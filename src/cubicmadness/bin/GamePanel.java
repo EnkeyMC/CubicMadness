@@ -128,12 +128,12 @@ public class GamePanel extends JPanel implements Runnable{
     
     private void gameCollisions(){
         for(EnemyBasic e: objects.enemies){
-            if(objects.player.getRect().intersects(e.getRect())){
+            if(objects.player.getCollisionBox().intersects(e.getCollisionBox())){
                 paused = true;
             }
         }
         
-        if(objects.player.getRect().intersects(objects.coin.getRect())){
+        if(objects.player.getCollisionBox().intersects(objects.coin.getCollisionBox())){
             score += 10;
             objects.coin = new Coin(this);
         }
