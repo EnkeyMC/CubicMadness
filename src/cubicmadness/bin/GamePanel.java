@@ -122,9 +122,9 @@ public class GamePanel extends JPanel implements Runnable{
         for(EnemyBasic e: objects.enemies){
             e.tick();
         }
-        
-        for(Particle p : objects.particles){
-            p.tick();
+        // TODO: Vyřešit tohle :(
+        for(int i = 0; i < objects.particles.size(); i++){
+            objects.particles.get(i).tick();
         }
         
         objects.player.tick();

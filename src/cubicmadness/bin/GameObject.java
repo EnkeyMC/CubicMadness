@@ -43,6 +43,10 @@ public abstract class GameObject {
         this.y += velY;
     }
     
+    public float getSpeed(){
+        return (float) Math.sqrt(Math.pow(velX, 2) + Math.pow(velY, 2));
+    }
+    
     /**
      * @return the x
      */

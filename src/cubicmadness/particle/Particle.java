@@ -15,6 +15,8 @@ public abstract class Particle extends GameObject{
     
     protected int life;
     protected Point center;
+    protected Dimension minSize;
+    protected Dimension maxSize;
     
     public Particle(GamePanel gp, int life, Color c, Point center, float x, float y, Dimension minSize, Dimension maxSize){
         super(gp);
@@ -23,15 +25,14 @@ public abstract class Particle extends GameObject{
         this.center = center;
         this.x = x;
         this.y = y;
+        this.minSize = minSize;
+        this.maxSize = maxSize;
     }
     
     @Override
     public void tick(){
         super.tick();
         this.life--;
-        if(life <= 0){
-            // remove
-        }
     }
     
     @Override

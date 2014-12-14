@@ -3,9 +3,12 @@ package cubicmadness.player;
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
 import cubicmadness.input.KeyInput;
+import cubicmadness.particle.ParticleTrail;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -43,9 +46,14 @@ public class Player extends GameObject{
         if(this.x > panel.getWidth() - this.size.width) x = panel.getWidth() - this.size.width;
         if(this.y < 0) y = 0;
         if(this.y > panel.getHeight() - this.size.height) y = panel.getHeight() - this.size.height;
-    }
-    
-    public float getSpeed(){
-        return (float) Math.sqrt(Math.pow(velX, 2) + Math.pow(velY, 2));
+        
+        if(this.getSpeed() != 0){
+            Random r = new Random();
+            panel.objects.particles.add(new ParticleTrail(panel, 5, this.color, 
+                new Point(Math.round((float) this.getRect().getCenterX()), (int) Math.round(this.getRect().getCenterY())), 
+                r.nextFloat() * this.size.width + this.x, 
+                r.nextFloat() * this.size.height + this.y, 
+                new Dimension(3,3), new Dimension(7,7),this));
+        }
     }
 }
