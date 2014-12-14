@@ -1,0 +1,49 @@
+package cubicmadness.coin;
+
+import cubicmadness.bin.GameObject;
+import cubicmadness.bin.GamePanel;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.util.Random;
+
+/**
+ *
+ * @author Martin
+ */
+public class Coin extends GameObject{
+    private float animProgress = 0;
+    
+    private final int animSpeed = 10;
+    private final Dimension maxSize = new Dimension(15,15);
+    
+    public Coin (GamePanel gp){
+        super(gp);
+        this.color = new Color(228,192,48);
+        size = new Dimension(10,10);
+        spawn();
+    }
+    
+    private void spawn(){
+        Random r = new Random();
+        this.x = r.nextInt(panel.getWidth() - 100) + 50;
+        this.y = r.nextInt(panel.getHeight() - 100) + 50;
+    }
+    
+    @Override
+    public void draw(Graphics2D g, double interpolation){
+        Rectangle r = getRect(interpolation);
+        int grow = (int) Math.round((maxSize.width - size.width) * Math.sin(Math.toRadians(animProgress)));
+        r.grow(grow,grow);
+        g.setColor(color);
+        g.fill(r);
+    }
+    
+    @Override
+    public void tick(){
+        animProgress += animSpeed;
+        if(animProgress > 180)
+            animProgress = 0;
+    }
+}
