@@ -44,6 +44,6 @@ public class Coin extends GameObject{
     public void tick(){
         animProgress += animSpeed;
         if(animProgress > 180)
-            animProgress = 0;
+            animProgress -= 180;
     }
 }
