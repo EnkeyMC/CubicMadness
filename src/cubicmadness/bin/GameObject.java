@@ -26,6 +26,10 @@ public abstract class GameObject {
         g.fill(getRect(interpolation));
     }
     
+    public Rectangle getCollisionBox(){
+        return this.getRect();
+    }
+    
     public Rectangle getRect(){
         return getRect(0);
     }
