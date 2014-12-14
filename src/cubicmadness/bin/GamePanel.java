@@ -3,6 +3,7 @@ package cubicmadness.bin;
 import cubicmadness.coin.Coin;
 import cubicmadness.enemy.EnemyBasic;
 import cubicmadness.input.KeyInput;
+import cubicmadness.particle.Particle;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -51,6 +52,11 @@ public class GamePanel extends JPanel implements Runnable{
         for(EnemyBasic e: objects.enemies){
             e.draw((Graphics2D)g, interpolation);
         }
+        
+        for(Particle p : objects.particles){
+            p.draw((Graphics2D)g, interpolation);
+        }
+        
         if(objects.coin != null){
             objects.coin.draw((Graphics2D)g, interpolation);
         }
@@ -116,6 +122,11 @@ public class GamePanel extends JPanel implements Runnable{
         for(EnemyBasic e: objects.enemies){
             e.tick();
         }
+        
+        for(Particle p : objects.particles){
+            p.tick();
+        }
+        
         objects.player.tick();
         objects.coin.tick();
         
