@@ -44,4 +44,8 @@ public class Player extends GameObject{
         if(this.y < 0) y = 0;
         if(this.y > panel.getHeight() - this.size.height) y = panel.getHeight() - this.size.height;
     }
+    
+    public float getSpeed(){
+        return (float) Math.sqrt(Math.pow(velX, 2) + Math.pow(velY, 2));
+    }
 }
