@@ -9,6 +9,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JPanel;
 
 /**
@@ -24,6 +26,7 @@ public class GamePanel extends JPanel implements Runnable{
     public static boolean paused = false;
     private double interpolation = 0;
     private int score = 0;
+    private List<Particle> particlesToRemove = new ArrayList<>();
     
     public GamePanel (){
         init();
@@ -122,10 +125,15 @@ public class GamePanel extends JPanel implements Runnable{
         for(EnemyBasic e: objects.enemies){
             e.tick();
         }
-        // TODO: Vyřešit tohle :(
-        for(int i = 0; i < objects.particles.size(); i++){
-            objects.particles.get(i).tick();
+        
+        for (Particle particle : objects.particles) {
+            particle.tick(this.particlesToRemove);
         }
+        
+        for (Particle p: this.particlesToRemove){
+            objects.particles.remove(p);
+        }
+        this.particlesToRemove.clear();
         
         objects.player.tick();
         objects.coin.tick();

@@ -49,7 +49,7 @@ public class Player extends GameObject{
         
         if(this.getSpeed() != 0){
             Random r = new Random();
-            panel.objects.particles.add(new ParticleTrail(panel, 5, this.color, 
+            panel.objects.particles.add(new ParticleTrail(panel, 10, this.color, 
                 new Point(Math.round((float) this.getRect().getCenterX()), (int) Math.round(this.getRect().getCenterY())), 
                 r.nextFloat() * this.size.width + this.x, 
                 r.nextFloat() * this.size.height + this.y, 

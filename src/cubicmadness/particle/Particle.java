@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.List;
 
 /**
  *
@@ -29,10 +30,12 @@ public abstract class Particle extends GameObject{
         this.maxSize = maxSize;
     }
     
-    @Override
-    public void tick(){
+    public void tick(List list){
         super.tick();
         this.life--;
+        if(life <= 0){
+            list.add(this);
+        }
     }
     
     @Override
