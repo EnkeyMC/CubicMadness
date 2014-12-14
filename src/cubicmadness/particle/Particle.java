@@ -5,6 +5,7 @@ import cubicmadness.bin.GamePanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 /**
  *
@@ -31,5 +32,10 @@ public abstract class Particle extends GameObject{
         if(life <= 0){
             // remove
         }
+    }
+    
+    @Override
+    public Rectangle getCollisionBox(){
+        return new Rectangle(0,0,0,0);
     }
 }
