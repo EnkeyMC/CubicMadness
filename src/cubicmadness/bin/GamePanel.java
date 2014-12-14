@@ -26,7 +26,7 @@ public class GamePanel extends JPanel implements Runnable{
     public static boolean paused = false;
     private double interpolation = 0;
     private int score = 0;
-    private List<Particle> particlesToRemove = new ArrayList<>();
+    private final List<Particle> particlesToRemove = new ArrayList<>();
     
     public GamePanel (){
         init();
