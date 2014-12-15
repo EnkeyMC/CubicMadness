@@ -155,6 +155,7 @@ public class GamePanel extends JPanel implements Runnable{
         if(objects.player.getCollisionBox().intersects(objects.coin.getCollisionBox())){
             score += 10;
             objects.coin = new Coin(this);
+            objects.enemies.add(new EnemyBasic(this));
         }
     }
 }

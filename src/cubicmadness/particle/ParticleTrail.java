@@ -17,15 +17,17 @@ public class ParticleTrail extends Particle{
     
     private final GameObject o;
 
-    public ParticleTrail(GamePanel gp, int life, Color c, Point center, float x, float y, Dimension minSize, Dimension maxSize, GameObject o) {
+    public ParticleTrail(GamePanel gp, int life, Color c, Point center, float x, float y, Dimension minSize, Dimension maxSize, GameObject o, int colorVariation) {
         super(gp, life, c, center, x, y, minSize, maxSize);
         this.o = o;
         
         Random r = new Random();
         int rsize = r.nextInt(maxSize.width - minSize.width) + minSize.width;
         this.size = new Dimension(rsize, rsize);
-        this.velX = (float)Math.cos(Math.atan((this.y - center.y) / (this.x - center.x))) * (o.getSpeed() / 2);
-        this.velY = (float)Math.sin(Math.atan((this.y - center.y) / (this.x - center.x))) * (o.getSpeed() / 2);
+        this.velX = (this.x - center.x) / 20;
+        this.velY = (this.y - center.y) / 20;
+        
+        this.color = r.nextInt(2) == 0 ? this.brighter(c, r.nextInt(colorVariation)) : this.darker(c, r.nextInt(colorVariation));
     }
     
     @Override
@@ -38,5 +40,19 @@ public class ParticleTrail extends Particle{
     
     private AlphaComposite makeTransparent(float alpha){
         return (AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+    }
+    
+    private Color darker (Color c, int times){
+        for(int i = 0; i < times; i++){
+            c = c.darker();
+        }
+        return c;
+    }
+    
+    private Color brighter (Color c, int times){
+        for(int i = 0; i < times; i++){
+            c = c.brighter();
+        }
+        return c;
     }
 }

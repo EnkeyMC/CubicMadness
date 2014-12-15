@@ -18,7 +18,7 @@ public class GameObjects {
     public Coin coin;
     
     public void init(GamePanel panel){
-        for(int i = 0; i < 1; i++)
+        for(int i = 0; i < 2; i++)
             enemies.add(new EnemyBasic(panel));
         
         coin = new Coin(panel);

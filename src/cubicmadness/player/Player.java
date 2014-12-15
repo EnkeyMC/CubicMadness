@@ -40,6 +40,11 @@ public class Player extends GameObject{
         if(key.contains(KeyEvent.VK_UP) && key.contains(KeyEvent.VK_DOWN)) velY = 0;
         if(key.contains(KeyEvent.VK_RIGHT) && key.contains(KeyEvent.VK_LEFT)) velX = 0;
         
+        if(velX != 0 && velY != 0){
+            velX = (float)Math.copySign(Math.sqrt(Math.pow(speed, 2) / 2), velX);
+            velY = (float)Math.copySign(Math.sqrt(Math.pow(speed, 2) / 2), velY);
+        }
+        
         this.x += velX;
         this.y += velY;
         
@@ -54,7 +59,7 @@ public class Player extends GameObject{
                 new Point(Math.round((float) this.predictPosition(5).getCenterX()), (int) Math.round(this.predictPosition(5).getCenterY())), 
                 r.nextFloat() * this.size.width + this.x, 
                 r.nextFloat() * this.size.height + this.y, 
-                new Dimension(3,3), new Dimension(7,7),this));
+                new Dimension(3,3), new Dimension(7,7),this, 2));
         }
     }
     
