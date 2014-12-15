@@ -17,7 +17,7 @@ import java.util.Set;
  * @author Martin
  */
 public class Player extends GameObject{
-    private final float speed = 7f;
+    private final float speed = 8f;
     
     public Player(GamePanel gp){
         super(gp);

@@ -2,6 +2,7 @@ package cubicmadness.bin;
 
 import cubicmadness.coin.Coin;
 import cubicmadness.enemy.EnemyBasic;
+import cubicmadness.enemy.EnemyFollowing;
 import cubicmadness.particle.Particle;
 import cubicmadness.player.Player;
 import java.util.ArrayList;
@@ -23,5 +24,6 @@ public class GameObjects {
         
         coin = new Coin(panel);
         player = new Player(panel);
+        enemies.add(new EnemyFollowing(panel));
     }
 }

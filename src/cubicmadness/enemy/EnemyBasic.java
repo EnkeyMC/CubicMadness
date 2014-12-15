@@ -13,9 +13,11 @@ import java.util.Random;
  */
 public class EnemyBasic extends GameObject{
     
+    protected String direction;
+    protected float speed;
+    
     // Finals
-    private final Random gen;
-    private final float speed;
+    protected final Random gen;
 
     public EnemyBasic(GamePanel panel){
         super(panel);
@@ -26,35 +28,39 @@ public class EnemyBasic extends GameObject{
         spawn();
     }
     
-    private void spawn(){
+    protected void spawn(){
         switch(gen.nextInt(4)){
             case 0: // UP
                 this.y = -size.height;
                 this.x = gen.nextFloat() * panel.getWidth();
                 
-                this.velY = gen.nextFloat() * (speed - 3f) + 3f;
+                this.velY = gen.nextFloat() * (speed - 2f) + 2f;
                 this.velX = (float)Math.sqrt(Math.pow(speed, 2) - Math.pow(velY, 2)) * (gen.nextInt(2) == 0 ? -1 : 1);
+                this.direction = "UP";
                 break;
             case 1: // DOWN
                 this.y = panel.getHeight();
                 this.x = gen.nextFloat() * panel.getWidth();
                 
-                this.velY = -(gen.nextFloat() * (speed - 3f) + 3f);
+                this.velY = -(gen.nextFloat() * (speed - 2f) + 2f);
                 this.velX = (float)Math.sqrt(Math.pow(speed, 2) - Math.pow(velY, 2)) * (gen.nextInt(2) == 0 ? -1 : 1);
+                this.direction = "DOWN";
                 break;
             case 2: // LEFT
                 this.x = - this.size.width;
                 this.y = gen.nextFloat() * panel.getHeight();
                 
-                this.velX = gen.nextFloat() * (speed - 3f) + 3f;
+                this.velX = gen.nextFloat() * (speed - 2f) + 2f;
                 this.velY = (float)Math.sqrt(Math.pow(speed, 2) - Math.pow(velX, 2)) * (gen.nextInt(2) == 0 ? -1 : 1);
+                this.direction = "LEFT";
                 break;
             case 3: // RIGHT
                 this.x = panel.getWidth();
                 this.y = gen.nextFloat() * panel.getHeight();
                 
-                this.velX = -(gen.nextFloat() * (speed - 3f) + 3f);
+                this.velX = -(gen.nextFloat() * (speed - 2f) + 2f);
                 this.velY = (float)Math.sqrt(Math.pow(speed, 2) - Math.pow(velX, 2)) * (gen.nextInt(2) == 0 ? -1 : 1);
+                this.direction = "RIGHT";
         }
     }
     
