@@ -1,7 +1,9 @@
 package cubicmadness.bin;
 
 import cubicmadness.coin.Coin;
+import cubicmadness.coin.CoinFollower;
 import cubicmadness.enemy.EnemyBasic;
+import cubicmadness.enemy.EnemyFollowing;
 import cubicmadness.input.KeyInput;
 import cubicmadness.particle.Particle;
 import java.awt.Color;
@@ -26,6 +28,7 @@ public class GamePanel extends JPanel implements Runnable{
     public static boolean paused = false;
     private double interpolation = 0;
     private int score = 0;
+    private int coins = 0;
     private final List<Particle> particlesToRemove = new ArrayList<>();
     
     public GamePanel (){
@@ -52,12 +55,17 @@ public class GamePanel extends JPanel implements Runnable{
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
         //System.out.println(interpolation);
+        
         for(EnemyBasic e: objects.enemies){
             e.draw((Graphics2D)g, interpolation);
         }
         
-        for(Particle p : objects.particles){
-            p.draw((Graphics2D)g, interpolation);
+        try{
+            for(Particle p : objects.particles){
+                p.draw((Graphics2D)g, interpolation);
+            }
+        }catch(Exception e){
+            
         }
         
         if(objects.coin != null){
@@ -67,6 +75,8 @@ public class GamePanel extends JPanel implements Runnable{
         
         
         gameHUD(g);        
+        
+        this.frames++;
     }
     
     private void gameHUD(Graphics g){
@@ -77,15 +87,15 @@ public class GamePanel extends JPanel implements Runnable{
     // GAME LOOP
 
     private static final int UPDATES_PER_SECOND = 30;
-    private static final int UPDATE_INTERVAL = 1000 / UPDATES_PER_SECOND * 1000000;
+    private static final double UPDATE_INTERVAL = 1000 / UPDATES_PER_SECOND * 1000000;
     private static final int MAX_FRAMESKIP = 5;
     
     private long nextUpdate = System.nanoTime();
+    private int frames = 0;
     
     @Override
     public void run() {
         long timer = System.currentTimeMillis();
-        int frames = 0;
         while (true) {
             if(!paused){
                 int skippedFrames = 0;
@@ -97,7 +107,6 @@ public class GamePanel extends JPanel implements Runnable{
 
                 this.interpolation = (System.nanoTime() + UPDATE_INTERVAL - this.nextUpdate) / UPDATE_INTERVAL;
                 this.gameRender();
-                frames++;
                 /*try {
                     Thread.sleep(3);
                 } catch (InterruptedException ex) {
@@ -114,6 +123,7 @@ public class GamePanel extends JPanel implements Runnable{
                     objects = new GameObjects();
                     objects.init(this);
                     score = 0;
+                    coins = 0;
                     this.nextUpdate = System.nanoTime();
                     paused = false;
                 }
@@ -153,9 +163,19 @@ public class GamePanel extends JPanel implements Runnable{
         }
         
         if(objects.player.getCollisionBox().intersects(objects.coin.getCollisionBox())){
-            score += 10;
-            objects.coin = new Coin(this);
-            objects.enemies.add(new EnemyBasic(this));
+            score += objects.coin.getPoints();
+            coins++;
+            if (objects.coin.getClass() == Coin.class){
+                objects.enemies.add(new EnemyBasic(this));
+            }else if(objects.coin.getClass() == CoinFollower.class){
+                objects.enemies.add(new EnemyFollowing(this));
+            }
+            
+            if(coins % 5 == 0){
+                objects.coin = new CoinFollower(this);
+            }else{
+                objects.coin = new Coin(this);
+            }
         }
     }
 }
