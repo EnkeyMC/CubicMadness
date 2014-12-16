@@ -1,6 +1,7 @@
 package cubicmadness.bin;
 
 import cubicmadness.coin.Coin;
+import cubicmadness.coin.CoinFollower;
 import cubicmadness.enemy.EnemyBasic;
 import cubicmadness.enemy.EnemyFollowing;
 import cubicmadness.particle.Particle;
@@ -24,6 +25,5 @@ public class GameObjects {
         
         coin = new Coin(panel);
         player = new Player(panel);
-        enemies.add(new EnemyFollowing(panel));
     }
 }
