@@ -82,6 +82,7 @@ public class GamePanel extends JPanel implements Runnable{
     private void gameHUD(Graphics g){
         g.setColor(objects.player.color);
         g.drawString("Score: " + score, 10, 20);
+        g.drawString("FPS: " + FPS, 10, 50);
     }
     
     // GAME LOOP
@@ -92,6 +93,7 @@ public class GamePanel extends JPanel implements Runnable{
     
     private long nextUpdate = System.nanoTime();
     private int frames = 0;
+    private int FPS = 0;
     
     @Override
     public void run() {
@@ -115,6 +117,7 @@ public class GamePanel extends JPanel implements Runnable{
 
                 if(System.currentTimeMillis() - timer > 1000){
                     timer += 1000;
+                    FPS = frames;
                     System.out.println("FPS: " + frames);
                     frames = 0;
                 }
