@@ -2,7 +2,6 @@ package cubicmadness.coin;
 
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
-import cubicmadness.enemy.EnemyBasic;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -55,5 +54,10 @@ public class Coin extends GameObject{
      */
     public int getPoints() {
         return this.points;
+    }
+    
+    @Override
+    public Rectangle getCollisionBox(){
+        return new Rectangle((int)this.x - (this.maxSize.width - this.size.width), (int)this.y - (this.maxSize.height - this.size.height), this.maxSize.width + (this.maxSize.height - this.size.height), this.maxSize.height + (this.maxSize.height - this.size.height));
     }
 }
