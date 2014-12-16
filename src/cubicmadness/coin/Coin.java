@@ -2,6 +2,7 @@ package cubicmadness.coin;
 
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
+import cubicmadness.enemy.EnemyBasic;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -13,22 +14,24 @@ import java.util.Random;
  * @author Martin
  */
 public class Coin extends GameObject{
-    private float animProgress = 0;
+    protected float animProgress = 0;
+    protected int points;
     
-    private final int animSpeed = 10;
-    private final Dimension maxSize = new Dimension(15,15);
+    protected final int animSpeed = 10;
+    protected final Dimension maxSize = new Dimension(15,15);
     
     public Coin (GamePanel gp){
         super(gp);
         this.color = new Color(228,192,48);
         size = new Dimension(10,10);
+        points = 10;
         spawn();
     }
     
     private void spawn(){
         Random r = new Random();
-        this.x = r.nextInt(panel.getWidth() - 100) + 50;
-        this.y = r.nextInt(panel.getHeight() - 100) + 50;
+        this.x = r.nextInt(panel.getWidth() - 200) + 100;
+        this.y = r.nextInt(panel.getHeight() - 200) + 100;
     }
     
     @Override
@@ -45,5 +48,12 @@ public class Coin extends GameObject{
         animProgress += animSpeed;
         if(animProgress > 180)
             animProgress -= 180;
+    }
+
+    /**
+     * @return the points
+     */
+    public int getPoints() {
+        return this.points;
     }
 }
