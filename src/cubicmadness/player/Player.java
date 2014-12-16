@@ -6,6 +6,7 @@ import cubicmadness.input.KeyInput;
 import cubicmadness.particle.ParticleTrail;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
@@ -60,6 +61,29 @@ public class Player extends GameObject{
                 r.nextFloat() * this.size.width + this.x, 
                 r.nextFloat() * this.size.height + this.y, 
                 new Dimension(3,3), new Dimension(7,7),this, 2));
+        }
+    }
+    
+    @Override
+    public void draw(Graphics2D g, double interpolation){
+        super.draw(g, interpolation);
+        
+        Set<Integer> key = KeyInput.pressed;
+        if(!key.contains(KeyEvent.VK_UP) && velY < 0){
+            this.y += velY * interpolation;
+            velY = 0;
+        }
+        if(!key.contains(KeyEvent.VK_DOWN) && velY > 0){
+            this.y += velY * interpolation;
+            velY = 0;
+        }
+        if(!key.contains(KeyEvent.VK_LEFT) && velX < 0){
+            this.x += velX * interpolation;
+            velX = 0;
+        }
+        if(!key.contains(KeyEvent.VK_RIGHT) && velX > 0){
+            this.x += velX * interpolation;
+            velX = 0;
         }
     }
     
