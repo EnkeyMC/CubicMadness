@@ -58,6 +58,7 @@ public class Coin extends GameObject{
     
     @Override
     public Rectangle getCollisionBox(){
-        return new Rectangle((int)this.x - (this.maxSize.width - this.size.width), (int)this.y - (this.maxSize.height - this.size.height), this.maxSize.width + (this.maxSize.height - this.size.height), this.maxSize.height + (this.maxSize.height - this.size.height));
+        int dif = this.maxSize.width - this.size.width;
+        return new Rectangle((int)this.x - dif, (int)this.y - dif, this.maxSize.width + dif, this.maxSize.height + dif);
     }
 }
