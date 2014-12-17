@@ -55,10 +55,12 @@ public class GamePanel extends JPanel implements Runnable{
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
-        //System.out.println(interpolation);
         
-        for(EnemyBasic e: objects.enemies){
-            e.draw((Graphics2D)g, interpolation);
+        try{
+            for(EnemyBasic e: objects.enemies){
+                e.draw((Graphics2D)g, interpolation);
+            }
+        }catch(Exception e){
         }
         
         try{
@@ -170,7 +172,8 @@ public class GamePanel extends JPanel implements Runnable{
             score += objects.coin.getPoints();
             coins++;
             
-            objects.particles.add(new ParticleCircular(this, 10, objects.coin.color, objects.coin.getCenter(), new Dimension(6,6), new Dimension(10,10), objects.coin, 1, objects.coin.getSize().width / 2, 10));
+            objects.particles.add(new ParticleCircular(this, 10, objects.coin.color, objects.coin.getCenter(), new Dimension(4,4), new Dimension(6,6), objects.coin, 1, objects.coin.getSize().width / 2, 10));
+            objects.particles.add(new ParticleCircular(this, 8, objects.coin.color, objects.coin.getCenter(), new Dimension(6,6), new Dimension(10,10), objects.coin, 1, objects.coin.getSize().width / 3, 6));
             
             if (objects.coin.getClass() == Coin.class){
                 objects.enemies.add(new EnemyBasic(this));
