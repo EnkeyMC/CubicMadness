@@ -4,7 +4,10 @@ import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Point;
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
+import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -12,11 +15,62 @@ import java.awt.Point;
  */
 public class ParticleCircular extends ParticleTrail{
     
-    private final Dimension circleSize;
+    private final float radius;
+    private final Particle[] particles;
 
-    public ParticleCircular(GamePanel gp, int life, Color c, Point center, Dimension circleSize, Dimension minSize, Dimension maxSize, GameObject o, int colorVariation) {
+    public ParticleCircular(GamePanel gp, int life, Color c, Point2D.Float center, Dimension minSize, Dimension maxSize, GameObject o, int colorVariation, float radius, int amount) {
         super(gp, life, c, center, 0, 0, minSize, maxSize, o, colorVariation);
-        this.circleSize = circleSize;
+        this.radius = radius;
+        particles = new Particle[amount];
+        
+        spawn(colorVariation);
+    }
+
+    private void spawn(int colorVariation) {
+        float angle = 360 / particles.length;
+        Random r = new Random ();
+        for(int i = 0; i < particles.length; i++){
+            int s;
+            if(maxSize.width > minSize.width){
+                s = r.nextInt(maxSize.width - minSize.width) + minSize.width;
+            }else{
+                s = minSize.width;
+            }
+            
+            Particle p = new Particle(this.panel, this.life, 
+                    (r.nextInt(2) == 0 ? this.brighter(this.color, r.nextInt(colorVariation)) : this.darker(this.color, r.nextInt(colorVariation))), 
+                    this.center, 0, 0, new Dimension(s,s));
+            
+            p.setX((float)(radius * Math.cos(Math.toRadians(angle * i))) + p.center.x);
+            p.setY((float)(radius * Math.sin(Math.toRadians(angle * i))) + p.center.y);
+            
+            p.setVelX(p.getX() - p.center.x);
+            p.setVelY(p.getY() - p.center.y);
+            
+            particles[i] = p;
+        }
     }
     
+    @Override
+    public void draw(Graphics2D g, double interpolation){
+        g.setComposite(this.makeTransparent(life / 10f > 1f ? 1f : life / 10f));
+        g.setColor(color);
+        for(Particle p : particles){
+            g.fill(p.getRect(interpolation));
+        }
+        
+        g.setComposite(this.makeTransparent(1));
+    }
+    
+    @Override
+    public void tick(List list){
+        for(Particle p : particles){
+            p.tick();
+        }
+        
+        this.life--;
+        if(life <= 0){
+            list.add(this);
+        }
+    }
 }

@@ -3,7 +3,9 @@ package cubicmadness.bin;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.Point2D;
 
 /**
  *
@@ -108,5 +110,9 @@ public abstract class GameObject {
      */
     public Dimension getSize() {
         return size;
+    }
+    
+    public Point2D.Float getCenter() {
+        return new Point2D.Float((float)this.getRect().getCenterX(), (float)this.getRect().getCenterY());
     }
 }

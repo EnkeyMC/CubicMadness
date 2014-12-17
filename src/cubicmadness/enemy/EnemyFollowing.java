@@ -9,8 +9,8 @@ import cubicmadness.bin.GamePanel;
 import cubicmadness.particle.ParticleTrail;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.Point2D;
 import java.util.Random;
 
 /**
@@ -45,7 +45,7 @@ public class EnemyFollowing extends EnemyBasic{
         if(this.getSpeed() != 0){
             Random r = new Random();
             panel.objects.particles.add(new ParticleTrail(panel, 20, this.color, 
-                new Point(Math.round((float) this.predictPosition(5).getCenterX()), (int) Math.round(this.predictPosition(5).getCenterY())), 
+                new Point2D.Float(Math.round((float) this.predictPosition(5).getCenterX()), (int) Math.round(this.predictPosition(5).getCenterY())), 
                 r.nextFloat() * this.size.width + this.x, 
                 r.nextFloat() * this.size.height + this.y, 
                 new Dimension(1,1), new Dimension(5,5),this, 2));

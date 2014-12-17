@@ -7,9 +7,9 @@ import cubicmadness.particle.ParticleTrail;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Point2D;
 import java.util.Random;
 import java.util.Set;
 
@@ -57,7 +57,7 @@ public class Player extends GameObject{
         if(this.getSpeed() != 0){
             Random r = new Random();
             panel.objects.particles.add(new ParticleTrail(panel, 10, this.color, 
-                new Point(Math.round((float) this.predictPosition(5).getCenterX()), (int) Math.round(this.predictPosition(5).getCenterY())), 
+                new Point2D.Float((float) this.predictPosition(5).getCenterX(), (float) this.predictPosition(5).getCenterY()), 
                 r.nextFloat() * this.size.width + this.x, 
                 r.nextFloat() * this.size.height + this.y, 
                 new Dimension(3,3), new Dimension(7,7),this, 2));

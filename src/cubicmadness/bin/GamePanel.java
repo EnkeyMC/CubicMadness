@@ -6,6 +6,7 @@ import cubicmadness.enemy.EnemyBasic;
 import cubicmadness.enemy.EnemyFollowing;
 import cubicmadness.input.KeyInput;
 import cubicmadness.particle.Particle;
+import cubicmadness.particle.ParticleCircular;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -168,6 +169,9 @@ public class GamePanel extends JPanel implements Runnable{
         if(objects.player.getCollisionBox().intersects(objects.coin.getCollisionBox())){
             score += objects.coin.getPoints();
             coins++;
+            
+            objects.particles.add(new ParticleCircular(this, 10, objects.coin.color, objects.coin.getCenter(), new Dimension(6,6), new Dimension(10,10), objects.coin, 1, objects.coin.getSize().width / 2, 10));
+            
             if (objects.coin.getClass() == Coin.class){
                 objects.enemies.add(new EnemyBasic(this));
             }else if(objects.coin.getClass() == CoinFollower.class){
