@@ -2,7 +2,6 @@ package cubicmadness.particle;
 
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -41,9 +40,5 @@ public class ParticleTrail extends Particle{
         g.setColor(color);
         g.fill(getRect(interpolation));
         g.setComposite(this.makeTransparent(1));
-    }
-    
-    protected AlphaComposite makeTransparent(float alpha){
-        return (AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
     }
 }

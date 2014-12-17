@@ -2,6 +2,7 @@ package cubicmadness.particle;
 
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -65,5 +66,9 @@ public class Particle extends GameObject{
             c = c.brighter();
         }
         return c;
+    }    
+    
+    protected AlphaComposite makeTransparent(float alpha){
+        return (AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
     }
 }
