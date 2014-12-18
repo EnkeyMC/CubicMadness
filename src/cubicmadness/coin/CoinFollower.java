@@ -17,10 +17,10 @@ public class CoinFollower extends Coin {
     @Override
     public void draw(Graphics2D g, double interpolation){
         super.draw(g, interpolation);
-        int size = this.maxSize.width - this.size.width;
+        int size = this.maxSize - this.getIntSize();
         g.fillRect(Math.round(this.x - size), Math.round(this.y - size), size, size);
-        g.fillRect(Math.round(this.x + this.size.width), Math.round(this.y + this.size.height), size, size);
-        g.fillRect(Math.round(this.x + this.size.width), Math.round(this.y - size), size, size);
-        g.fillRect(Math.round(this.x - size), Math.round(this.y + this.size.height), size, size);
+        g.fillRect(Math.round(this.x + this.size), Math.round(this.y + this.size), size, size);
+        g.fillRect(Math.round(this.x + this.size), Math.round(this.y - size), size, size);
+        g.fillRect(Math.round(this.x - size), Math.round(this.y + this.size), size, size);
     }
 }

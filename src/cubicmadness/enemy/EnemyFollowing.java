@@ -8,7 +8,6 @@ package cubicmadness.enemy;
 import cubicmadness.bin.GamePanel;
 import cubicmadness.particle.ParticleTrail;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.Random;
@@ -25,7 +24,7 @@ public class EnemyFollowing extends EnemyBasic{
         super(panel);
         this.speed = 10f;
         this.color = new Color(115,88,140);
-        this.size = new Dimension(7,7);
+        this.size = 7;
     }    
     
     @Override
@@ -46,13 +45,13 @@ public class EnemyFollowing extends EnemyBasic{
             Random r = new Random();
             panel.objects.particles.add(new ParticleTrail(panel, 20, this.color, 
                 new Point2D.Float(Math.round((float) this.predictPosition(5).getCenterX()), (int) Math.round(this.predictPosition(5).getCenterY())), 
-                r.nextFloat() * this.size.width + this.x, 
-                r.nextFloat() * this.size.height + this.y, 
-                new Dimension(1,1), new Dimension(5,5),this, 2));
+                r.nextFloat() * this.size + this.x, 
+                r.nextFloat() * this.size + this.y, 
+                1, 5,this, 2));
         }
     }
     
     private Rectangle predictPosition(int ticks){
-        return new Rectangle((int)(this.x + (velX * ticks)), (int)(this.y + (velY * ticks)), this.size.width, this.size.height);
+        return new Rectangle((int)(this.x + (velX * ticks)), (int)(this.y + (velY * ticks)), this.getIntSize(), this.getIntSize());
     }
 }

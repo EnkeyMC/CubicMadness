@@ -3,7 +3,6 @@ package cubicmadness.coin;
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Random;
@@ -17,12 +16,12 @@ public class Coin extends GameObject{
     protected int points;
     
     protected final int animSpeed = 10;
-    protected final Dimension maxSize = new Dimension(15,15);
+    protected final int maxSize = 15;
     
     public Coin (GamePanel gp){
         super(gp);
         this.color = new Color(228,192,48);
-        size = new Dimension(10,10);
+        size = 10;
         points = 10;
         spawn();
     }
@@ -36,7 +35,7 @@ public class Coin extends GameObject{
     @Override
     public void draw(Graphics2D g, double interpolation){
         Rectangle r = getRect(interpolation);
-        int grow = (int) Math.round((maxSize.width - size.width) * Math.sin(Math.toRadians(animProgress)));
+        int grow = (int) Math.round((maxSize - size) * Math.sin(Math.toRadians(animProgress)));
         r.grow(grow,grow);
         g.setColor(color);
         g.fill(r);
@@ -58,7 +57,7 @@ public class Coin extends GameObject{
     
     @Override
     public Rectangle getCollisionBox(){
-        int dif = this.maxSize.width - this.size.width;
-        return new Rectangle((int)this.x - dif, (int)this.y - dif, this.maxSize.width + dif, this.maxSize.height + dif);
+        int dif = (int)this.maxSize - this.getIntSize();
+        return new Rectangle((int)this.x - dif, (int)this.y - dif, this.maxSize + dif, this.maxSize + dif);
     }
 }

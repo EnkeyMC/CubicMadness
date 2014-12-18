@@ -1,9 +1,7 @@
 package cubicmadness.bin;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
@@ -15,7 +13,7 @@ public abstract class GameObject {
     protected float x, y;
     protected float velX, velY;
     protected Color color;
-    protected Dimension size;
+    protected float size;
     
     protected final GamePanel panel;
     
@@ -37,12 +35,16 @@ public abstract class GameObject {
     }
     
     public Rectangle getRect(double i){
-        return new Rectangle((int)(x + (velX * i)), (int) (y + (velY * i)), size.width, size.height);
+        return new Rectangle((int)(x + (velX * i)), (int) (y + (velY * i)), this.getIntSize(), this.getIntSize());
     }
     
     public void tick(){        
         this.x += velX;
         this.y += velY;
+    }
+    
+    public int getIntSize(){
+        return Math.round(this.size);
     }
     
     public float getSpeed(){
@@ -108,7 +110,7 @@ public abstract class GameObject {
     /**
      * @return the size
      */
-    public Dimension getSize() {
+    public float getSize() {
         return size;
     }
     

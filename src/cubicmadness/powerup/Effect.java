@@ -1,5 +1,6 @@
 package cubicmadness.powerup;
 
+import cubicmadness.player.Player;
 import java.awt.Graphics2D;
 
 /**
@@ -20,11 +21,11 @@ public class Effect {
         this.effect = effect;
     }
     
-    public void draw(Graphics2D g, double interpolation){
+    public void draw(Player player, Graphics2D g, double interpolation){
         
     }
     
-    public void tick(){
+    public void tick(Player player){
         
     }
 }

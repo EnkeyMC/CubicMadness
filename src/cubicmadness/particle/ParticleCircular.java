@@ -3,7 +3,6 @@ package cubicmadness.particle;
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.util.List;
@@ -18,7 +17,7 @@ public class ParticleCircular extends ParticleTrail{
     private final float radius;
     private final Particle[] particles;
 
-    public ParticleCircular(GamePanel gp, int life, Color c, Point2D.Float center, Dimension minSize, Dimension maxSize, GameObject o, int colorVariation, float radius, int amount) {
+    public ParticleCircular(GamePanel gp, int life, Color c, Point2D.Float center, int minSize, int maxSize, GameObject o, int colorVariation, float radius, int amount) {
         super(gp, life, c, center, 0, 0, minSize, maxSize, o, colorVariation);
         this.radius = radius;
         particles = new Particle[amount];
@@ -31,15 +30,15 @@ public class ParticleCircular extends ParticleTrail{
         Random r = new Random ();
         for(int i = 0; i < particles.length; i++){
             int s;
-            if(maxSize.width > minSize.width){
-                s = r.nextInt(maxSize.width - minSize.width) + minSize.width;
+            if(maxSize > minSize){
+                s = r.nextInt(maxSize - minSize) + minSize;
             }else{
-                s = minSize.width;
+                s = minSize;
             }
             
             Particle p = new Particle(this.panel, this.life, 
                     (r.nextInt(2) == 0 ? this.brighter(this.color, r.nextInt(colorVariation)) : this.darker(this.color, r.nextInt(colorVariation))), 
-                    this.center, 0, 0, new Dimension(s,s));
+                    this.center, 0, 0, s);
             
             p.setX((float)(radius * Math.cos(Math.toRadians(angle * i))) + p.center.x);
             p.setY((float)(radius * Math.sin(Math.toRadians(angle * i))) + p.center.y);

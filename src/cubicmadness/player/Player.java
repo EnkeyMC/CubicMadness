@@ -5,7 +5,6 @@ import cubicmadness.bin.GamePanel;
 import cubicmadness.input.KeyInput;
 import cubicmadness.particle.ParticleTrail;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
@@ -23,9 +22,9 @@ public class Player extends GameObject{
     public Player(GamePanel gp){
         super(gp);
         color = new Color(179,61,67);
-        size = new Dimension(20,20);
-        x = panel.getWidth() / 2 - size.width / 2;
-        y = panel.getHeight() / 2 - size.height / 2;
+        size = 20;
+        x = panel.getWidth() / 2 - size / 2;
+        y = panel.getHeight() / 2 - size / 2;
     }
     
     @Override
@@ -50,17 +49,17 @@ public class Player extends GameObject{
         this.y += velY;
         
         if(this.x < 0) x = 0;
-        if(this.x > panel.getWidth() - this.size.width) x = panel.getWidth() - this.size.width;
+        if(this.x > panel.getWidth() - this.size) x = panel.getWidth() - this.size;
         if(this.y < 0) y = 0;
-        if(this.y > panel.getHeight() - this.size.height) y = panel.getHeight() - this.size.height;
+        if(this.y > panel.getHeight() - this.size) y = panel.getHeight() - this.size;
         
         if(this.getSpeed() != 0){
             Random r = new Random();
             panel.objects.particles.add(new ParticleTrail(panel, 10, this.color, 
                 new Point2D.Float((float) this.predictPosition(5).getCenterX(), (float) this.predictPosition(5).getCenterY()), 
-                r.nextFloat() * this.size.width + this.x, 
-                r.nextFloat() * this.size.height + this.y, 
-                new Dimension(3,3), new Dimension(7,7),this, 2));
+                r.nextFloat() * this.size + this.x, 
+                r.nextFloat() * this.size + this.y, 
+                3, 7,this, 2));
         }
     }
     
@@ -88,6 +87,6 @@ public class Player extends GameObject{
     }
     
     private Rectangle predictPosition(int ticks){
-        return new Rectangle((int)(this.x + (velX * ticks)), (int)(this.y + (velY * ticks)), this.size.width, this.size.height);
+        return new Rectangle((int)(this.x + (velX * ticks)), (int)(this.y + (velY * ticks)), this.getIntSize(), this.getIntSize());
     }
 }

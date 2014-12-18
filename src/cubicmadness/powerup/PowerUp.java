@@ -15,5 +15,8 @@ public abstract class PowerUp extends GameObject{
     public PowerUp(GamePanel panel) {
         super(panel);
     }
-
+    
+    public Effect getEffect(){
+        return this.ef;
+    }
 }

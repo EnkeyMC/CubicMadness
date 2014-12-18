@@ -3,7 +3,6 @@ package cubicmadness.enemy;
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.Random;
 
@@ -24,14 +23,14 @@ public class EnemyBasic extends GameObject{
         this.gen = new Random();
         this.speed = 10f;
         this.color = Color.GRAY;
-        size = new Dimension(10,10);
+        size = 10;
         spawn();
     }
     
     protected void spawn(){
         switch(gen.nextInt(4)){
             case 0: // UP
-                this.y = -size.height;
+                this.y = -size;
                 this.x = gen.nextFloat() * panel.getWidth();
                 
                 this.velY = gen.nextFloat() * (speed - 2f) + 2f;
@@ -47,7 +46,7 @@ public class EnemyBasic extends GameObject{
                 this.direction = "DOWN";
                 break;
             case 2: // LEFT
-                this.x = - this.size.width;
+                this.x = - this.size;
                 this.y = gen.nextFloat() * panel.getHeight();
                 
                 this.velX = gen.nextFloat() * (speed - 2f) + 2f;
