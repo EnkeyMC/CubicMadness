@@ -28,4 +28,8 @@ public class Effect {
     public void tick(Player player){
         
     }
+    
+    public int getEffect(){
+        return this.effect;
+    }
 }

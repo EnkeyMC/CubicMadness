@@ -7,6 +7,8 @@ import cubicmadness.enemy.EnemyFollowing;
 import cubicmadness.input.KeyInput;
 import cubicmadness.particle.Particle;
 import cubicmadness.particle.ParticleCircular;
+import cubicmadness.powerup.Effect;
+import cubicmadness.powerup.PowerUp;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -55,6 +57,10 @@ public class GamePanel extends JPanel implements Runnable{
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
+        
+        for(PowerUp p : objects.powerups){
+            p.draw((Graphics2D)g, interpolation);
+        }
         
         try{
             for(EnemyBasic e: objects.enemies){
@@ -138,6 +144,11 @@ public class GamePanel extends JPanel implements Runnable{
     }
     
     private void gameTick(){
+        
+        for(PowerUp p : objects.powerups){
+            p.tick();
+        }
+        
         for(EnemyBasic e: objects.enemies){
             e.tick();
         }
@@ -164,7 +175,9 @@ public class GamePanel extends JPanel implements Runnable{
     private void gameCollisions(){
         for(EnemyBasic e: objects.enemies){
             if(objects.player.getCollisionBox().intersects(e.getCollisionBox())){
-                paused = true;
+                if(objects.player.hasEffect(Effect.LIFE)){
+                    //objects.player.effects
+                }
             }
         }
         
@@ -186,6 +199,17 @@ public class GamePanel extends JPanel implements Runnable{
             }else{
                 objects.coin = new Coin(this);
             }
+        }
+        List<PowerUp> toRemove = new ArrayList();
+        for(PowerUp p : objects.powerups){
+            if(objects.player.getCollisionBox().intersects(p.getCollisionBox())){
+                objects.player.effects.add(p.getEffect());
+                toRemove.add(p);
+            }
+        }
+        
+        for(PowerUp p : toRemove){
+            objects.powerups.remove(p);
         }
     }
 }

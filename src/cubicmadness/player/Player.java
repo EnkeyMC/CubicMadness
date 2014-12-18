@@ -4,11 +4,14 @@ import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
 import cubicmadness.input.KeyInput;
 import cubicmadness.particle.ParticleTrail;
+import cubicmadness.powerup.Effect;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -18,6 +21,8 @@ import java.util.Set;
  */
 public class Player extends GameObject{
     private final float speed = 8f;
+    
+    public final List<Effect> effects = new ArrayList();
     
     public Player(GamePanel gp){
         super(gp);
@@ -88,5 +93,14 @@ public class Player extends GameObject{
     
     private Rectangle predictPosition(int ticks){
         return new Rectangle((int)(this.x + (velX * ticks)), (int)(this.y + (velY * ticks)), this.getIntSize(), this.getIntSize());
+    }
+    
+    public boolean hasEffect(int e){
+        for(Effect ef : effects){
+            if(e == ef.getEffect()){
+                return true;
+            }
+        }
+        return false;
     }
 }
