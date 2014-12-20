@@ -3,6 +3,7 @@ package cubicmadness.powerup;
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
 import java.awt.Color;
+import java.util.List;
 
 /**
  *
@@ -23,6 +24,14 @@ public abstract class PowerUp extends GameObject{
     
     public Effect getEffect(){
         return this.ef;
+    }
+    
+    public void tick(List list){
+        super.tick();
+        life--;
+        if(life <= 0){
+            list.add(this);
+        }
     }
     
     protected Color interpolatedColor(double interpolation){

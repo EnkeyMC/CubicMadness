@@ -2,7 +2,6 @@ package cubicmadness.particle;
 
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;

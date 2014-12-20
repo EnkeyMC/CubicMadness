@@ -16,10 +16,12 @@ public class ParticleCircular extends ParticleTrail{
     
     private final float radius;
     private final Particle[] particles;
+    private final float friction;
 
-    public ParticleCircular(GamePanel gp, int life, Color c, Point2D.Float center, int minSize, int maxSize, GameObject o, int colorVariation, float radius, int amount) {
+    public ParticleCircular(GamePanel gp, int life, Color c, Point2D.Float center, int minSize, int maxSize, GameObject o, int colorVariation, float radius, int amount, float friction) {
         super(gp, life, c, center, 0, 0, minSize, maxSize, o, colorVariation);
         this.radius = radius;
+        this.friction = friction;
         particles = new Particle[amount];
         
         spawn(colorVariation);
@@ -64,6 +66,8 @@ public class ParticleCircular extends ParticleTrail{
     @Override
     public void tick(List list){
         for(Particle p : particles){
+            p.setVelX(p.getVelX() - (p.getVelX() * friction));
+            p.setVelY(p.getVelY() - (p.getVelY() * friction));
             p.tick();
         }
         

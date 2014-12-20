@@ -3,6 +3,7 @@ package cubicmadness.powerup;
 import cubicmadness.bin.GamePanel;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.List;
 
 /**
  *
@@ -22,8 +23,8 @@ public class BoxLife extends PowerUp {
     }
     
     @Override
-    public void tick(){
-        super.tick();
+    public void tick(List list){
+        super.tick(list);
         animProgress += animSpeed;
         if(animProgress > 180)
             animProgress -= 180;

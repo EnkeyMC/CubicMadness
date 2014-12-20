@@ -7,6 +7,8 @@ import cubicmadness.enemy.EnemyFollowing;
 import cubicmadness.input.KeyInput;
 import cubicmadness.particle.Particle;
 import cubicmadness.particle.ParticleCircular;
+import cubicmadness.particle.ParticleZooming;
+import cubicmadness.powerup.BoxLife;
 import cubicmadness.powerup.Effect;
 import cubicmadness.powerup.PowerUp;
 import java.awt.Color;
@@ -16,6 +18,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import javax.swing.JPanel;
 
 /**
@@ -33,6 +36,8 @@ public class GamePanel extends JPanel implements Runnable{
     private int score = 0;
     private int coins = 0;
     private final List<Particle> particlesToRemove = new ArrayList<>();
+    private boolean debugMode = false;
+    private int nextSpawn = 0;
     
     public GamePanel (){
         init();
@@ -58,9 +63,11 @@ public class GamePanel extends JPanel implements Runnable{
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
         
-        for(PowerUp p : objects.powerups){
-            p.draw((Graphics2D)g, interpolation);
-        }
+        try{
+            for(PowerUp p : objects.powerups){
+                p.draw((Graphics2D)g, interpolation);
+            }
+        }catch(Exception e){}
         
         try{
             for(EnemyBasic e: objects.enemies){
@@ -91,7 +98,21 @@ public class GamePanel extends JPanel implements Runnable{
     private void gameHUD(Graphics g){
         g.setColor(objects.player.color);
         g.drawString("Score: " + score, 10, 20);
+        if(debugMode){
+            this.debugHUD(g);
+        }
+    }
+    
+    private void debugHUD(Graphics g){
         g.drawString("FPS: " + FPS, 10, 50);
+        g.drawString("Player:", 10, 70);
+        g.drawString("X: " + objects.player.getX(), 20, 90);
+        g.drawString("Y: " + objects.player.getY(), 20, 110);
+        g.drawString("Coins: " + this.coins, 20, 130);
+        
+        int i = 0;
+        for(EnemyBasic e : objects.enemies) i++;
+        g.drawString("Enemies: " + i, 10, 160);
     }
     
     // GAME LOOP
@@ -145,8 +166,14 @@ public class GamePanel extends JPanel implements Runnable{
     
     private void gameTick(){
         
+        List<PowerUp> powerupsToRemove = new ArrayList();
         for(PowerUp p : objects.powerups){
-            p.tick();
+            p.tick(powerupsToRemove);
+        }
+        
+        for(PowerUp p : powerupsToRemove){
+            objects.powerups.remove(p);
+            objects.particles.add(new ParticleZooming(this, 8, p.color, p.getCenter(), p.x, p.y, p.size, -3));
         }
         
         for(EnemyBasic e: objects.enemies){
@@ -166,6 +193,24 @@ public class GamePanel extends JPanel implements Runnable{
         objects.coin.tick();
         
         this.gameCollisions();
+        
+        if(KeyInput.pressed.contains(KeyEvent.VK_SEMICOLON)){
+            this.debugMode = !this.debugMode;
+            KeyInput.pressed.remove(KeyEvent.VK_SEMICOLON);
+        }
+        
+        if(this.nextSpawn < 0){
+            Random r = new Random();
+            switch(r.nextInt(1)){
+                case 0:
+                    objects.powerups.add(new BoxLife(this, r.nextInt(90) + 90, r.nextInt(this.getWidth() - 200) + 100, r.nextInt(this.getHeight() - 200) + 100));
+                    break;
+                default:
+            }
+            this.nextSpawn = r.nextInt(90) + 180;
+        }else{
+            this.nextSpawn--;
+        }
     }
     
     private void gameRender(){   
@@ -187,8 +232,8 @@ public class GamePanel extends JPanel implements Runnable{
             score += objects.coin.getPoints();
             coins++;
             
-            objects.particles.add(new ParticleCircular(this, 10, objects.coin.color, objects.coin.getCenter(), 4, 6, objects.coin, 1, objects.coin.getSize() / 2, 10));
-            objects.particles.add(new ParticleCircular(this, 8, objects.coin.color, objects.coin.getCenter(), 6, 10, objects.coin, 1, objects.coin.getSize() / 3, 6));
+            objects.particles.add(new ParticleCircular(this, 10, objects.coin.color, objects.coin.getCenter(), 4, 6, objects.coin, 1, objects.coin.getSize() / 2, 10, 0.1f));
+            objects.particles.add(new ParticleCircular(this, 8, objects.coin.color, objects.coin.getCenter(), 6, 10, objects.coin, 1, objects.coin.getSize() / 3, 6, 0.1f));
             
             if (objects.coin.getClass() == Coin.class){
                 objects.enemies.add(new EnemyBasic(this));
@@ -205,8 +250,10 @@ public class GamePanel extends JPanel implements Runnable{
         List<PowerUp> toRemove = new ArrayList();
         for(PowerUp p : objects.powerups){
             if(objects.player.getCollisionBox().intersects(p.getCollisionBox())){
-                objects.player.effects.add(p.getEffect());
-                toRemove.add(p);
+                if(objects.player.applyEffect(p.getEffect())){
+                    toRemove.add(p);
+                    objects.particles.add(new ParticleZooming(this, 8, p.color, p.getCenter(), p.x, p.y, p.getSize(), 3));
+                }
             }
         }
         

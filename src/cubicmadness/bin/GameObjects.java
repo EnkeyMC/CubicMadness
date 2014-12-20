@@ -4,7 +4,6 @@ import cubicmadness.coin.Coin;
 import cubicmadness.enemy.EnemyBasic;
 import cubicmadness.particle.Particle;
 import cubicmadness.player.Player;
-import cubicmadness.powerup.BoxLife;
 import cubicmadness.powerup.PowerUp;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +25,5 @@ public class GameObjects {
         
         coin = new Coin(panel);
         player = new Player(panel);
-        powerups.add(new BoxLife(panel, 6000, 200,200));
     }
 }

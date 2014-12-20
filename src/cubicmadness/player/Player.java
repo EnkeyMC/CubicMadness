@@ -34,7 +34,7 @@ public class Player extends GameObject{
     public Player(GamePanel gp){
         super(gp);
         color = new Color(179,61,67);
-        size = 20;
+        size = 24;
         x = panel.getWidth() / 2 - size / 2;
         y = panel.getHeight() / 2 - size / 2;
     }
@@ -60,10 +60,22 @@ public class Player extends GameObject{
         this.x += velX;
         this.y += velY;
         
-        if(this.x < 0) x = 0;
-        if(this.x > panel.getWidth() - this.size) x = panel.getWidth() - this.size;
-        if(this.y < 0) y = 0;
-        if(this.y > panel.getHeight() - this.size) y = panel.getHeight() - this.size;
+        if(this.x < 0) {
+            x = 0;
+            velX = 0;
+        }
+        if(this.x > panel.getWidth() - this.size){
+            x = panel.getWidth() - this.size;
+            velX = 0;
+        }
+        if(this.y < 0) {
+            y = 0;
+            velY = 0;
+        }
+        if(this.y > panel.getHeight() - this.size) {
+            y = panel.getHeight() - this.size;
+            velY = 0;
+        }
         
         if(this.getSpeed() != 0){
             Random r = new Random();
@@ -116,6 +128,10 @@ public class Player extends GameObject{
             this.x += velX * interpolation;
             velX = 0;
         }
+        
+        for(Effect e :effects){
+            e.draw(this, g, interpolation);
+        }
     }
     
     private Rectangle predictPosition(int ticks){
@@ -140,6 +156,29 @@ public class Player extends GameObject{
         }
         if(tmp != null){
             return this.effects.remove(tmp);
+        }else{
+            return false;
+        }
+    }
+    
+    public int getEffectCount(int effect){
+        int i = 0;
+        for(Effect e : this.effects){
+            if(e.getEffect() == effect) i++;
+        }
+        return i;
+    }
+    
+    public boolean applyEffect(Effect e){
+        int i = 0;
+        for(Effect effect : effects){
+            if(effect.getEffect() == e.getEffect()){
+                i++;
+            }
+        }
+        
+        if(i < 5){
+            return effects.add(e);
         }else{
             return false;
         }
