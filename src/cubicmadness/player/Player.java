@@ -20,9 +20,16 @@ import java.util.Set;
  * @author Martin
  */
 public class Player extends GameObject{
-    private final float speed = 8f;
     
+    private final float speed = 8f;    
     public final List<Effect> effects = new ArrayList();
+    private final int TICKS_INV = 30;
+    
+    private boolean invincible = false;
+    private int tickInvincible = 0;
+    
+    private int animProgress = 0;
+    private final int animSpeed = 30;
     
     public Player(GamePanel gp){
         super(gp);
@@ -66,11 +73,31 @@ public class Player extends GameObject{
                 r.nextFloat() * this.size + this.y, 
                 3, 7,this, 2));
         }
+        
+        if(this.invincible){
+            this.animProgress += this.animSpeed;
+            this.tickInvincible++;
+            
+            if(this.animProgress > 180){
+                this.animProgress -= 180;
+            }
+            
+            if(this.tickInvincible >= this.TICKS_INV){
+                this.invincible = false;
+            }
+        }
     }
     
     @Override
     public void draw(Graphics2D g, double interpolation){
-        super.draw(g, interpolation);
+        if(this.invincible){
+            g.setComposite(this.makeTransparent((float)Math.sin(Math.toRadians(this.animProgress))));
+            super.draw(g, interpolation);
+            g.setComposite(this.makeTransparent(1f));
+        }else{
+            super.draw(g, interpolation);
+        }
+                
         
         Set<Integer> key = KeyInput.pressed;
         if(!key.contains(KeyEvent.VK_UP) && velY < 0){
@@ -102,5 +129,29 @@ public class Player extends GameObject{
             }
         }
         return false;
+    }
+    
+    public boolean removeEffect(int ef){
+        Effect tmp = null;
+        for(Effect e : this.effects){
+            if(e.getEffect() == ef){
+                tmp = e;
+            }
+        }
+        if(tmp != null){
+            return this.effects.remove(tmp);
+        }else{
+            return false;
+        }
+    }
+    
+    public void makeInvincible(){
+        this.invincible = true;
+        this.animProgress = 0;
+        this.tickInvincible = 0;
+    }
+    
+    public boolean isInvincible(){
+        return this.invincible;
     }
 }

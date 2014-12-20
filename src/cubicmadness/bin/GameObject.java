@@ -1,5 +1,6 @@
 package cubicmadness.bin;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -116,5 +117,9 @@ public abstract class GameObject {
     
     public Point2D.Float getCenter() {
         return new Point2D.Float((float)this.getRect().getCenterX(), (float)this.getRect().getCenterY());
+    }  
+    
+    protected AlphaComposite makeTransparent(float alpha){
+        return (AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
     }
 }

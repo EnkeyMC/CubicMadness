@@ -65,9 +65,5 @@ public class Particle extends GameObject{
             c = c.brighter();
         }
         return c;
-    }    
-    
-    protected AlphaComposite makeTransparent(float alpha){
-        return (AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
-    }
+    }  
 }

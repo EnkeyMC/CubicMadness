@@ -174,9 +174,11 @@ public class GamePanel extends JPanel implements Runnable{
     
     private void gameCollisions(){
         for(EnemyBasic e: objects.enemies){
-            if(objects.player.getCollisionBox().intersects(e.getCollisionBox())){
-                if(objects.player.hasEffect(Effect.LIFE)){
-                    //objects.player.effects
+            if(objects.player.getCollisionBox().intersects(e.getCollisionBox()) && !objects.player.isInvincible()){
+                if(objects.player.removeEffect(Effect.LIFE)){
+                    objects.player.makeInvincible();
+                }else{
+                    paused = true;
                 }
             }
         }
