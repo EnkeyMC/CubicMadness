@@ -122,4 +122,8 @@ public abstract class GameObject {
     protected AlphaComposite makeTransparent(float alpha){
         return (AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
     }
+
+    public Color getColor() {
+        return this.color;
+    }
 }

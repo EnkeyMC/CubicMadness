@@ -18,12 +18,4 @@ public class GameObjects {
     public Player player;
     public Coin coin;
     public List<PowerUp> powerups = new ArrayList();
-    
-    public void init(GamePanel panel){
-        for(int i = 0; i < 2; i++)
-            enemies.add(new EnemyBasic(panel));
-        
-        coin = new Coin(panel);
-        player = new Player(panel);
-    }
 }
