@@ -18,10 +18,12 @@ public class GameStateManager {
     private final Stack<GameState> states = new Stack();
     
     public final GameState PLAY_STATE;
+    public final GameState MAINMENU_STATE;
     
     public GameStateManager(GamePanel gp){
         this.PLAY_STATE = new PlayState(gp, gp.objects);
-        this.pushState(PLAY_STATE);
+        this.MAINMENU_STATE = new MainMenuState(gp);
+        this.pushState(this.MAINMENU_STATE);
     }
     
     public void tick(){

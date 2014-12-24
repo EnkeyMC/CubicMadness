@@ -36,7 +36,7 @@ public class PlayState extends GameState {
     private int coins = 0;
     private boolean debugMode = false;
     private int nextSpawn = 0;
-    private GameObjects objects;
+    private final GameObjects objects;
 
     public PlayState(GamePanel gp, GameObjects objects) {
         super(gp);
@@ -207,11 +207,11 @@ public class PlayState extends GameState {
 
     @Override
     public void init() {
+        objects.player = new Player(gp);
         for(int i = 0; i < 2; i++)
             objects.enemies.add(new EnemyBasic(gp));
         
         objects.coin = new Coin(gp);
-        objects.player = new Player(gp);
         
         coins = 0;
         score = 0;

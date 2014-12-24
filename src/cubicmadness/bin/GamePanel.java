@@ -2,18 +2,20 @@ package cubicmadness.bin;
 
 import cubicmadness.gamestates.GameStateManager;
 import cubicmadness.input.KeyInput;
+import cubicmadness.input.MouseInput;
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
-import javax.swing.JPanel;
+import java.awt.image.BufferStrategy;
 
 /**
  *
  * @author Martin
  */
-public class GamePanel extends JPanel implements Runnable{
+public class GamePanel extends Canvas implements Runnable{
     
     private final Dimension size = new Dimension(800, 600);
     
@@ -29,12 +31,15 @@ public class GamePanel extends JPanel implements Runnable{
     }
     
     private void init(){
+        Frame f = new Frame(size.width, size.height, "Cubic Madness", this);
         this.setPreferredSize(size);
         this.setSize(size);
         this.setBackground(Color.white);
         this.setForeground(Color.black);
         this.setFocusable(true);
         this.addKeyListener(new KeyInput());
+        this.addMouseListener(new MouseInput());
+        this.addMouseMotionListener(new MouseInput());
     }
     
     private void start(){
@@ -84,6 +89,7 @@ public class GamePanel extends JPanel implements Runnable{
             
             if(KeyInput.pressed.contains(KeyEvent.VK_ESCAPE)){
                 gsm.popCurrentState();
+                KeyInput.pressed.remove(KeyEvent.VK_ESCAPE);
             }
         }
     }
@@ -93,15 +99,25 @@ public class GamePanel extends JPanel implements Runnable{
     }
     
     private void gameRender(){   
-        this.repaint();
-    }
-    
-    @Override
-    protected void paintComponent(Graphics g){
-        super.paintComponent(g);
+        BufferStrategy bs = this.getBufferStrategy();
+        if(bs == null) {
+            this.createBufferStrategy(3);
+            return;
+        }
         
-        gsm.draw((Graphics2D)g, interpolation);
+        Graphics2D g = (Graphics2D) bs.getDrawGraphics();
+        
+        g.setColor(Color.white);
+        g.fillRect(0, 0, size.width, size.height);
+        
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        
+        gsm.draw(g, interpolation);
         
         this.frames++;
+        
+        g.dispose();
+        bs.show();
     }
 }
