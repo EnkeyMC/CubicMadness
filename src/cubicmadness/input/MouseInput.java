@@ -28,7 +28,7 @@ public class MouseInput extends MouseAdapter implements MouseMotionListener{
     }
     
     @Override
-    public void mouseClicked(MouseEvent e){
+    public void mousePressed(MouseEvent e){
         if(e.getButton() == 1) LMB = true;
         if(e.getButton() == 3) RMB = true;        
     }

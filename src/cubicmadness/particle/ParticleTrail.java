@@ -2,6 +2,7 @@ package cubicmadness.particle;
 
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
+import cubicmadness.gamestates.GameState;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
@@ -15,8 +16,8 @@ public class ParticleTrail extends Particle{
     
     private final GameObject o;
 
-    public ParticleTrail(GamePanel gp, int life, Color c, Point2D.Float center, float x, float y, int minSize, int maxSize, GameObject o, int colorVariation) {
-        super(gp, life, c, center, x, y, minSize, maxSize);
+    public ParticleTrail(GamePanel gp, GameState gs, int life, Color c, Point2D.Float center, float x, float y, int minSize, int maxSize, GameObject o, int colorVariation) {
+        super(gp, gs, life, c, center, x, y, minSize, maxSize);
         this.o = o;
         
         Random r = new Random();

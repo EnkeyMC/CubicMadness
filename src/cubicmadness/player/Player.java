@@ -2,6 +2,7 @@ package cubicmadness.player;
 
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
+import cubicmadness.gamestates.GameState;
 import cubicmadness.input.KeyInput;
 import cubicmadness.particle.ParticleTrail;
 import cubicmadness.powerup.Effect;
@@ -21,7 +22,6 @@ import java.util.Set;
  */
 public class Player extends GameObject{
     
-    private final float speed = 8f;    
     public final List<Effect> effects = new ArrayList();
     private final int TICKS_INV = 30;
     
@@ -31,30 +31,32 @@ public class Player extends GameObject{
     private int animProgress = 0;
     private final int animSpeed = 30;
     
-    public Player(GamePanel gp){
-        super(gp);
+    public Player(GamePanel gp, GameState gs){
+        super(gp,gs);
         color = new Color(179,61,67);
         size = 24;
-        x = panel.getWidth() / 2 - size / 2;
-        y = panel.getHeight() / 2 - size / 2;
+        x = gp.getWidth() / 2 - size / 2;
+        y = gp.getHeight() / 2 - size / 2;
+        DEFAULT_SPEED = 8f;
+        this.speed = DEFAULT_SPEED;
     }
     
     @Override
     public void tick(){
         Set<Integer> key = KeyInput.pressed;
-        if(key.contains(KeyEvent.VK_UP)) velY = -speed;
+        if(key.contains(KeyEvent.VK_UP)) velY = -getSpeed();
         else velY = 0;
-        if(key.contains(KeyEvent.VK_DOWN)) velY = speed;
-        if(key.contains(KeyEvent.VK_RIGHT)) velX = speed;
+        if(key.contains(KeyEvent.VK_DOWN)) velY = getSpeed();
+        if(key.contains(KeyEvent.VK_RIGHT)) velX = getSpeed();
         else velX = 0;
-        if(key.contains(KeyEvent.VK_LEFT)) velX = -speed;
+        if(key.contains(KeyEvent.VK_LEFT)) velX = -getSpeed();
         
         if(key.contains(KeyEvent.VK_UP) && key.contains(KeyEvent.VK_DOWN)) velY = 0;
         if(key.contains(KeyEvent.VK_RIGHT) && key.contains(KeyEvent.VK_LEFT)) velX = 0;
         
         if(velX != 0 && velY != 0){
-            velX = (float)Math.copySign(Math.sqrt(Math.pow(speed, 2) / 2), velX);
-            velY = (float)Math.copySign(Math.sqrt(Math.pow(speed, 2) / 2), velY);
+            velX = (float)Math.copySign(Math.sqrt(Math.pow(getSpeed(), 2) / 2), velX);
+            velY = (float)Math.copySign(Math.sqrt(Math.pow(getSpeed(), 2) / 2), velY);
         }
         
         this.x += velX;
@@ -64,22 +66,22 @@ public class Player extends GameObject{
             x = 0;
             velX = 0;
         }
-        if(this.x > panel.getWidth() - this.size){
-            x = panel.getWidth() - this.size;
+        if(this.x > gp.getWidth() - this.size){
+            x = gp.getWidth() - this.size;
             velX = 0;
         }
         if(this.y < 0) {
             y = 0;
             velY = 0;
         }
-        if(this.y > panel.getHeight() - this.size) {
-            y = panel.getHeight() - this.size;
+        if(this.y > gp.getHeight() - this.size) {
+            y = gp.getHeight() - this.size;
             velY = 0;
         }
         
-        if(this.getSpeed() != 0){
+        if(this.getVelocity() != 0){
             Random r = new Random();
-            panel.objects.particles.add(new ParticleTrail(panel, 10, this.color, 
+            gs.particles.add(new ParticleTrail(gp, gs, 10, this.color, 
                 new Point2D.Float((float) this.predictPosition(5).getCenterX(), (float) this.predictPosition(5).getCenterY()), 
                 r.nextFloat() * this.size + this.x, 
                 r.nextFloat() * this.size + this.y, 
@@ -96,6 +98,12 @@ public class Player extends GameObject{
             
             if(this.tickInvincible >= this.TICKS_INV){
                 this.invincible = false;
+            }
+        }
+        
+        for(int i = 0; i < effects.size(); i++){
+            if(effects.get(i).tick(this)){
+                effects.remove(i);
             }
         }
     }

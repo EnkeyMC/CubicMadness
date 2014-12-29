@@ -2,6 +2,7 @@ package cubicmadness.coin;
 
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
+import cubicmadness.gamestates.GameState;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -18,8 +19,8 @@ public class Coin extends GameObject{
     protected final int animSpeed = 10;
     protected final int maxSize = 15;
     
-    public Coin (GamePanel gp){
-        super(gp);
+    public Coin (GamePanel gp, GameState gs){
+        super(gp, gs);
         this.color = new Color(228,192,48);
         size = 10;
         points = 10;
@@ -28,8 +29,8 @@ public class Coin extends GameObject{
     
     private void spawn(){
         Random r = new Random();
-        this.x = r.nextInt(panel.getWidth() - 200) + 100;
-        this.y = r.nextInt(panel.getHeight() - 200) + 100;
+        this.x = r.nextInt(gp.getWidth() - 200) + 100;
+        this.y = r.nextInt(gp.getHeight() - 200) + 100;
     }
     
     @Override

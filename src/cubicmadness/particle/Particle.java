@@ -2,6 +2,7 @@ package cubicmadness.particle;
 
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
+import cubicmadness.gamestates.GameState;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
@@ -18,8 +19,8 @@ public class Particle extends GameObject{
     protected int minSize;
     protected int maxSize;
     
-    public Particle(GamePanel gp, int life, Color c, Point2D.Float center, float x, float y, int minSize, int maxSize){
-        super(gp);
+    public Particle(GamePanel gp, GameState gs, int life, Color c, Point2D.Float center, float x, float y, int minSize, int maxSize){
+        super(gp, gs);
         this.life = life;
         this.color = c;
         this.center = center;
@@ -29,8 +30,8 @@ public class Particle extends GameObject{
         this.maxSize = maxSize;
     }
     
-    public Particle(GamePanel gp, int life, Color c, Point2D.Float center, float x, float y, float size){
-        super(gp);
+    public Particle(GamePanel gp, GameState gs, int life, Color c, Point2D.Float center, float x, float y, float size){
+        super(gp, gs);
         this.life = life;
         this.color = c;
         this.center = center;

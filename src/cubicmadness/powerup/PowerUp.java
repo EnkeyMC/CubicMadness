@@ -2,6 +2,7 @@ package cubicmadness.powerup;
 
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
+import cubicmadness.gamestates.GameState;
 import java.awt.Color;
 import java.util.List;
 
@@ -18,8 +19,8 @@ public abstract class PowerUp extends GameObject{
     protected int animProgress = 0;
     protected int animSpeed = 10;
 
-    public PowerUp(GamePanel panel) {
-        super(panel);
+    public PowerUp(GamePanel gp, GameState gs) {
+        super(gp, gs);
     }
     
     public Effect getEffect(){

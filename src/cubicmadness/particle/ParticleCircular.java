@@ -2,6 +2,7 @@ package cubicmadness.particle;
 
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
+import cubicmadness.gamestates.GameState;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
@@ -18,8 +19,8 @@ public class ParticleCircular extends ParticleTrail{
     private final Particle[] particles;
     private final float friction;
 
-    public ParticleCircular(GamePanel gp, int life, Color c, Point2D.Float center, int minSize, int maxSize, GameObject o, int colorVariation, float radius, int amount, float friction) {
-        super(gp, life, c, center, 0, 0, minSize, maxSize, o, colorVariation);
+    public ParticleCircular(GamePanel gp, GameState gs, int life, Color c, Point2D.Float center, int minSize, int maxSize, GameObject o, int colorVariation, float radius, int amount, float friction) {
+        super(gp, gs, life, c, center, 0, 0, minSize, maxSize, o, colorVariation);
         this.radius = radius;
         this.friction = friction;
         particles = new Particle[amount];
@@ -38,7 +39,7 @@ public class ParticleCircular extends ParticleTrail{
                 s = minSize;
             }
             
-            Particle p = new Particle(this.panel, this.life, 
+            Particle p = new Particle(this.gp, this.gs, this.life, 
                     (r.nextInt(2) == 0 ? this.brighter(this.color, r.nextInt(colorVariation)) : this.darker(this.color, r.nextInt(colorVariation))), 
                     this.center, 0, 0, s);
             

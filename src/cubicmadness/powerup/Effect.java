@@ -17,9 +17,23 @@ public class Effect {
     public static final int SLOWNESS = 4;
     
     private final int effect;
+    private final int level;
+    private final int duration;
+    
+    private int time;
     
     public Effect (int effect){
         this.effect = effect;
+        this.level = 0;
+        this.duration = 0;
+        this.time = 0;
+    }
+    
+    public Effect (int effect, int level, int duration){
+        this.effect = effect;
+        this.level = level;
+        this.duration = duration;
+        this.time = 0;
     }
     
     public void draw(Player player, Graphics2D g, double interpolation){
@@ -49,8 +63,30 @@ public class Effect {
         }
     }
     
-    public void tick(Player player){
-        
+    public boolean tick(Player player){
+        switch(this.effect){
+            case LIFE:
+                break;
+            case SHIELD:
+                
+                break;
+            case PULSE:
+                
+                break;
+            case SLOWNESS:
+                player.setSpeed(player.getDEFAULT_SPEED() - level*2);
+                time++;
+                
+                if(time >= duration){
+                    player.setSpeed(player.getDEFAULT_SPEED());
+                    return true;
+                }
+                break;
+            default:
+                System.out.println("Unknown effect!");
+                return true;
+        }
+        return false;
     }
     
     public int getEffect(){

@@ -62,6 +62,10 @@ public abstract class MenuElement {
         return ((this.x < x && this.x + getWidth() > x) && (this.y < y && this.y + this.getHeight() > y));
     }
     
+    public void actionPerformed(){
+        
+    }
+    
     public abstract int getHeight();
     public abstract int getWidth();
 }

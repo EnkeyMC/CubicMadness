@@ -1,6 +1,7 @@
 package cubicmadness.coin;
 
 import cubicmadness.bin.GamePanel;
+import cubicmadness.gamestates.GameState;
 import java.awt.Graphics2D;
 
 /**
@@ -9,8 +10,8 @@ import java.awt.Graphics2D;
  */
 public class CoinFollower extends Coin {
 
-    public CoinFollower(GamePanel gp) {
-        super(gp);
+    public CoinFollower(GamePanel gp, GameState gs) {
+        super(gp, gs);
         this.points = 25;
     }
 

@@ -21,7 +21,7 @@ public class GameStateManager {
     public final GameState MAINMENU_STATE;
     
     public GameStateManager(GamePanel gp){
-        this.PLAY_STATE = new PlayState(gp, gp.objects);
+        this.PLAY_STATE = new PlayState(gp);
         this.MAINMENU_STATE = new MainMenuState(gp);
         this.pushState(this.MAINMENU_STATE);
     }

@@ -1,6 +1,7 @@
 package cubicmadness.powerup;
 
 import cubicmadness.bin.GamePanel;
+import cubicmadness.gamestates.GameState;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.List;
@@ -11,8 +12,8 @@ import java.util.List;
  */
 public class BoxLife extends PowerUp {
 
-    public BoxLife(GamePanel panel, int life, float x, float y) {
-        super(panel);
+    public BoxLife(GamePanel gp, GameState gs, int life, float x, float y) {
+        super(gp, gs);
         this.life = life;
         this.x = x;
         this.y = y;

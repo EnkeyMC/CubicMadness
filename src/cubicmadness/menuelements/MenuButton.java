@@ -9,6 +9,10 @@ import cubicmadness.bin.GamePanel;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,11 +29,13 @@ public class MenuButton extends MenuElement{
     
     private final int type;
     private final String text;
+    private Method action;
 
-    public MenuButton(GamePanel panel, int type, String text) {
+    public MenuButton(GamePanel panel, int type, String text, Method m) {
         super(panel, 0, 0);
         this.type = type;
         this.text = text;
+        this.action = m;
     }
 
     @Override
@@ -55,6 +61,15 @@ public class MenuButton extends MenuElement{
                 break;
             default:
                 System.out.println("Unknown button align!");
+        }
+    }
+    
+    @Override
+    public void actionPerformed(){
+        try {
+            action.invoke(panel.gsm.MAINMENU_STATE);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            Logger.getLogger(MenuButton.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

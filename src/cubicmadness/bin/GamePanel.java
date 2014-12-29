@@ -18,8 +18,7 @@ import java.awt.image.BufferStrategy;
 public class GamePanel extends Canvas implements Runnable{
     
     private final Dimension size = new Dimension(800, 600);
-    
-    public GameObjects objects = new GameObjects();    
+     
     public GameStateManager gsm;
     private Thread thread;
     public static boolean paused = false;

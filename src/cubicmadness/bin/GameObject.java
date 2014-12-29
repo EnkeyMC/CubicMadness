@@ -1,5 +1,7 @@
 package cubicmadness.bin;
 
+import cubicmadness.gamestates.GameState;
+import cubicmadness.gamestates.PlayState;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -11,15 +13,21 @@ import java.awt.geom.Point2D;
  * @author Martin
  */
 public abstract class GameObject {
+
     protected float x, y;
     protected float velX, velY;
     protected Color color;
     protected float size;
+    protected float speed;
     
-    protected final GamePanel panel;
+    protected float DEFAULT_SPEED = 0;
     
-    public GameObject(GamePanel panel){
-        this.panel = panel;
+    protected final GamePanel gp;
+    protected final PlayState gs;
+    
+    public GameObject(GamePanel gp, GameState gs){
+        this.gp = gp;
+        this.gs = (PlayState)gs;
     }
     
     public void draw(Graphics2D g, double interpolation){
@@ -48,7 +56,7 @@ public abstract class GameObject {
         return Math.round(this.size);
     }
     
-    public float getSpeed(){
+    public float getVelocity(){
         return (float) Math.sqrt(Math.pow(velX, 2) + Math.pow(velY, 2));
     }
     
@@ -125,5 +133,26 @@ public abstract class GameObject {
 
     public Color getColor() {
         return this.color;
+    }
+    
+    /**
+     * @return the speed
+     */
+    public float getSpeed() {
+        return speed;
+    }
+
+    /**
+     * @param speed the speed to set
+     */
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+    
+    /**
+     * @return the DEFAULT_SPEED
+     */
+    public float getDEFAULT_SPEED() {
+        return DEFAULT_SPEED;
     }
 }

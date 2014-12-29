@@ -6,6 +6,7 @@
 package cubicmadness.particle;
 
 import cubicmadness.bin.GamePanel;
+import cubicmadness.gamestates.GameState;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -21,8 +22,8 @@ public class ParticleZooming extends Particle{
     private final float zoomSpeed;
     private float zoom = 0;
 
-    public ParticleZooming(GamePanel gp, int life, Color c, Point2D.Float center, float x, float y, float size, float zoomSpeed) {
-        super(gp, life, c, center, x, y, size);
+    public ParticleZooming(GamePanel gp, GameState gs, int life, Color c, Point2D.Float center, float x, float y, float size, float zoomSpeed) {
+        super(gp, gs, life, c, center, x, y, size);
         this.zoomSpeed = zoomSpeed;
     }
     
