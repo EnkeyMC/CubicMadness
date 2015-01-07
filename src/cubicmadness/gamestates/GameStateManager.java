@@ -64,4 +64,8 @@ public class GameStateManager {
         }
         states.peek().resume();
     }
+    
+    public GameState getCurrentState(){
+        return states.peek();
+    }
 }

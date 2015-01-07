@@ -81,7 +81,7 @@ public class Player extends GameObject{
         
         if(this.getVelocity() != 0){
             Random r = new Random();
-            gs.particles.add(new ParticleTrail(gp, gs, 10, this.color, 
+            gs.getObjects().particles.add(new ParticleTrail(gp, gs, 10, this.color, 
                 new Point2D.Float((float) this.predictPosition(5).getCenterX(), (float) this.predictPosition(5).getCenterY()), 
                 r.nextFloat() * this.size + this.x, 
                 r.nextFloat() * this.size + this.y, 

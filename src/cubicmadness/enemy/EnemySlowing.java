@@ -32,8 +32,8 @@ public class EnemySlowing extends EnemyBasic{
     public void tick(){
         super.tick();
         Random r = new Random();
-        gs.particles.add(new ParticleZooming(gp, gs, 20, this.getColor(), this.getCenter(), this.getX(), this.getY(), this.getSize(), -0.2f));
-        gs.particles.add(new ParticleTrail(gp, gs, 20, this.color, 
+        gs.getObjects().particles.add(new ParticleZooming(gp, gs, 20, this.getColor(), this.getCenter(), this.getX(), this.getY(), this.getSize(), -0.2f));
+        gs.getObjects().particles.add(new ParticleTrail(gp, gs, 20, this.color, 
                 new Point2D.Float((float) this.predictPosition(5).getCenterX(), (float) this.predictPosition(5).getCenterY()), 
                 r.nextFloat() * this.size + this.x, 
                 r.nextFloat() * this.size + this.y, 

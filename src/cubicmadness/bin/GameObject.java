@@ -23,11 +23,11 @@ public abstract class GameObject {
     protected float DEFAULT_SPEED = 0;
     
     protected final GamePanel gp;
-    protected final PlayState gs;
+    protected final GameState gs;
     
     public GameObject(GamePanel gp, GameState gs){
         this.gp = gp;
-        this.gs = (PlayState)gs;
+        this.gs = gs;
     }
     
     public void draw(Graphics2D g, double interpolation){

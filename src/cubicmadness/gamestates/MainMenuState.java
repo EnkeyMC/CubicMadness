@@ -28,9 +28,6 @@ import java.util.logging.Logger;
  * @author Martin
  */
 public class MainMenuState extends GameState {
-    
-    private final List<MenuElement> elements = new ArrayList();
-    private final List<Particle> particles = new ArrayList();
 
     public MainMenuState(GamePanel gp) {
         super(gp);
@@ -41,31 +38,31 @@ public class MainMenuState extends GameState {
         if(!(MouseInput.mouseXY.x == MouseInput.mousePrevXY.x && MouseInput.mouseXY.y == MouseInput.mousePrevXY.y)){
             Random r = new Random();
             ParticleTrail p = new ParticleTrail(gp, this, 10, Color.LIGHT_GRAY, new Point2D.Float(MouseInput.mouseXY.x, MouseInput.mouseXY.y), MouseInput.mouseXY.x + r.nextInt(6) - 3, MouseInput.mouseXY.y + r.nextInt(6) - 3, 4,6,null,3);
-            particles.add(p);
+            objects.particles.add(p);
             
             MouseInput.mousePrevXY = MouseInput.mouseXY;
         }
         
         if(MouseInput.LMB){
-            particles.add(new ParticleCircular(gp, this, 10, Color.LIGHT_GRAY, new Point2D.Float(MouseInput.mouseXY.x, MouseInput.mouseXY.y), 4, 6, null, 3, 5, 10, 0.2f));
+            objects.particles.add(new ParticleCircular(gp, this, 10, Color.LIGHT_GRAY, new Point2D.Float(MouseInput.mouseXY.x, MouseInput.mouseXY.y), 4, 6, null, 3, 5, 10, 0.2f));
             MouseInput.LMB = false;
         }
         
         List<Particle> particlesToRemove = new ArrayList();
-        for(Particle p : particles){
+        for(Particle p : objects.particles){
             p.tick(particlesToRemove);
         }
         
         for(Particle p : particlesToRemove){
-            particles.remove(p);
+            objects.particles.remove(p);
         }
         
         if(KeyInput.pressed.contains(KeyEvent.VK_ENTER)){
-            this.elements.get(0).actionPerformed();
+            this.objects.elements.get(0).actionPerformed();
             KeyInput.pressed.remove(KeyEvent.VK_ENTER);
         }
         
-        for(MenuElement e : elements){
+        for(MenuElement e : objects.elements){
             if(e.isInBounds(MouseInput.mouseXY.x, MouseInput.mouseXY.y)){
                 e.setFocused(true);
             }else{
@@ -76,11 +73,11 @@ public class MainMenuState extends GameState {
 
     @Override
     public void draw(Graphics2D g, double interpolation) {
-        for(MenuElement e : elements){
+        for(MenuElement e : objects.elements){
             e.draw(g, interpolation);
         }
         
-        for(Particle p : particles){
+        for(Particle p : objects.particles){
             p.draw(g, interpolation);
         }
     }
@@ -104,7 +101,7 @@ public class MainMenuState extends GameState {
             e = new MenuButton(gp, MenuButton.BIG, "Play", this.getClass().getDeclaredMethod("buttonPlayAction"));
             e.align(MenuButton.ALIGN_CENTER);
             e.setY(200);
-            elements.add(e);
+            objects.elements.add(e);
         } catch (NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(MainMenuState.class.getName()).log(Level.SEVERE, null, ex);
         }

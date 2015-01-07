@@ -35,17 +35,17 @@ public class EnemyFollowing extends EnemyBasic{
         switch(this.direction){
             case "UP":
             case "DOWN":
-                velX += Math.copySign(gravity, this.gs.player.getRect().getCenterX() - this.getRect().getCenterX());
+                velX += Math.copySign(gravity, this.gs.getObjects().player.getRect().getCenterX() - this.getRect().getCenterX());
                 //velY = (float) Math.sqrt(Math.pow(speed, 2) - Math.pow(velX, 2));
                 break;
             case "LEFT":
             case "RIGHT":
-                velY += Math.copySign(gravity, this.gs.player.getRect().getCenterY() - this.getRect().getCenterY());
+                velY += Math.copySign(gravity, this.gs.getObjects().player.getRect().getCenterY() - this.getRect().getCenterY());
                 //velX = (float) Math.sqrt(Math.pow(speed, 2) - Math.pow(velY, 2));
         }
         if(this.getVelocity() != 0){
             Random r = new Random();
-            gs.particles.add(new ParticleTrail(gp, gs, 20, this.color, 
+            gs.getObjects().particles.add(new ParticleTrail(gp, gs, 20, this.color, 
                 new Point2D.Float(Math.round((float) this.predictPosition(5).getCenterX()), (int) Math.round(this.predictPosition(5).getCenterY())), 
                 r.nextFloat() * this.size + this.x, 
                 r.nextFloat() * this.size + this.y, 

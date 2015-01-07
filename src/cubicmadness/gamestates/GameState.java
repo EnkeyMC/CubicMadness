@@ -6,6 +6,7 @@
 package cubicmadness.gamestates;
 
 import cubicmadness.bin.GamePanel;
+import cubicmadness.bin.ObjectHandler;
 import java.awt.Graphics2D;
 
 /**
@@ -15,9 +16,14 @@ import java.awt.Graphics2D;
 public abstract class GameState {
     
     protected GamePanel gp;
+    protected ObjectHandler objects = new ObjectHandler();
     
     public GameState(GamePanel gp){
         this.gp = gp;
+    }
+    
+    public ObjectHandler getObjects(){
+        return objects;
     }
     
     public abstract void tick();
