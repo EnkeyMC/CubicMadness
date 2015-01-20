@@ -1,7 +1,6 @@
 package cubicmadness.bin;
 
 import cubicmadness.gamestates.GameState;
-import cubicmadness.gamestates.PlayState;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;

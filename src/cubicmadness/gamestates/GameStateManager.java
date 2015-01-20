@@ -19,10 +19,12 @@ public class GameStateManager {
     
     public final GameState PLAY_STATE;
     public final GameState MAINMENU_STATE;
+    public final GameState GAMEOVER_STATE;
     
     public GameStateManager(GamePanel gp){
         this.PLAY_STATE = new PlayState(gp);
         this.MAINMENU_STATE = new MainMenuState(gp);
+        this.GAMEOVER_STATE = new GameOverState(gp);
         this.pushState(this.MAINMENU_STATE);
     }
     
@@ -55,6 +57,13 @@ public class GameStateManager {
             states.peek().pause();
         states.push(s);
         states.peek().init();
+    }
+    
+    public void pushState(GameState s, Object o){
+        if(!states.empty())
+            states.peek().pause();
+        states.push(s);
+        states.peek().init(o);
     }
     
     public void popCurrentState(){

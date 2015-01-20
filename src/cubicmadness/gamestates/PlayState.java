@@ -6,7 +6,7 @@
 package cubicmadness.gamestates;
 
 import cubicmadness.bin.GamePanel;
-import static cubicmadness.bin.GamePanel.paused;
+import cubicmadness.bin.ObjectHandler;
 import cubicmadness.coin.Coin;
 import cubicmadness.coin.CoinFollower;
 import cubicmadness.coin.CoinSlower;
@@ -152,7 +152,7 @@ public class PlayState extends GameState {
                     if(objects.player.removeEffect(Effect.LIFE)){
                         objects.player.makeInvincible();
                     }else{
-                        paused = true;
+                        gp.gsm.pushState(gp.gsm.GAMEOVER_STATE, this.getObjects());
                     }
                 }
             }
@@ -198,12 +198,12 @@ public class PlayState extends GameState {
 
     @Override
     public void pause() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public void resume() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
@@ -213,9 +213,7 @@ public class PlayState extends GameState {
 
     @Override
     public void init() {
-        this.objects.enemies = new ArrayList();
-        this.objects.particles = new ArrayList();
-        this.objects.powerups = new ArrayList();
+        this.objects = new ObjectHandler();
         objects.player = new Player(gp, this);
         for(int i = 0; i < 2; i++)
             this.objects.enemies.add(new EnemyBasic(gp, this));
@@ -224,5 +222,14 @@ public class PlayState extends GameState {
         
         coins = 0;
         score = 0;
+    }
+
+    @Override
+    public void init(Object o) {
+        
+    }
+    
+    public int getScore(){
+        return score;
     }
 }

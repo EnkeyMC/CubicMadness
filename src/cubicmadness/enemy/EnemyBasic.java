@@ -70,7 +70,6 @@ public class EnemyBasic extends GameObject{
             this.spawn();
             return;
         }
-        this.x += velX;
-        this.y += velY;
+        super.tick();
     }
 }

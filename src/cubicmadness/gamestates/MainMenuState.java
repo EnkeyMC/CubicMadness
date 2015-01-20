@@ -45,7 +45,6 @@ public class MainMenuState extends GameState {
         
         if(MouseInput.LMB){
             objects.particles.add(new ParticleCircular(gp, this, 10, Color.LIGHT_GRAY, new Point2D.Float(MouseInput.mouseXY.x, MouseInput.mouseXY.y), 4, 6, null, 3, 5, 10, 0.2f));
-            MouseInput.LMB = false;
         }
         
         List<Particle> particlesToRemove = new ArrayList();
@@ -57,17 +56,63 @@ public class MainMenuState extends GameState {
             objects.particles.remove(p);
         }
         
+        if(KeyInput.pressed.contains(KeyEvent.VK_UP)){
+            int i = 0;
+            for(MenuElement e : objects.elements){
+                if(e.isFocused()){
+                    i = objects.elements.indexOf(e);
+                    e.setFocused(false);
+                }
+            }
+            i = (int) GamePanel.cycle(i - 1, 0, objects.elements.size()-1);
+            objects.elements.get(i).setFocused(true);
+            KeyInput.pressed.remove(KeyEvent.VK_UP);
+        }
+        
+        if(KeyInput.pressed.contains(KeyEvent.VK_DOWN)){
+            int i = 0;
+            for(MenuElement e : objects.elements){
+                if(e.isFocused()){
+                    i = objects.elements.indexOf(e);
+                    e.setFocused(false);
+                }
+            }
+            i = (int) GamePanel.cycle(i + 1, 0, objects.elements.size()-1);
+            objects.elements.get(i).setFocused(true);
+            KeyInput.pressed.remove(KeyEvent.VK_DOWN);
+        }
+        
         if(KeyInput.pressed.contains(KeyEvent.VK_ENTER)){
-            this.objects.elements.get(0).actionPerformed();
             KeyInput.pressed.remove(KeyEvent.VK_ENTER);
+            for(MenuElement e : objects.elements){
+                if(e.isFocused()){
+                    e.actionPerformed();
+                    return;
+                }
+            }
+        }
+        
+        if(MouseInput.LMB){
+            MouseInput.LMB = false;
+            for(MenuElement e : objects.elements){
+                if(e.isInBounds(MouseInput.mouseXY.x, MouseInput.mouseXY.y)){
+                    e.actionPerformed();
+                    return;
+                }
+            }
         }
         
         for(MenuElement e : objects.elements){
             if(e.isInBounds(MouseInput.mouseXY.x, MouseInput.mouseXY.y)){
+                this.unfocusAllElements();
                 e.setFocused(true);
-            }else{
-                e.setFocused(false);
             }
+        }
+    }
+    
+    private void unfocusAllElements(){
+        for(MenuElement e : objects.elements){
+            e.setFocused(false);
         }
     }
 
@@ -98,9 +143,15 @@ public class MainMenuState extends GameState {
     public void init() {
         MenuButton e;
         try {
-            e = new MenuButton(gp, MenuButton.BIG, "Play", this.getClass().getDeclaredMethod("buttonPlayAction"));
+            e = new MenuButton(gp, this, MenuButton.BIG, "Play", this.getClass().getDeclaredMethod("buttonPlayAction"));
             e.align(MenuButton.ALIGN_CENTER);
             e.setY(200);
+            e.setFocused(true);
+            objects.elements.add(e);
+            
+            e = new MenuButton(gp, this, MenuButton.BIG, "Exit", this.getClass().getDeclaredMethod("buttonExitAction"));
+            e.align(MenuButton.ALIGN_CENTER);
+            e.setY(300);
             objects.elements.add(e);
         } catch (NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(MainMenuState.class.getName()).log(Level.SEVERE, null, ex);
@@ -109,5 +160,14 @@ public class MainMenuState extends GameState {
     
     public void buttonPlayAction(){
         gp.gsm.pushState(gp.gsm.PLAY_STATE);
+    }
+    
+    public void buttonExitAction(){
+        System.exit(0);
+    }
+
+    @Override
+    public void init(Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

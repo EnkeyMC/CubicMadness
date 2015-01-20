@@ -32,4 +32,5 @@ public abstract class GameState {
     public abstract void resume();
     public abstract void restart();
     public abstract void init();
+    public abstract void init(Object o);
 }

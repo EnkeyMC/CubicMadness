@@ -6,6 +6,7 @@
 package cubicmadness.menuelements;
 
 import cubicmadness.bin.GamePanel;
+import cubicmadness.gamestates.GameState;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -31,8 +32,8 @@ public class MenuButton extends MenuElement{
     private final String text;
     private Method action;
 
-    public MenuButton(GamePanel panel, int type, String text, Method m) {
-        super(panel, 0, 0);
+    public MenuButton(GamePanel panel, GameState gs, int type, String text, Method m) {
+        super(panel, gs, 0, 0);
         this.type = type;
         this.text = text;
         this.action = m;
@@ -57,7 +58,7 @@ public class MenuButton extends MenuElement{
     public void align(byte align){
         switch(align){
             case ALIGN_CENTER:
-                setX((panel.getWidth() / 2f) - (type / 2f));
+                setX((gp.getWidth() / 2f) - (type / 2f));
                 break;
             default:
                 System.out.println("Unknown button align!");
@@ -67,7 +68,7 @@ public class MenuButton extends MenuElement{
     @Override
     public void actionPerformed(){
         try {
-            action.invoke(panel.gsm.MAINMENU_STATE);
+            action.invoke(this.gs);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(MenuButton.class.getName()).log(Level.SEVERE, null, ex);
         }

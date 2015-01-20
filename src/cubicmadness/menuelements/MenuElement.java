@@ -6,6 +6,7 @@
 package cubicmadness.menuelements;
 
 import cubicmadness.bin.GamePanel;
+import cubicmadness.gamestates.GameState;
 import java.awt.Graphics2D;
 
 /**
@@ -14,13 +15,15 @@ import java.awt.Graphics2D;
  */
 public abstract class MenuElement {
     
-    protected GamePanel panel;
+    protected GamePanel gp;
+    protected GameState gs;
     protected float x;
     protected float y;
     protected boolean focused;
     
-    public MenuElement(GamePanel panel, float x, float y){
-        this.panel = panel;
+    public MenuElement(GamePanel gp, GameState gs, float x, float y){
+        this.gp = gp;
+        this.gs = gs;
         this.x = x;
         this.y = y;
     }

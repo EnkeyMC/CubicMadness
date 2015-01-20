@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 
 /**
@@ -78,17 +77,6 @@ public class GamePanel extends Canvas implements Runnable{
                     System.out.println("FPS: " + frames);
                     frames = 0;
                 }
-            }else{
-                if(KeyInput.pressed.contains(KeyEvent.VK_R)){
-                    gsm.restart();
-                    this.nextUpdate = System.nanoTime();
-                    paused = false;
-                }
-            }
-            
-            if(KeyInput.pressed.contains(KeyEvent.VK_ESCAPE)){
-                gsm.popCurrentState();
-                KeyInput.pressed.remove(KeyEvent.VK_ESCAPE);
             }
         }
     }
@@ -118,5 +106,25 @@ public class GamePanel extends Canvas implements Runnable{
         
         g.dispose();
         bs.show();
+    }
+    
+    public static float clamp(float n, float min, float max){
+        if(n < min){
+            return min;
+        }else if(n > max){
+            return max;
+        }else{
+            return n;
+        }
+    }
+    
+    public static float cycle(float n, float min, float max){
+        if(n < min){
+            return max;
+        }else if(n > max){
+            return min;
+        }else{
+            return n;
+        }
     }
 }

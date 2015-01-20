@@ -20,8 +20,4 @@ public class ObjectHandler {
     public Coin coin;
     public List<PowerUp> powerups = new ArrayList();
     public List<MenuElement> elements = new ArrayList();
-    
-    public void tick(){
-        
-    }
 }
