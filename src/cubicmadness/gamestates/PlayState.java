@@ -44,50 +44,50 @@ public class PlayState extends GameState {
 
     @Override
     public void tick() {
-        List<PowerUp> powerupsToRemove = new ArrayList();
-        for(PowerUp p : objects.powerups){
-            p.tick(powerupsToRemove);
-        }
-        
-        for(PowerUp p : powerupsToRemove){
-            objects.powerups.remove(p);
-            this.objects.particles.add(new ParticleZooming(gp, this,8, p.getColor(), p.getCenter(), p.getX(), p.getY(), p.getSize(), -3));
-        }
-        
-        for(EnemyBasic e: this.objects.enemies){
-            e.tick();
-        }
-        
-        List<Particle> particlesToRemove = new ArrayList<>();
-        for (Particle particle : this.objects.particles) {
-            particle.tick(particlesToRemove);
-        }
-        
-        for (Particle p: particlesToRemove){
-            this.objects.particles.remove(p);
-        }
-        
-        objects.player.tick();
-        this.objects.coin.tick();
-        
-        this.gameCollisions();
-        
-        if(KeyInput.pressed.contains(KeyEvent.VK_SEMICOLON)){
-            this.debugMode = !this.debugMode;
-            KeyInput.pressed.remove(KeyEvent.VK_SEMICOLON);
-        }
-        
-        if(this.nextSpawn < 0){
-            Random r = new Random();
-            switch(r.nextInt(1)){
-                case 0:
-                    objects.powerups.add(new BoxLife(gp, this,r.nextInt(90) + 90, r.nextInt(gp.getWidth() - 200) + 100, r.nextInt(gp.getHeight() - 200) + 100));
-                    break;
-                default:
+        if(!paused){
+            List<PowerUp> powerupsToRemove = new ArrayList();
+            for(PowerUp p : objects.powerups){
+                p.tick(powerupsToRemove);
             }
-            this.nextSpawn = r.nextInt(90) + 180;
-        }else{
-            this.nextSpawn--;
+
+            for(PowerUp p : powerupsToRemove){
+                objects.powerups.remove(p);
+                this.objects.particles.add(new ParticleZooming(gp, this,8, p.getColor(), p.getCenter(), p.getX(), p.getY(), p.getSize(), -3));
+            }
+
+            for(EnemyBasic e: this.objects.enemies){
+                e.tick();
+            }
+
+            List<Particle> particlesToRemove = new ArrayList<>();
+            for (Particle particle : this.objects.particles) {
+                particle.tick(particlesToRemove);
+            }
+
+            for (Particle p: particlesToRemove){
+                this.objects.particles.remove(p);
+            }
+
+            objects.player.tick();
+            this.objects.coin.tick();
+
+            this.gameCollisions();
+
+            if(KeyInput.pressed.contains(KeyEvent.VK_SEMICOLON)){
+                this.debugMode = !this.debugMode;
+                KeyInput.pressed.remove(KeyEvent.VK_SEMICOLON);
+            }
+
+            if(this.nextSpawn <= 0){
+                Random r = new Random();
+                switch(r.nextInt(1)){
+                    case 0:
+                        objects.powerups.add(new BoxLife(gp, this,r.nextInt(90) + 90, r.nextInt(gp.getWidth() - 200) + 100, r.nextInt(gp.getHeight() - 200) + 100));
+                        break;
+                    default:
+                }
+                this.nextSpawn = r.nextInt(3) + 2;
+            }
         }
     }
 
@@ -138,9 +138,11 @@ public class PlayState extends GameState {
         g.drawString("Y: " + objects.player.getY(), 20, 110);
         g.drawString("Coins: " + this.coins, 20, 130);
         
-        int i = 0;
-        for(EnemyBasic e : this.objects.enemies) i++;
-        g.drawString("Enemies: " + i, 10, 160);
+        g.drawString("Enemies: " + objects.enemies.size(), 10, 160);
+        int particles = 0;
+        for(Particle p : objects.particles) particles += p.particleAmount();
+        g.drawString("Particles: " + particles, 10, 180);
+        g.drawString("PowerUps: " + objects.powerups.size(), 10, 200);
     }
     
     private void gameCollisions(){
@@ -161,6 +163,7 @@ public class PlayState extends GameState {
         if(objects.player.getCollisionBox().intersects(this.objects.coin.getCollisionBox())){
             score += this.objects.coin.getPoints();
             coins++;
+            this.nextSpawn--;
             
             this.objects.particles.add(new ParticleCircular(gp, this,10, this.objects.coin.getColor(), this.objects.coin.getCenter(), 4, 6, this.objects.coin, 1, this.objects.coin.getSize() / 2, 10, 0.1f));
             this.objects.particles.add(new ParticleCircular(gp, this,8, this.objects.coin.getColor(), this.objects.coin.getCenter(), 6, 10, this.objects.coin, 1, this.objects.coin.getSize() / 3, 6, 0.1f));
@@ -194,16 +197,6 @@ public class PlayState extends GameState {
         for(PowerUp p : toRemove){
             objects.powerups.remove(p);
         }
-    }
-
-    @Override
-    public void pause() {
-        
-    }
-
-    @Override
-    public void resume() {
-        
     }
 
     @Override

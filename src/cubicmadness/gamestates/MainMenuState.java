@@ -6,6 +6,7 @@
 package cubicmadness.gamestates;
 
 import cubicmadness.bin.GamePanel;
+import cubicmadness.bin.ObjectHandler;
 import cubicmadness.input.KeyInput;
 import cubicmadness.input.MouseInput;
 import cubicmadness.menuelements.MenuButton;
@@ -128,19 +129,13 @@ public class MainMenuState extends GameState {
     }
 
     @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
     public void restart() {
+        init();
     }
 
     @Override
     public void init() {
+        this.objects = new ObjectHandler();
         MenuButton e;
         try {
             e = new MenuButton(gp, this, MenuButton.BIG, "Play", this.getClass().getDeclaredMethod("buttonPlayAction"));
@@ -159,7 +154,7 @@ public class MainMenuState extends GameState {
     }
     
     public void buttonPlayAction(){
-        gp.gsm.pushState(gp.gsm.PLAY_STATE);
+        gp.gsm.transition(this, gp.gsm.PLAY_STATE, TransitionState.BLACKFADE);
     }
     
     public void buttonExitAction(){
@@ -168,6 +163,6 @@ public class MainMenuState extends GameState {
 
     @Override
     public void init(Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        init();
     }
 }

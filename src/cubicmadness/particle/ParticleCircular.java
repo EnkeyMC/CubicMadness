@@ -77,4 +77,8 @@ public class ParticleCircular extends ParticleTrail{
             list.add(this);
         }
     }
+    
+    public int particleAmount(){
+        return particles.length;
+    }
 }

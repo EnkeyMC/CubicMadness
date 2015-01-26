@@ -65,30 +65,32 @@ public class GameOverState extends GameState{
             alpha = GamePanel.clamp(alpha, 0, 1);
         }
         
-         if(KeyInput.pressed.contains(KeyEvent.VK_UP)){
-            int i = 0;
-            for(MenuElement e : objects.elements){
-                if(e.isFocused()){
-                    i = objects.elements.indexOf(e);
-                    e.setFocused(false);
+        if(alpha != 0){
+            if(KeyInput.pressed.contains(KeyEvent.VK_UP)){
+                int i = 0;
+                for(MenuElement e : objects.elements){
+                    if(e.isFocused()){
+                        i = objects.elements.indexOf(e);
+                        e.setFocused(false);
+                    }
                 }
+                i = (int) GamePanel.cycle(i - 1, 0, objects.elements.size()-1);
+                objects.elements.get(i).setFocused(true);
+                KeyInput.pressed.remove(KeyEvent.VK_UP);
             }
-            i = (int) GamePanel.cycle(i - 1, 0, objects.elements.size()-1);
-            objects.elements.get(i).setFocused(true);
-            KeyInput.pressed.remove(KeyEvent.VK_UP);
-        }
-        
-        if(KeyInput.pressed.contains(KeyEvent.VK_DOWN)){
-            int i = 0;
-            for(MenuElement e : objects.elements){
-                if(e.isFocused()){
-                    i = objects.elements.indexOf(e);
-                    e.setFocused(false);
+
+            if(KeyInput.pressed.contains(KeyEvent.VK_DOWN)){
+                int i = 0;
+                for(MenuElement e : objects.elements){
+                    if(e.isFocused()){
+                        i = objects.elements.indexOf(e);
+                        e.setFocused(false);
+                    }
                 }
+                i = (int) GamePanel.cycle(i + 1, 0, objects.elements.size()-1);
+                objects.elements.get(i).setFocused(true);
+                KeyInput.pressed.remove(KeyEvent.VK_DOWN);
             }
-            i = (int) GamePanel.cycle(i + 1, 0, objects.elements.size()-1);
-            objects.elements.get(i).setFocused(true);
-            KeyInput.pressed.remove(KeyEvent.VK_DOWN);
         }
         
         if(KeyInput.pressed.contains(KeyEvent.VK_ENTER)){
@@ -157,12 +159,11 @@ public class GameOverState extends GameState{
                 e.draw(g, interpolation);
             }
             
-            g.setColor(new Color(40,40,40));
+            g.setColor(Color.WHITE);
             g.setFont(g.getFont().deriveFont(60f));
             g.drawString("Game Over!", (gp.getWidth() / 2) - (g.getFontMetrics().stringWidth("Game Over!") / 2), 100);
             
             g.setFont(g.getFont().deriveFont(45f));
-            g.setColor(new Color(60,60,60));
             int score = ((PlayState)gp.gsm.PLAY_STATE).getScore();
             g.drawString("Score: " + score, (gp.getWidth() / 2) - (g.getFontMetrics().stringWidth("Score: " + score) / 2), 150);            
         }
@@ -176,15 +177,8 @@ public class GameOverState extends GameState{
     }
 
     @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
     public void restart() {
+        init(gameObjects);
     }
 
     @Override
@@ -218,10 +212,11 @@ public class GameOverState extends GameState{
     }
     
     public void buttonRestartAction(){
-        gp.gsm.pushState(gp.gsm.PLAY_STATE);
+        gp.gsm.transition(this, gp.gsm.PLAY_STATE, TransitionState.BLACKFADE);
     }
     
     public void buttonMainMenuAction(){
-        gp.gsm.pushState(gp.gsm.MAINMENU_STATE);
+        gp.gsm.transition(this, gp.gsm.MAINMENU_STATE, TransitionState.BLACKFADE);
+        //gp.gsm.pushState(gp.gsm.MAINMENU_STATE);
     }
 }

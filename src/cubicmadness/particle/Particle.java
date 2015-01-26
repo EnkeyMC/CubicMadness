@@ -66,4 +66,8 @@ public class Particle extends GameObject{
         }
         return c;
     }  
+    
+    public int particleAmount(){
+        return 1;
+    }
 }

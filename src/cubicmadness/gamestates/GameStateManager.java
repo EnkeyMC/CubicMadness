@@ -21,11 +21,15 @@ public class GameStateManager {
     public final GameState MAINMENU_STATE;
     public final GameState GAMEOVER_STATE;
     
+    
+    private final GamePanel gp;
+    
     public GameStateManager(GamePanel gp){
         this.PLAY_STATE = new PlayState(gp);
         this.MAINMENU_STATE = new MainMenuState(gp);
         this.GAMEOVER_STATE = new GameOverState(gp);
         this.pushState(this.MAINMENU_STATE);
+        this.gp = gp;
     }
     
     public void tick(){
@@ -76,5 +80,19 @@ public class GameStateManager {
     
     public GameState getCurrentState(){
         return states.peek();
+    }
+    
+    public void transition(GameState prev, GameState next, byte type){
+        states.push(new TransitionState(gp, prev, next, type));
+    }
+    
+    public void prepareState(GameState s){
+        s.init();
+        s.pause();
+    }
+    
+    public void resume(GameState s){
+        states.push(s);
+        resume();
     }
 }
