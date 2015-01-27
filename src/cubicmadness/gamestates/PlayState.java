@@ -19,6 +19,8 @@ import cubicmadness.particle.ParticleCircular;
 import cubicmadness.particle.ParticleZooming;
 import cubicmadness.player.Player;
 import cubicmadness.powerup.BoxLife;
+import cubicmadness.powerup.BoxPulse;
+import cubicmadness.powerup.BoxShield;
 import cubicmadness.powerup.Effect;
 import cubicmadness.powerup.PowerUp;
 import java.awt.Graphics;
@@ -67,6 +69,13 @@ public class PlayState extends GameState {
             for (Particle p: particlesToRemove){
                 this.objects.particles.remove(p);
             }
+            
+            if (objects.pulse != null) {
+                objects.pulse.tick();
+                if(objects.pulse.getLife() < 0){
+                    objects.pulse = null;
+                }
+            }
 
             objects.player.tick();
             this.objects.coin.tick();
@@ -80,11 +89,13 @@ public class PlayState extends GameState {
 
             if(this.nextSpawn <= 0){
                 Random r = new Random();
-                switch(r.nextInt(1)){
-                    case 0:
-                        objects.powerups.add(new BoxLife(gp, this,r.nextInt(90) + 90, r.nextInt(gp.getWidth() - 200) + 100, r.nextInt(gp.getHeight() - 200) + 100));
-                        break;
-                    default:
+                int n = r.nextInt(100);
+                if(n < 40){
+                    objects.powerups.add(new BoxLife(gp, this,r.nextInt(90) + 90, r.nextInt(gp.getWidth() - 200) + 100, r.nextInt(gp.getHeight() - 200) + 100));
+                }else if(n < 80){
+                    objects.powerups.add(new BoxPulse(gp, this,r.nextInt(90) + 90, r.nextInt(gp.getWidth() - 200) + 100, r.nextInt(gp.getHeight() - 200) + 100));
+                }else{
+                    objects.powerups.add(new BoxShield(gp, this,r.nextInt(90) + 90, r.nextInt(gp.getWidth() - 200) + 100, r.nextInt(gp.getHeight() - 200) + 100));
                 }
                 this.nextSpawn = r.nextInt(3) + 2;
             }
@@ -114,6 +125,9 @@ public class PlayState extends GameState {
             
         }
         
+        if(objects.pulse != null)
+            objects.pulse.draw(g, interpolation);
+        
         if(this.objects.coin != null){
             this.objects.coin.draw((Graphics2D)g, interpolation);
         }
@@ -137,27 +151,40 @@ public class PlayState extends GameState {
         g.drawString("X: " + objects.player.getX(), 20, 90);
         g.drawString("Y: " + objects.player.getY(), 20, 110);
         g.drawString("Coins: " + this.coins, 20, 130);
+        g.drawString("Shield: " + objects.player.getShieldLevel(), 20, 150);
         
-        g.drawString("Enemies: " + objects.enemies.size(), 10, 160);
+        g.drawString("Enemies: " + objects.enemies.size(), 10, 180);
         int particles = 0;
         for(Particle p : objects.particles) particles += p.particleAmount();
-        g.drawString("Particles: " + particles, 10, 180);
-        g.drawString("PowerUps: " + objects.powerups.size(), 10, 200);
+        g.drawString("Particles: " + particles, 10, 200);
+        g.drawString("PowerUps: " + objects.powerups.size(), 10, 220);
     }
     
     private void gameCollisions(){
+        List<EnemyBasic> enemiesToRemove = new ArrayList();
         for(EnemyBasic e: this.objects.enemies){
             if(objects.player.getCollisionBox().intersects(e.getCollisionBox()) && !objects.player.isInvincible()){
                 if(e.getClass() == EnemySlowing.class){
                     objects.player.applyEffect(new Effect(Effect.SLOWNESS, 1, 90));
                 }else{
-                    if(objects.player.removeEffect(Effect.LIFE)){
+                    if(objects.player.decreaseSheild()){
+                    }else if(objects.player.removeEffect(Effect.LIFE)){
                         objects.player.makeInvincible();
                     }else{
                         gp.gsm.pushState(gp.gsm.GAMEOVER_STATE, this.getObjects());
                     }
                 }
             }
+            
+            if(objects.pulse != null && objects.pulse.getCollisionBox().intersects(e.getCollisionBox())){
+                enemiesToRemove.add(e);
+                this.objects.particles.add(new ParticleCircular(gp, this,10, e.getColor(), e.getCenter(), 4, 6, e, 1, e.getSize() / 2, 10, 0.1f));
+                this.objects.particles.add(new ParticleCircular(gp, this,8, e.getColor(), e.getCenter(), 6, 10, e, 1, e.getSize() / 3, 6, 0.1f));
+            }
+        }
+        
+        for(EnemyBasic e : enemiesToRemove){
+            objects.enemies.remove(e);
         }
         
         if(objects.player.getCollisionBox().intersects(this.objects.coin.getCollisionBox())){

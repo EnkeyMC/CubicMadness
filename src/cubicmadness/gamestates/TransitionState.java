@@ -14,6 +14,8 @@ import java.util.List;
  */
 public class TransitionState extends GameState{
     
+    // TODO: přidat možnost vypnutí
+    
     // Types
     public static final byte BLACKFADE = 0;
     
@@ -34,7 +36,7 @@ public class TransitionState extends GameState{
         this.alpha = 0;
         
         if(type == TransitionState.BLACKFADE){
-            this.halftime = 20;
+            this.halftime = 10;
         }else{
             this.halftime = 30;
         }

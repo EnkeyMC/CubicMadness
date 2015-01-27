@@ -1,5 +1,6 @@
 package cubicmadness.player;
 
+import cubicmadness.attack.Pulse;
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
 import cubicmadness.gamestates.GameState;
@@ -106,10 +107,22 @@ public class Player extends GameObject{
                 effects.remove(i);
             }
         }
+        
+        if(KeyInput.pressed.contains(KeyEvent.VK_SPACE)){
+            KeyInput.pressed.remove(KeyEvent.VK_SPACE);
+            if(gs.getObjects().pulse == null && this.hasEffect(Effect.PULSE)){
+                gs.getObjects().pulse = new Pulse(gp, gs, this.getCenter().x,this.getCenter().y);
+                this.effects.remove(this.getFirstEffect(Effect.PULSE));
+            }
+        }
     }
     
     @Override
     public void draw(Graphics2D g, double interpolation){
+        for(Effect e :effects){
+            e.draw(this, g, interpolation);
+        }
+        
         if(this.invincible){
             g.setComposite(this.makeTransparent((float)Math.sin(Math.toRadians(this.animProgress))));
             super.draw(g, interpolation);
@@ -135,10 +148,6 @@ public class Player extends GameObject{
         if(!key.contains(KeyEvent.VK_RIGHT) && velX > 0){
             this.x += velX * interpolation;
             velX = 0;
-        }
-        
-        for(Effect e :effects){
-            e.draw(this, g, interpolation);
         }
     }
     
@@ -177,15 +186,8 @@ public class Player extends GameObject{
         return i;
     }
     
-    public boolean applyEffect(Effect e){
-        int i = 0;
-        for(Effect effect : effects){
-            if(effect.getEffect() == e.getEffect()){
-                i++;
-            }
-        }
-        
-        if(i < 5){
+    public boolean applyEffect(Effect e){        
+        if(this.getEffectCount(e.getEffect()) < e.getMax()){
             return effects.add(e);
         }else{
             return false;
@@ -200,5 +202,32 @@ public class Player extends GameObject{
     
     public boolean isInvincible(){
         return this.invincible;
+    }
+    
+    public boolean decreaseSheild(){
+        if(this.hasEffect(Effect.SHIELD)){
+            Effect e = this.getFirstEffect(Effect.SHIELD);
+            if(e.getLevel() > 0){
+                e.setLevel(e.getLevel() - 1);
+                return true;
+            }else{
+                this.effects.remove(e);
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+    
+    public Effect getFirstEffect(int type){
+        for(Effect e : this.effects){
+            if(e.getEffect() == type)
+                return e;
+        }
+        return null;
+    }
+    
+    public int getShieldLevel(){
+        return this.getFirstEffect(Effect.SHIELD) == null ? 0 : this.getFirstEffect(Effect.SHIELD).getLevel();
     }
 }

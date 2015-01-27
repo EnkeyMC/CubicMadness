@@ -42,6 +42,13 @@ public class MainMenuState extends GameState {
             objects.particles.add(p);
             
             MouseInput.mousePrevXY = MouseInput.mouseXY;
+            
+            for(MenuElement e : objects.elements){
+                if(e.isInBounds(MouseInput.mouseXY.x, MouseInput.mouseXY.y)){
+                    this.unfocusAllElements();
+                    e.setFocused(true);
+                }
+            }
         }
         
         if(MouseInput.LMB){
@@ -100,13 +107,6 @@ public class MainMenuState extends GameState {
                     e.actionPerformed();
                     return;
                 }
-            }
-        }
-        
-        for(MenuElement e : objects.elements){
-            if(e.isInBounds(MouseInput.mouseXY.x, MouseInput.mouseXY.y)){
-                this.unfocusAllElements();
-                e.setFocused(true);
             }
         }
     }

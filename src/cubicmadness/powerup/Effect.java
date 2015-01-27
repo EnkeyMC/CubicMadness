@@ -1,6 +1,8 @@
 package cubicmadness.powerup;
 
 import cubicmadness.player.Player;
+import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
@@ -17,8 +19,8 @@ public class Effect {
     public static final int SLOWNESS = 4;
     
     private final int effect;
-    private final int level;
-    private final int duration;
+    private int duration;
+    private int level;
     
     private int time;
     
@@ -27,6 +29,10 @@ public class Effect {
         this.level = 0;
         this.duration = 0;
         this.time = 0;
+        
+        if(effect == SHIELD){
+            level = 3;
+        }
     }
     
     public Effect (int effect, int level, int duration){
@@ -42,18 +48,35 @@ public class Effect {
                 int num = player.getEffectCount(LIFE);
                 Rectangle r = player.getRect(interpolation);
                 int gap = 1;
+                int ygap = player.hasEffect(Effect.SHIELD) ? 5 : 3;
                 int size = (int) (player.getSize() - 4) / 5;
                 
+                g.setColor(player.getColor());
                 for(int i = 0; i < num; i++){
-                    g.fillRect(r.x + (size + gap) * i, r.y - 3 - size, size, size);
+                    g.fillRect(r.x + (size + gap) * i, r.y - ygap - size, size, size);
                 }
                 
                 break;
             case SHIELD:
-                
+                g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+                Color c = new Color(63,154,240);
+                g.setColor(this.interpolatedColor(Math.abs(Math.sin(Math.toRadians(System.currentTimeMillis() / 3))), c, c.darker())); 
+                Rectangle r2 = player.getRect(interpolation);
+                r2.grow(level / 1, level / 1);
+                g.fill(r2);
+                g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
                 break;
             case PULSE:
+                int num2 = player.getEffectCount(PULSE);
+                Rectangle r3 = player.getRect(interpolation);
+                int gap2 = 1;
+                int ygap2 = player.hasEffect(Effect.SHIELD) ? 5 : 3;
+                int size2 = (int) (player.getSize() - 4) / 5;
                 
+                g.setColor(new Color(150,150,150));
+                for(int i = 0; i < num2; i++){
+                    g.fillRect(r3.x + (size2 + gap2) * i, r3.y + ygap2 + (int)player.getSize(), size2, size2);
+                }
                 break;
             case SLOWNESS:
                 
@@ -68,13 +91,17 @@ public class Effect {
             case LIFE:
                 break;
             case SHIELD:
-                
+                duration++;
+                if(duration > 20){
+                    if(level < 3)
+                        level++;
+                    duration = 0;
+                }
                 break;
             case PULSE:
-                
                 break;
             case SLOWNESS:
-                player.setSpeed(player.getDEFAULT_SPEED() - level*2);
+                player.setSpeed(player.getDEFAULT_SPEED() - getLevel()*2);
                 time++;
                 
                 if(time >= duration){
@@ -91,5 +118,37 @@ public class Effect {
     
     public int getEffect(){
         return this.effect;
+    }
+    
+    public int getMax(){
+        switch (effect) {
+            case LIFE:
+            case PULSE:
+                return 5;
+            default:
+                return 1;
+        }
+    }
+
+    /**
+     * @return the level
+     */
+    public int getLevel() {
+        return level;
+    }
+
+    /**
+     * @param level the level to set
+     */
+    public void setLevel(int level) {
+        this.level = level;
+    }
+    
+    private Color interpolatedColor(double interpolation, Color c1, Color c2){
+        int r,g,b;
+        r = (int)Math.round(c1.getRed() * interpolation + c2.getRed() * (1 - interpolation));
+        g = (int)Math.round(c1.getGreen() * interpolation + c2.getGreen() * (1 - interpolation));
+        b = (int)Math.round(c1.getBlue() * interpolation + c2.getBlue() * (1 - interpolation));
+        return new Color(r,g,b);
     }
 }

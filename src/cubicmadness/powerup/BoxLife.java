@@ -43,4 +43,9 @@ public class BoxLife extends PowerUp {
         g.fillRect((int)(this.x + this.size - s/2), (int)(this.y + this.size - s/2), (int)s, (int)s);
         g.fillRect((int)(this.x - s/2), (int)(this.y + this.size - s/2), (int)s, (int)s);
     }
+    
+    @Override
+    public Color getColor(){
+        return this.c1;
+    }
 }

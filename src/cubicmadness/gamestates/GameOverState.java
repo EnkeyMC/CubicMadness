@@ -34,7 +34,18 @@ public class GameOverState extends GameState{
     }
 
     @Override
-    public void tick() {
+    public void tick() {        
+        if(!(MouseInput.mouseXY.x == MouseInput.mousePrevXY.x && MouseInput.mouseXY.y == MouseInput.mousePrevXY.y)){            
+            MouseInput.mousePrevXY = MouseInput.mouseXY;
+            
+            for(MenuElement e : objects.elements){
+                if(e.isInBounds(MouseInput.mouseXY.x, MouseInput.mouseXY.y)){
+                    this.unfocusAllElements();
+                    e.setFocused(true);
+                }
+            }
+        }
+        
         List<PowerUp> powerupsToRemove = new ArrayList();
         for(PowerUp p : objects.powerups){
             p.tick(powerupsToRemove);
@@ -110,13 +121,6 @@ public class GameOverState extends GameState{
                     e.actionPerformed();
                     return;
                 }
-            }
-        }
-        
-        for(MenuElement e : objects.elements){
-            if(e.isInBounds(MouseInput.mouseXY.x, MouseInput.mouseXY.y)){
-                this.unfocusAllElements();
-                e.setFocused(true);
             }
         }
     }
