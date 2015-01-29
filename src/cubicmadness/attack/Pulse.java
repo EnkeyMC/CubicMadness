@@ -28,8 +28,8 @@ public class Pulse extends GameObject {
         this.x = centerX - (size / 2f);
         this.y = centerY - (size / 2f);
         this.color = new Color(150, 150, 150);
-        this.speed = 25;
-        this.life = 5;
+        this.speed = 35;
+        this.life = 7;
     }
     
     private void grow(float amount) {
