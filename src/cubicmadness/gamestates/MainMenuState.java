@@ -5,6 +5,7 @@
  */
 package cubicmadness.gamestates;
 
+import cubicmadness.bin.Config;
 import cubicmadness.bin.GamePanel;
 import cubicmadness.bin.ObjectHandler;
 import cubicmadness.input.MouseInput;
@@ -109,6 +110,8 @@ public class MainMenuState extends GameState {
         }
         
         objects.elements.add(new MenuLabel(gp, this, gp.getWidth() / 2, 100, "Cubic Madness", MenuLabel.TYPE_H1, MenuLabel.ALIGN_CENTER));
+        objects.elements.add(new MenuLabel(gp, this, 20, gp.getHeight() - 20, "Made by Martin Omacht", 12, 0));
+        objects.elements.add(new MenuLabel(gp, this, gp.getWidth() - 20, gp.getHeight() - 20, "Version: " + Config.VERSION, 12, MenuLabel.ALIGN_RIGHT));
     }
     
     public void buttonPlayAction(){
