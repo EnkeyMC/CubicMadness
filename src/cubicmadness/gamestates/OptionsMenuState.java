@@ -23,9 +23,9 @@ import java.util.logging.Logger;
  *
  * @author Martin
  */
-public class MainMenuState extends GameState {
+public class OptionsMenuState extends GameState{
 
-    public MainMenuState(GamePanel gp) {
+    public OptionsMenuState(GamePanel gp) {
         super(gp);
     }
 
@@ -71,8 +71,9 @@ public class MainMenuState extends GameState {
             e.draw(g, interpolation);
         }
         
-        for(MenuButton b : objects.buttons)
-            b.draw(g, interpolation);
+        for(MenuElement e : objects.buttons){
+            e.draw(g, interpolation);
+        }
         
         for(Particle p : objects.particles){
             p.draw(g, interpolation);
@@ -87,44 +88,45 @@ public class MainMenuState extends GameState {
     @Override
     public void init() {
         this.objects = new ObjectHandler();
+        
         MenuButton e;
         try {
-            e = new MenuButton(gp, this, MenuButton.BIG, "Play", this.getClass().getDeclaredMethod("buttonPlayAction"));
+            objects.elements.add(new MenuLabel(gp, this, gp.getWidth() /2, 100, "Options", MenuLabel.TYPE_H2, MenuLabel.ALIGN_CENTER));
+            
+            e = new MenuButton(gp, this, MenuButton.MEDIUM, "Controls", this.getClass().getDeclaredMethod("buttonControlsAction"));
             e.align(MenuButton.ALIGN_CENTER);
             e.setY(200);
             e.setFocused(true);
             objects.buttons.add(e);
             
-            e = new MenuButton(gp, this, MenuButton.BIG, "Options", this.getClass().getDeclaredMethod("buttonOptionsAction"));
+            e = new MenuButton(gp, this, MenuButton.MEDIUM, "Graphics", this.getClass().getDeclaredMethod("buttonGraphicsAction"));
             e.align(MenuButton.ALIGN_CENTER);
-            e.setY(300);
+            e.setY(250);
             objects.buttons.add(e);
             
-            e = new MenuButton(gp, this, MenuButton.BIG, "Exit", this.getClass().getDeclaredMethod("buttonExitAction"));
+            e = new MenuButton(gp, this, MenuButton.MEDIUM, "Back", this.getClass().getDeclaredMethod("buttonBackAction"));
             e.align(MenuButton.ALIGN_CENTER);
             e.setY(400);
             objects.buttons.add(e);
         } catch (NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(MainMenuState.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        objects.elements.add(new MenuLabel(gp, this, gp.getWidth() / 2, 100, "Cubic Madness", MenuLabel.TYPE_H1, MenuLabel.ALIGN_CENTER));
     }
     
-    public void buttonPlayAction(){
-        gp.gsm.transition(this, gp.gsm.PLAY_STATE, TransitionState.BLACKFADE);
+    public void buttonBackAction(){
+        gp.gsm.transition(this, gp.gsm.MAINMENU_STATE, TransitionState.BLACKFADE);
     }
     
-    public void buttonExitAction(){
-        System.exit(0);
+    public void buttonControlsAction(){
     }
     
-    public void buttonOptionsAction(){
-        gp.gsm.transition(this, gp.gsm.OPTIONSMENU_STATE, TransitionState.BLACKFADE);
+    public void buttonGraphicsAction(){
+        gp.gsm.transition(this, gp.gsm.GRAPHICSOPTIONS_STATE, TransitionState.BLACKFADE);
     }
 
     @Override
     public void init(Object o) {
         init();
     }
+    
 }

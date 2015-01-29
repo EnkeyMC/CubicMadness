@@ -6,9 +6,11 @@ import cubicmadness.input.MouseInput;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferStrategy;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -17,6 +19,7 @@ import java.awt.image.BufferStrategy;
 public class GamePanel extends Canvas implements Runnable{
     
     private final Dimension size = new Dimension(800, 600);
+    public final ImageIcon bgr;
      
     public GameStateManager gsm;
     private Thread thread;
@@ -24,6 +27,8 @@ public class GamePanel extends Canvas implements Runnable{
     private double interpolation = 0;
     
     public GamePanel (){
+        bgr = new ImageIcon(this.getClass().getResource("bgr.png"));
+        
         init();
         start();
     }
@@ -94,11 +99,21 @@ public class GamePanel extends Canvas implements Runnable{
         
         Graphics2D g = (Graphics2D) bs.getDrawGraphics();
         
+        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
+        
         g.setColor(Color.white);
         g.fillRect(0, 0, size.width, size.height);
         
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        if(Config.antialiasing)
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        if(Config.antialiasingText)
+            g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        
+        if(Config.rendering)
+            g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        else
+            g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
         
         gsm.draw(g, interpolation);
         
@@ -106,25 +121,5 @@ public class GamePanel extends Canvas implements Runnable{
         
         g.dispose();
         bs.show();
-    }
-    
-    public static float clamp(float n, float min, float max){
-        if(n < min){
-            return min;
-        }else if(n > max){
-            return max;
-        }else{
-            return n;
-        }
-    }
-    
-    public static float cycle(float n, float min, float max){
-        if(n < min){
-            return max;
-        }else if(n > max){
-            return min;
-        }else{
-            return n;
-        }
     }
 }

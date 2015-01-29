@@ -20,6 +20,8 @@ public class GameStateManager {
     public final GameState PLAY_STATE;
     public final GameState MAINMENU_STATE;
     public final GameState GAMEOVER_STATE;
+    public final GameState OPTIONSMENU_STATE;
+    public final GameState GRAPHICSOPTIONS_STATE;
     
     
     private final GamePanel gp;
@@ -28,6 +30,9 @@ public class GameStateManager {
         this.PLAY_STATE = new PlayState(gp);
         this.MAINMENU_STATE = new MainMenuState(gp);
         this.GAMEOVER_STATE = new GameOverState(gp);
+        this.OPTIONSMENU_STATE = new OptionsMenuState(gp);
+        this.GRAPHICSOPTIONS_STATE = new GraphicsOptionsState(gp);
+        
         this.pushState(this.MAINMENU_STATE);
         this.gp = gp;
     }
@@ -72,10 +77,6 @@ public class GameStateManager {
     
     public void popCurrentState(){
         states.pop();
-        if(states.empty()){
-            System.exit(0);
-        }
-        states.peek().resume();
     }
     
     public GameState getCurrentState(){

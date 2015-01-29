@@ -1,12 +1,15 @@
 package cubicmadness.gamestates;
 
+import cubicmadness.bin.Config;
 import cubicmadness.bin.GamePanel;
 import cubicmadness.bin.ObjectHandler;
+import cubicmadness.bin.Utils;
 import cubicmadness.enemy.EnemyBasic;
 import cubicmadness.input.KeyInput;
 import cubicmadness.input.MouseInput;
 import cubicmadness.menuelements.MenuButton;
 import cubicmadness.menuelements.MenuElement;
+import cubicmadness.menuelements.MenuLabel;
 import cubicmadness.particle.Particle;
 import cubicmadness.particle.ParticleZooming;
 import cubicmadness.powerup.PowerUp;
@@ -28,6 +31,8 @@ public class GameOverState extends GameState{
     private ObjectHandler gameObjects;
     private int delay;
     private float alpha;
+    
+    private MenuLabel score;
 
     public GameOverState(GamePanel gp) {
         super(gp);
@@ -38,7 +43,7 @@ public class GameOverState extends GameState{
         if(!(MouseInput.mouseXY.x == MouseInput.mousePrevXY.x && MouseInput.mouseXY.y == MouseInput.mousePrevXY.y)){            
             MouseInput.mousePrevXY = MouseInput.mouseXY;
             
-            for(MenuElement e : objects.elements){
+            for(MenuElement e : objects.buttons){
                 if(e.isInBounds(MouseInput.mouseXY.x, MouseInput.mouseXY.y)){
                     this.unfocusAllElements();
                     e.setFocused(true);
@@ -69,44 +74,26 @@ public class GameOverState extends GameState{
             this.objects.particles.remove(p);
         }
         
+        for (MenuElement e : objects.elements)
+            e.tick();
+        
+        for (MenuElement e : objects.buttons)
+            e.tick();
+        
         if(delay > 0){
             delay--;
         }else if(alpha < 1){
             alpha += 0.1;
-            alpha = GamePanel.clamp(alpha, 0, 1);
+            alpha = Utils.clamp(alpha, 0, 1);
         }
         
         if(alpha != 0){
-            if(KeyInput.pressed.contains(KeyEvent.VK_UP)){
-                int i = 0;
-                for(MenuElement e : objects.elements){
-                    if(e.isFocused()){
-                        i = objects.elements.indexOf(e);
-                        e.setFocused(false);
-                    }
-                }
-                i = (int) GamePanel.cycle(i - 1, 0, objects.elements.size()-1);
-                objects.elements.get(i).setFocused(true);
-                KeyInput.pressed.remove(KeyEvent.VK_UP);
-            }
-
-            if(KeyInput.pressed.contains(KeyEvent.VK_DOWN)){
-                int i = 0;
-                for(MenuElement e : objects.elements){
-                    if(e.isFocused()){
-                        i = objects.elements.indexOf(e);
-                        e.setFocused(false);
-                    }
-                }
-                i = (int) GamePanel.cycle(i + 1, 0, objects.elements.size()-1);
-                objects.elements.get(i).setFocused(true);
-                KeyInput.pressed.remove(KeyEvent.VK_DOWN);
-            }
+            this.menuInteraction();
         }
         
-        if(KeyInput.pressed.contains(KeyEvent.VK_ENTER)){
+        if(KeyInput.pressed.contains(KeyEvent.VK_ENTER) || KeyInput.pressed.contains(Config.ATTACK)){
             KeyInput.pressed.remove(KeyEvent.VK_ENTER);
-            for(MenuElement e : objects.elements){
+            for(MenuElement e : objects.buttons){
                 if(e.isFocused()){
                     e.actionPerformed();
                     return;
@@ -116,7 +103,7 @@ public class GameOverState extends GameState{
         
         if(MouseInput.LMB){
             MouseInput.LMB = false;
-            for(MenuElement e : objects.elements){
+            for(MenuElement e : objects.buttons){
                 if(e.isInBounds(MouseInput.mouseXY.x, MouseInput.mouseXY.y)){
                     e.actionPerformed();
                     return;
@@ -143,6 +130,10 @@ public class GameOverState extends GameState{
             e.draw(g, 0);
         }
         
+        for(MenuElement e : gameObjects.buttons){
+            e.draw(g, 0);
+        }
+        
         // OBJECTS FOR THIS STATE
         for(Particle p : objects.particles){
             p.draw(g, interpolation);
@@ -150,7 +141,7 @@ public class GameOverState extends GameState{
         if(alpha != 0){
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, this.alpha));
             
-            g.setColor(new Color(0,0,0, 0.25f));
+            g.setColor(new Color(1,1,1, 0.7f));
             g.fillRect(0, 0, gp.getWidth(), gp.getHeight());
             
             for(PowerUp p : objects.powerups){
@@ -162,22 +153,16 @@ public class GameOverState extends GameState{
             for(MenuElement e : objects.elements){
                 e.draw(g, interpolation);
             }
+            for(MenuElement e : objects.buttons){
+                e.draw(g, 0);
+            }
             
-            g.setColor(Color.WHITE);
-            g.setFont(g.getFont().deriveFont(60f));
-            g.drawString("Game Over!", (gp.getWidth() / 2) - (g.getFontMetrics().stringWidth("Game Over!") / 2), 100);
-            
-            g.setFont(g.getFont().deriveFont(45f));
-            int score = ((PlayState)gp.gsm.PLAY_STATE).getScore();
-            g.drawString("Score: " + score, (gp.getWidth() / 2) - (g.getFontMetrics().stringWidth("Score: " + score) / 2), 150);            
+            int s = ((PlayState)gp.gsm.PLAY_STATE).getScore();          
+            this.score.setText("Score: " + s);
+            this.score.alignCenter();
+            this.score.draw(g, interpolation);
         }
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-    }
-    
-    private void unfocusAllElements(){
-        for(MenuElement e : objects.elements){
-            e.setFocused(false);
-        }
     }
 
     @Override
@@ -204,15 +189,19 @@ public class GameOverState extends GameState{
             e.align(MenuButton.ALIGN_CENTER);
             e.setY(200);
             e.setFocused(true);
-            objects.elements.add(e);
+            objects.buttons.add(e);
             
             e = new MenuButton(gp, this, MenuButton.BIG, "Main menu", this.getClass().getDeclaredMethod("buttonMainMenuAction"));
             e.align(MenuButton.ALIGN_CENTER);
             e.setY(300);
-            objects.elements.add(e);
+            objects.buttons.add(e);
         } catch (NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(MainMenuState.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        objects.elements.add(new MenuLabel(gp, this, gp.getWidth() / 2, 100, "Game Over!", MenuLabel.TYPE_H1, MenuLabel.ALIGN_CENTER));
+        score = new MenuLabel(gp, this, gp.getWidth() / 2, 150, "Score: " + 0, MenuLabel.TYPE_H2, MenuLabel.ALIGN_CENTER);
+
     }
     
     public void buttonRestartAction(){
@@ -221,6 +210,5 @@ public class GameOverState extends GameState{
     
     public void buttonMainMenuAction(){
         gp.gsm.transition(this, gp.gsm.MAINMENU_STATE, TransitionState.BLACKFADE);
-        //gp.gsm.pushState(gp.gsm.MAINMENU_STATE);
     }
 }

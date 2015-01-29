@@ -3,6 +3,7 @@ package cubicmadness.bin;
 import cubicmadness.attack.Pulse;
 import cubicmadness.coin.Coin;
 import cubicmadness.enemy.EnemyBasic;
+import cubicmadness.menuelements.MenuButton;
 import cubicmadness.menuelements.MenuElement;
 import cubicmadness.particle.Particle;
 import cubicmadness.player.Player;
@@ -22,4 +23,5 @@ public class ObjectHandler {
     public Pulse pulse;
     public List<PowerUp> powerups = new ArrayList();
     public List<MenuElement> elements = new ArrayList();
+    public List<MenuButton> buttons = new ArrayList();
 }

@@ -1,6 +1,7 @@
 package cubicmadness.player;
 
 import cubicmadness.attack.Pulse;
+import cubicmadness.bin.Config;
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
 import cubicmadness.gamestates.GameState;
@@ -45,15 +46,15 @@ public class Player extends GameObject{
     @Override
     public void tick(){
         Set<Integer> key = KeyInput.pressed;
-        if(key.contains(KeyEvent.VK_UP)) velY = -getSpeed();
+        if(key.contains(Config.UP) || key.contains(KeyEvent.VK_UP)) velY = -getSpeed();
         else velY = 0;
-        if(key.contains(KeyEvent.VK_DOWN)) velY = getSpeed();
-        if(key.contains(KeyEvent.VK_RIGHT)) velX = getSpeed();
+        if(key.contains(Config.DOWN) || key.contains(KeyEvent.VK_DOWN)) velY = getSpeed();
+        if(key.contains(Config.RIGHT) || key.contains(KeyEvent.VK_RIGHT)) velX = getSpeed();
         else velX = 0;
-        if(key.contains(KeyEvent.VK_LEFT)) velX = -getSpeed();
+        if(key.contains(Config.LEFT) || key.contains(KeyEvent.VK_LEFT)) velX = -getSpeed();
         
-        if(key.contains(KeyEvent.VK_UP) && key.contains(KeyEvent.VK_DOWN)) velY = 0;
-        if(key.contains(KeyEvent.VK_RIGHT) && key.contains(KeyEvent.VK_LEFT)) velX = 0;
+        if((key.contains(Config.UP) || key.contains(KeyEvent.VK_UP)) && (key.contains(Config.DOWN) || key.contains(KeyEvent.VK_DOWN))) velY = 0;
+        if((key.contains(Config.RIGHT) || key.contains(KeyEvent.VK_RIGHT)) && (key.contains(Config.LEFT) || key.contains(KeyEvent.VK_LEFT))) velX = 0;
         
         if(velX != 0 && velY != 0){
             velX = (float)Math.copySign(Math.sqrt(Math.pow(getSpeed(), 2) / 2), velX);
@@ -108,8 +109,8 @@ public class Player extends GameObject{
             }
         }
         
-        if(KeyInput.pressed.contains(KeyEvent.VK_SPACE)){
-            KeyInput.pressed.remove(KeyEvent.VK_SPACE);
+        if(KeyInput.pressed.contains(Config.ATTACK)){
+            KeyInput.pressed.remove(Config.ATTACK);
             if(gs.getObjects().pulse == null && this.hasEffect(Effect.PULSE)){
                 gs.getObjects().pulse = new Pulse(gp, gs, this.getCenter().x,this.getCenter().y);
                 this.effects.remove(this.getFirstEffect(Effect.PULSE));
@@ -133,19 +134,19 @@ public class Player extends GameObject{
                 
         
         Set<Integer> key = KeyInput.pressed;
-        if(!key.contains(KeyEvent.VK_UP) && velY < 0){
+        if(!(key.contains(Config.UP) || key.contains(KeyEvent.VK_UP)) && velY < 0){
             this.y += velY * interpolation;
             velY = 0;
         }
-        if(!key.contains(KeyEvent.VK_DOWN) && velY > 0){
+        if(!(key.contains(Config.DOWN) || key.contains(KeyEvent.VK_DOWN)) && velY > 0){
             this.y += velY * interpolation;
             velY = 0;
         }
-        if(!key.contains(KeyEvent.VK_LEFT) && velX < 0){
+        if(!(key.contains(Config.LEFT) || key.contains(KeyEvent.VK_LEFT)) && velX < 0){
             this.x += velX * interpolation;
             velX = 0;
         }
-        if(!key.contains(KeyEvent.VK_RIGHT) && velX > 0){
+        if(!(key.contains(Config.RIGHT) || key.contains(KeyEvent.VK_RIGHT)) && velX > 0){
             this.x += velX * interpolation;
             velX = 0;
         }

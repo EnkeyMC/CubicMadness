@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cubicmadness.gamestates;
 
+import cubicmadness.bin.Config;
 import cubicmadness.bin.GamePanel;
 import cubicmadness.bin.ObjectHandler;
 import cubicmadness.input.MouseInput;
@@ -23,15 +19,19 @@ import java.util.logging.Logger;
  *
  * @author Martin
  */
-public class MainMenuState extends GameState {
+public class GraphicsOptionsState extends GameState{
+    
+    private MenuButton transition;
+    private MenuButton antialiasing;
+    private MenuButton rendering;
 
-    public MainMenuState(GamePanel gp) {
+    public GraphicsOptionsState(GamePanel gp) {
         super(gp);
     }
 
     @Override
     public void tick() {
-        if(!(MouseInput.mouseXY.x == MouseInput.mousePrevXY.x && MouseInput.mouseXY.y == MouseInput.mousePrevXY.y)){
+    if(!(MouseInput.mouseXY.x == MouseInput.mousePrevXY.x && MouseInput.mouseXY.y == MouseInput.mousePrevXY.y)){
             MouseInput.mousePrevXY = MouseInput.mouseXY;
             
             for(MenuElement e : objects.buttons){
@@ -62,7 +62,6 @@ public class MainMenuState extends GameState {
 
     @Override
     public void draw(Graphics2D g, double interpolation) {
-        
         g.drawImage(gp.bgr.getImage(), 0, 0, gp);
         g.setColor(new Color(1,1,1,0.85f));
         g.fillRect(0, 0, gp.getWidth(), gp.getHeight());
@@ -71,8 +70,9 @@ public class MainMenuState extends GameState {
             e.draw(g, interpolation);
         }
         
-        for(MenuButton b : objects.buttons)
-            b.draw(g, interpolation);
+        for(MenuElement e : objects.buttons){
+            e.draw(g, interpolation);
+        }
         
         for(Particle p : objects.particles){
             p.draw(g, interpolation);
@@ -81,45 +81,64 @@ public class MainMenuState extends GameState {
 
     @Override
     public void restart() {
-        init();
     }
 
     @Override
     public void init() {
         this.objects = new ObjectHandler();
+        
         MenuButton e;
         try {
-            e = new MenuButton(gp, this, MenuButton.BIG, "Play", this.getClass().getDeclaredMethod("buttonPlayAction"));
+            objects.elements.add(new MenuLabel(gp, this, gp.getWidth() /2, 100, "Graphics options", MenuLabel.TYPE_H2, MenuLabel.ALIGN_CENTER));
+            
+            e = new MenuButton(gp, this, MenuButton.MEDIUM, Config.transitions ? "ON" : "OFF", this.getClass().getDeclaredMethod("buttonTransitionAction"));
             e.align(MenuButton.ALIGN_CENTER);
-            e.setY(200);
+            e.setY(150);
             e.setFocused(true);
+            this.transition = e;
+            objects.elements.add(new MenuLabel(gp, this, e, "Toggle Transitions", MenuLabel.TYPE_LABEL, MenuLabel.ALIGN_CENTER));
             objects.buttons.add(e);
             
-            e = new MenuButton(gp, this, MenuButton.BIG, "Options", this.getClass().getDeclaredMethod("buttonOptionsAction"));
+            e = new MenuButton(gp, this, MenuButton.MEDIUM, Config.antialiasing ? "ON" : "OFF", this.getClass().getDeclaredMethod("buttonAntialiasingAction"));
             e.align(MenuButton.ALIGN_CENTER);
-            e.setY(300);
+            e.setY(230);
+            this.antialiasing = e;
+            objects.elements.add(new MenuLabel(gp, this, e, "Toggle Atialiasing", MenuLabel.TYPE_LABEL, MenuLabel.ALIGN_CENTER));
             objects.buttons.add(e);
             
-            e = new MenuButton(gp, this, MenuButton.BIG, "Exit", this.getClass().getDeclaredMethod("buttonExitAction"));
+            e = new MenuButton(gp, this, MenuButton.MEDIUM, Config.rendering ? "Quality" : "Speed", this.getClass().getDeclaredMethod("buttonRenderingAction"));
+            e.align(MenuButton.ALIGN_CENTER);
+            e.setY(310);
+            this.rendering = e;
+            objects.elements.add(new MenuLabel(gp, this, e, "Rendering", MenuLabel.TYPE_LABEL, MenuLabel.ALIGN_CENTER));
+            objects.buttons.add(e);
+            
+            e = new MenuButton(gp, this, MenuButton.MEDIUM, "Back", this.getClass().getDeclaredMethod("buttonBackAction"));
             e.align(MenuButton.ALIGN_CENTER);
             e.setY(400);
             objects.buttons.add(e);
         } catch (NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(MainMenuState.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        objects.elements.add(new MenuLabel(gp, this, gp.getWidth() / 2, 100, "Cubic Madness", MenuLabel.TYPE_H1, MenuLabel.ALIGN_CENTER));
     }
     
-    public void buttonPlayAction(){
-        gp.gsm.transition(this, gp.gsm.PLAY_STATE, TransitionState.BLACKFADE);
+    public void buttonTransitionAction(){
+        Config.transitions = !Config.transitions;
+        this.transition.setText(Config.transitions ? "ON" : "OFF");
     }
     
-    public void buttonExitAction(){
-        System.exit(0);
+    public void buttonAntialiasingAction(){
+        Config.antialiasing = !Config.antialiasing;
+        Config.antialiasingText = Config.antialiasing;
+        this.antialiasing.setText(Config.antialiasing ? "ON" : "OFF");
     }
     
-    public void buttonOptionsAction(){
+    public void buttonRenderingAction(){
+        Config.rendering = !Config.rendering;
+        this.rendering.setText(Config.rendering ? "Quality" : "Speed");
+    }
+    
+    public void buttonBackAction(){
         gp.gsm.transition(this, gp.gsm.OPTIONSMENU_STATE, TransitionState.BLACKFADE);
     }
 
@@ -127,4 +146,5 @@ public class MainMenuState extends GameState {
     public void init(Object o) {
         init();
     }
+
 }

@@ -1,5 +1,6 @@
 package cubicmadness.gamestates;
 
+import cubicmadness.bin.Config;
 import cubicmadness.bin.GamePanel;
 import cubicmadness.particle.Particle;
 import java.awt.AlphaComposite;
@@ -39,7 +40,7 @@ public class TransitionState extends GameState{
             this.halftime = 10;
         }else{
             this.halftime = 30;
-        }
+        }          
     }
 
     @Override
@@ -52,6 +53,10 @@ public class TransitionState extends GameState{
         for(Particle p : particlesToRemove){
             prev.getObjects().particles.remove(p);
         }
+        
+        if(!Config.transitions){
+            gp.gsm.pushState(next);
+        }  
         
         
         if(timer < halftime){

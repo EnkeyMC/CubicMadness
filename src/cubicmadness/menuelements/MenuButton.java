@@ -6,9 +6,13 @@
 package cubicmadness.menuelements;
 
 import cubicmadness.bin.GamePanel;
+import cubicmadness.bin.Utils;
 import cubicmadness.gamestates.GameState;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -22,43 +26,89 @@ import java.util.logging.Logger;
 public class MenuButton extends MenuElement{
     
     public static final byte ALIGN_CENTER = 0;
+    public static final byte ALIGN_RIGHT = 1;
+    private static final byte ALIGN_LEFT = 2;
     
-    public static final int BIG = 300;
-    public static final int MEDIUM = 150;
+    public static final Dimension BIG = new Dimension(300,80);
+    public static final Dimension MEDIUM = new Dimension(150,40);
     
-    private final int HEIGHT = 80;
-    
-    private final int type;
-    private final String text;
+    private final Dimension type;
+    private String text;
     private Method action;
+    
+    private int animProgress = 0;
+    private final int animTime = 10;
 
-    public MenuButton(GamePanel panel, GameState gs, int type, String text, Method m) {
+    public MenuButton(GamePanel panel, GameState gs, Dimension type, String text, Method m) {
         super(panel, gs, 0, 0);
         this.type = type;
         this.text = text;
         this.action = m;
     }
+    
+    @Override
+    public void tick(){
+        super.tick();
+        if(this.focused){
+            if(this.animProgress < animTime)
+                this.animProgress++;
+        }else{
+            if(this.animProgress > 0)
+                this.animProgress--;
+        }
+    }
 
     @Override
     public void draw(Graphics2D g, double interpolation) {
-        g.setColor(Color.GRAY);
-        g.fillRect((int)x, (int)y, type, HEIGHT);
-        g.setColor(Color.WHITE);
-        g.setFont(g.getFont().deriveFont(30f));
-        float paddingX = (type - g.getFontMetrics().stringWidth(text)) / 2f;
-        float paddingY = (HEIGHT - g.getFontMetrics().getHeight()) / 2f;
-        g.drawString(text, x + paddingX, y + paddingY + g.getFontMetrics().getHeight() - 10);
-        if(this.focused){
-            g.setColor(Color.DARK_GRAY);
-            g.setStroke(new BasicStroke(5));
-            g.drawRect((int)x, (int)y, type, HEIGHT);
+        g.setColor(new Color(170,170,170));
+        g.setStroke(new BasicStroke(2f));
+        g.drawLine((int)x, (int)y, (int)x, (int)y + type.height);
+        g.drawLine((int)x + type.width, (int)y, (int)x + type.width, (int)y + type.height);
+        
+        float percent = (this.animProgress / (float)this.animTime);
+        percent = Utils.smootherstep(percent);
+        int width = (int)(type.width * 0.2f * percent);
+        
+        g.drawLine((int)x, (int)y, (int)x + width, (int)y);
+        g.drawLine((int)x, (int)y + type.height, (int)x + width, (int)y + type.height);
+        g.drawLine((int)x + type.width - width, (int)y, (int)x + type.width, (int)y);
+        g.drawLine((int)x + type.width - width, (int)y + type.height, (int)x + type.width, (int)y + type.height);
+        
+        
+        g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 40));
+        
+        if(type == MEDIUM){
+            g.setFont(g.getFont().deriveFont(20f));
+        }else if(type == BIG){
+            g.setFont(g.getFont().deriveFont(40f));
         }
+        
+        FontMetrics fm = g.getFontMetrics();
+        if(this.type.width * 0.8 < fm.stringWidth(getText())){
+            for(float i = 40; i > 12; i--){
+                g.setFont(g.getFont().deriveFont(i));
+                if(this.type.width * 0.8 >= g.getFontMetrics().stringWidth(getText()))
+                    break;
+            }
+            fm = g.getFontMetrics();
+        }
+        g.setColor(new Color(130,130,130));
+        float paddingX = (type.width - fm.stringWidth(getText())) / 2f;
+        float paddingY = (float)(type.height - fm.getStringBounds(getText(), g).getHeight()) / 2f;
+        g.drawString(getText(), x + paddingX, y + paddingY + fm.getAscent());
+        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
     }
     
     public void align(byte align){
         switch(align){
             case ALIGN_CENTER:
-                setX((gp.getWidth() / 2f) - (type / 2f));
+                setX((gp.getWidth() / 2f) - (type.width / 2f));
+                break;
+            case ALIGN_RIGHT:
+                setX(gp.getWidth() * 0.8f - type.width);
+                break;
+            case ALIGN_LEFT:
+                setX(gp.getWidth() * 0.2f);
                 break;
             default:
                 System.out.println("Unknown button align!");
@@ -76,11 +126,25 @@ public class MenuButton extends MenuElement{
 
     @Override
     public int getHeight() {
-        return HEIGHT;
+        return type.height;
     }
 
     @Override
     public int getWidth() {
-        return type;
+        return type.width;
+    }
+
+    /**
+     * @return the text
+     */
+    public String getText() {
+        return text;
+    }
+
+    /**
+     * @param text the text to set
+     */
+    public void setText(String text) {
+        this.text = text;
     }
 }
