@@ -60,6 +60,8 @@ public class MenuButton extends MenuElement{
 
     @Override
     public void draw(Graphics2D g, double interpolation) {
+        g.setColor(new Color(200,200,200,50));
+        g.fillRect((int)this.x, (int)this.y, type.width, type.height);
         g.setColor(new Color(130,130,130));
         g.setStroke(new BasicStroke(2f));
         g.drawLine((int)x, (int)y, (int)x, (int)y + type.height);
