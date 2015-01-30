@@ -16,6 +16,7 @@ import cubicmadness.enemy.EnemySlowing;
 import cubicmadness.input.KeyInput;
 import cubicmadness.particle.Particle;
 import cubicmadness.particle.ParticleCircular;
+import cubicmadness.particle.ParticleText;
 import cubicmadness.particle.ParticleZooming;
 import cubicmadness.player.Player;
 import cubicmadness.powerup.BoxLife;
@@ -194,6 +195,7 @@ public class PlayState extends GameState {
             
             this.objects.particles.add(new ParticleCircular(gp, this,10, this.objects.coin.getColor(), this.objects.coin.getCenter(), 4, 6, this.objects.coin, 1, this.objects.coin.getSize() / 2, 10, 0.1f));
             this.objects.particles.add(new ParticleCircular(gp, this,8, this.objects.coin.getColor(), this.objects.coin.getCenter(), 6, 10, this.objects.coin, 1, this.objects.coin.getSize() / 3, 6, 0.1f));
+            this.objects.particles.add(new ParticleText(gp, this, 20, this.objects.coin.getColor(), this.objects.coin.getCenter().x, this.objects.coin.getCenter().y, "+" + this.objects.coin.getPoints()));
             
             if (this.objects.coin.getClass() == Coin.class){
                 this.objects.enemies.add(new EnemyBasic(gp, this));
