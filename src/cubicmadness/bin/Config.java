@@ -14,13 +14,14 @@ import java.awt.event.KeyEvent;
 public class Config {
     
     // VERSION
-    public static final String VERSION = "0.7.2";
+    public static final String VERSION = "0.7.3";
     
     // GRAPHICS OPTIONS
     public static boolean antialiasing = true;
     public static boolean antialiasingText = true;
     public static boolean transitions = true;
     public static boolean rendering = true;
+    public static boolean fullscreen = false;
     
     // CONTROLS
     public static int UP = KeyEvent.VK_W;

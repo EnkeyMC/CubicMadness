@@ -24,6 +24,7 @@ public class GraphicsOptionsState extends GameState{
     private MenuButton transition;
     private MenuButton antialiasing;
     private MenuButton rendering;
+    private MenuButton fullscreen;
 
     public GraphicsOptionsState(GamePanel gp) {
         super(gp);
@@ -113,9 +114,16 @@ public class GraphicsOptionsState extends GameState{
             objects.elements.add(new MenuLabel(gp, this, e, "Rendering", MenuLabel.TYPE_LABEL, MenuLabel.ALIGN_CENTER));
             objects.buttons.add(e);
             
+            e = new MenuButton(gp, this, MenuButton.MEDIUM, Config.fullscreen ? "ON" : "OFF", this.getClass().getDeclaredMethod("buttonFullscreenAction"));
+            e.align(MenuButton.ALIGN_CENTER);
+            e.setY(390);
+            this.fullscreen = e;
+            objects.elements.add(new MenuLabel(gp, this, e, "Toggle fullscreen", MenuLabel.TYPE_LABEL, MenuLabel.ALIGN_CENTER));
+            objects.buttons.add(e);
+            
             e = new MenuButton(gp, this, MenuButton.MEDIUM, "Back", this.getClass().getDeclaredMethod("buttonBackAction"));
             e.align(MenuButton.ALIGN_CENTER);
-            e.setY(400);
+            e.setY(480);
             objects.buttons.add(e);
         } catch (NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(MainMenuState.class.getName()).log(Level.SEVERE, null, ex);
@@ -136,6 +144,12 @@ public class GraphicsOptionsState extends GameState{
     public void buttonRenderingAction(){
         Config.rendering = !Config.rendering;
         this.rendering.setText(Config.rendering ? "Quality" : "Speed");
+    }
+    
+    public void buttonFullscreenAction(){
+        Config.fullscreen = !Config.fullscreen;
+        this.fullscreen.setText(Config.fullscreen ? "ON" : "OFF");
+        gp.makeFullscreen(Config.fullscreen);
     }
     
     public void buttonBackAction(){

@@ -69,7 +69,7 @@ public class MenuLabel extends MenuElement {
     @Override
     public void draw(Graphics2D g, double interpolation) {
         g.setFont(getFont());
-        g.setColor(new Color(100,100,100));
+        g.setColor(new Color(80,80,80));
         g.drawString(getText(), x, y);
     }
 

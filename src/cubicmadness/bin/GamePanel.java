@@ -27,6 +27,7 @@ public class GamePanel extends Canvas implements Runnable{
     private Thread thread;
     public static boolean paused = false;
     private double interpolation = 0;
+    private Frame f;
     
     public GamePanel (){
         bgr = new ImageIcon(this.getClass().getResource("bgr.png"));
@@ -36,20 +37,23 @@ public class GamePanel extends Canvas implements Runnable{
     }
     
     private void init(){
-        Frame f = new Frame(size.width, size.height, "Cubic Madness", this);
+        f = new Frame(size.width, size.height, "Cubic Madness", this);
         this.setBackground(Color.white);
         this.setForeground(Color.black);
         this.setFocusable(true);
         this.addKeyListener(new KeyInput());
         this.addMouseListener(new MouseInput());
         this.addMouseMotionListener(new MouseInput());
-        //this.size = new Dimension(this.getWidth(), this.getHeight());
     }
     
     private void start(){
         this.gsm = new GameStateManager(this);
         thread = new Thread(this);
         thread.start();
+    }
+    
+    public void makeFullscreen(boolean full){
+        f.makeFullscreen(full);
     }
     
     // GAME LOOP
@@ -95,9 +99,7 @@ public class GamePanel extends Canvas implements Runnable{
         }
         MouseInput.mouseXYtransform.x = (int) (MouseInput.mouseXY.x - xOff);
         MouseInput.mouseXYtransform.x = (int) (MouseInput.mouseXYtransform.x / scale);
-        MouseInput.mouseXYtransform.y = (int) (MouseInput.mouseXY.y / scale);// TODO Workout dis
-        //System.out.println(MouseInput.mouseXYtransform.x + ":" + MouseInput.mouseXYtransform.y);
-        //System.out.println(xOff);
+        MouseInput.mouseXYtransform.y = (int) (MouseInput.mouseXY.y / scale);
         gsm.tick();
     }
     

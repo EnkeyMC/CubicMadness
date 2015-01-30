@@ -60,7 +60,7 @@ public class MenuButton extends MenuElement{
 
     @Override
     public void draw(Graphics2D g, double interpolation) {
-        g.setColor(new Color(170,170,170));
+        g.setColor(new Color(130,130,130));
         g.setStroke(new BasicStroke(2f));
         g.drawLine((int)x, (int)y, (int)x, (int)y + type.height);
         g.drawLine((int)x + type.width, (int)y, (int)x + type.width, (int)y + type.height);
@@ -92,7 +92,7 @@ public class MenuButton extends MenuElement{
             }
             fm = g.getFontMetrics();
         }
-        g.setColor(new Color(130,130,130));
+        g.setColor(new Color(100,100,100));
         float paddingX = (type.width - fm.stringWidth(getText())) / 2f;
         float paddingY = (float)(type.height - fm.getStringBounds(getText(), g).getHeight()) / 2f;
         g.drawString(getText(), x + paddingX, y + paddingY + fm.getAscent());
