@@ -79,17 +79,17 @@ public class TransitionState extends GameState{
                 this.prev.draw(g, 0);
                 g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, this.alpha));
                 g.setColor(Color.black);
-                g.fillRect(0, 0, gp.getWidth(), gp.getHeight());
+                g.fillRect(0, 0, gp.size.width, gp.size.height);
                 g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, this.alpha));
             }else if(timer == halftime){
                 gp.gsm.prepareState(next);
                 g.setColor(Color.black);
-                g.fillRect(0, 0, gp.getWidth(), gp.getHeight());
+                g.fillRect(0, 0, gp.size.width, gp.size.height);
             }else{
                 this.next.draw(g, 0);
                 g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, this.alpha));
                 g.setColor(Color.black);
-                g.fillRect(0, 0, gp.getWidth(), gp.getHeight());
+                g.fillRect(0, 0, gp.size.width, gp.size.height);
                 g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, this.alpha));
             }
         }

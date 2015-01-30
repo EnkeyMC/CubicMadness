@@ -3,12 +3,14 @@ package cubicmadness.bin;
 import cubicmadness.gamestates.GameStateManager;
 import cubicmadness.input.KeyInput;
 import cubicmadness.input.MouseInput;
+import java.awt.AlphaComposite;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import javax.swing.ImageIcon;
 
@@ -18,7 +20,7 @@ import javax.swing.ImageIcon;
  */
 public class GamePanel extends Canvas implements Runnable{
     
-    private final Dimension size = new Dimension(800, 600);
+    public Dimension size = new Dimension(800, 600);
     public final ImageIcon bgr;
      
     public GameStateManager gsm;
@@ -35,14 +37,13 @@ public class GamePanel extends Canvas implements Runnable{
     
     private void init(){
         Frame f = new Frame(size.width, size.height, "Cubic Madness", this);
-        this.setPreferredSize(size);
-        this.setSize(size);
         this.setBackground(Color.white);
         this.setForeground(Color.black);
         this.setFocusable(true);
         this.addKeyListener(new KeyInput());
         this.addMouseListener(new MouseInput());
         this.addMouseMotionListener(new MouseInput());
+        //this.size = new Dimension(this.getWidth(), this.getHeight());
     }
     
     private void start(){
@@ -87,6 +88,16 @@ public class GamePanel extends Canvas implements Runnable{
     }
     
     private void gameTick(){
+        double scale = Math.min(this.getWidth() / this.size.getWidth(), this.getHeight() / this.size.getHeight());
+        double xOff = (this.getWidth() - this.size.width * scale) / 2;
+        if(this.getWidth() / this.size.getWidth() < this.getHeight() / this.size.getHeight()){
+            xOff = 0;
+        }
+        MouseInput.mouseXYtransform.x = (int) (MouseInput.mouseXY.x - xOff);
+        MouseInput.mouseXYtransform.x = (int) (MouseInput.mouseXYtransform.x / scale);
+        MouseInput.mouseXYtransform.y = (int) (MouseInput.mouseXY.y / scale);// TODO Workout dis
+        //System.out.println(MouseInput.mouseXYtransform.x + ":" + MouseInput.mouseXYtransform.y);
+        //System.out.println(xOff);
         gsm.tick();
     }
     
@@ -101,8 +112,21 @@ public class GamePanel extends Canvas implements Runnable{
         
         g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
         
-        g.setColor(Color.white);
-        g.fillRect(0, 0, size.width, size.height);
+        g.setColor(Color.GRAY);
+        g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        
+        AffineTransform at = new AffineTransform();
+        double scale = Math.min(this.getWidth() / this.size.getWidth(), this.getHeight() / this.size.getHeight());
+        double xOff = (this.getWidth() - this.size.width * scale) / 2f;
+        if(this.getWidth() / this.size.getWidth() < this.getHeight() / this.size.getHeight()){
+            xOff = 0;
+        }
+        at.translate(xOff, 0);
+        at.scale(scale, scale);
+        g.setTransform(at);
+        
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, this.size.width, this.size.height);
         
         if(Config.antialiasing)
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -116,6 +140,13 @@ public class GamePanel extends Canvas implements Runnable{
             g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
         
         gsm.draw(g, interpolation);
+        
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+        g.setColor(Color.BLACK);
+        g.fillRect(-500, 0, 500, this.size.height);
+        g.fillRect(this.size.width, 0, 500, this.size.height);
+        g.fillRect(-500, -1000, size.width + 500, 0);
+        g.fillRect(-500, this.size.height, size.width + 500, 1500);
         
         this.frames++;
         

@@ -16,6 +16,7 @@ import java.awt.event.MouseMotionListener;
  */
 public class MouseInput extends MouseAdapter implements MouseMotionListener{
     
+    public static Point mouseXYtransform = new Point(0,0);
     public static Point mouseXY = new Point(0,0);
     public static Point mousePrevXY = new Point(0,0);
     public static boolean LMB = false;

@@ -31,11 +31,11 @@ public class OptionsMenuState extends GameState{
 
     @Override
     public void tick() {
-        if(!(MouseInput.mouseXY.x == MouseInput.mousePrevXY.x && MouseInput.mouseXY.y == MouseInput.mousePrevXY.y)){
-            MouseInput.mousePrevXY = MouseInput.mouseXY;
+        if(!(MouseInput.mouseXYtransform.x == MouseInput.mousePrevXY.x && MouseInput.mouseXYtransform.y == MouseInput.mousePrevXY.y)){
+            MouseInput.mousePrevXY = MouseInput.mouseXYtransform;
             
             for(MenuElement e : objects.buttons){
-                if(e.isInBounds(MouseInput.mouseXY.x, MouseInput.mouseXY.y)){
+                if(e.isInBounds(MouseInput.mouseXYtransform.x, MouseInput.mouseXYtransform.y)){
                     this.unfocusAllElements();
                     e.setFocused(true);
                 }
@@ -65,7 +65,7 @@ public class OptionsMenuState extends GameState{
         
         g.drawImage(gp.bgr.getImage(), 0, 0, gp);
         g.setColor(new Color(1,1,1,0.85f));
-        g.fillRect(0, 0, gp.getWidth(), gp.getHeight());
+        g.fillRect(0, 0, gp.size.width, gp.size.height);
         
         for(MenuElement e : objects.elements){
             e.draw(g, interpolation);
@@ -91,7 +91,7 @@ public class OptionsMenuState extends GameState{
         
         MenuButton e;
         try {
-            objects.elements.add(new MenuLabel(gp, this, gp.getWidth() /2, 100, "Options", MenuLabel.TYPE_H2, MenuLabel.ALIGN_CENTER));
+            objects.elements.add(new MenuLabel(gp, this, gp.size.width /2, 100, "Options", MenuLabel.TYPE_H2, MenuLabel.ALIGN_CENTER));
             
             e = new MenuButton(gp, this, MenuButton.MEDIUM, "Controls", this.getClass().getDeclaredMethod("buttonControlsAction"));
             e.align(MenuButton.ALIGN_CENTER);

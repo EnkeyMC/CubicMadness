@@ -91,7 +91,7 @@ public abstract class GameState {
         if(MouseInput.LMB){
             MouseInput.LMB = false;
             for(MenuElement e : objects.buttons){
-                if(e.isInBounds(MouseInput.mouseXY.x, MouseInput.mouseXY.y)){
+                if(e.isInBounds(MouseInput.mouseXYtransform.x, MouseInput.mouseXYtransform.y)){
                     e.actionPerformed();
                     return;
                 }

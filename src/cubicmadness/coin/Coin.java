@@ -29,8 +29,8 @@ public class Coin extends GameObject{
     
     private void spawn(){
         Random r = new Random();
-        this.x = r.nextInt(gp.getWidth() - 200) + 100;
-        this.y = r.nextInt(gp.getHeight() - 200) + 100;
+        this.x = r.nextInt(gp.size.width - 200) + 100;
+        this.y = r.nextInt(gp.size.height - 200) + 100;
     }
     
     @Override

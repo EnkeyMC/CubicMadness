@@ -32,15 +32,15 @@ public class EnemyBasic extends GameObject{
         switch(gen.nextInt(4)){
             case 0: // UP
                 this.y = -size;
-                this.x = gen.nextFloat() * gp.getWidth();
+                this.x = gen.nextFloat() * gp.size.width;
                 
                 this.velY = gen.nextFloat() * (DEFAULT_SPEED - 2f) + 2f;
                 this.velX = (float)Math.sqrt(Math.pow(DEFAULT_SPEED, 2) - Math.pow(velY, 2)) * (gen.nextInt(2) == 0 ? -1 : 1);
                 this.direction = "UP";
                 break;
             case 1: // DOWN
-                this.y = gp.getHeight();
-                this.x = gen.nextFloat() * gp.getWidth();
+                this.y = gp.size.height;
+                this.x = gen.nextFloat() * gp.size.width;
                 
                 this.velY = -(gen.nextFloat() * (DEFAULT_SPEED - 2f) + 2f);
                 this.velX = (float)Math.sqrt(Math.pow(DEFAULT_SPEED, 2) - Math.pow(velY, 2)) * (gen.nextInt(2) == 0 ? -1 : 1);
@@ -48,15 +48,15 @@ public class EnemyBasic extends GameObject{
                 break;
             case 2: // LEFT
                 this.x = - this.size;
-                this.y = gen.nextFloat() * gp.getHeight();
+                this.y = gen.nextFloat() * gp.size.height;
                 
                 this.velX = gen.nextFloat() * (DEFAULT_SPEED - 2f) + 2f;
                 this.velY = (float)Math.sqrt(Math.pow(DEFAULT_SPEED, 2) - Math.pow(velX, 2)) * (gen.nextInt(2) == 0 ? -1 : 1);
                 this.direction = "LEFT";
                 break;
             case 3: // RIGHT
-                this.x = gp.getWidth();
-                this.y = gen.nextFloat() * gp.getHeight();
+                this.x = gp.size.width;
+                this.y = gen.nextFloat() * gp.size.height;
                 
                 this.velX = -(gen.nextFloat() * (DEFAULT_SPEED - 2f) + 2f);
                 this.velY = (float)Math.sqrt(Math.pow(DEFAULT_SPEED, 2) - Math.pow(velX, 2)) * (gen.nextInt(2) == 0 ? -1 : 1);
@@ -66,7 +66,7 @@ public class EnemyBasic extends GameObject{
     
     @Override
     public void tick(){
-        if(!this.getRect().intersects(new Rectangle(-50,-50, gp.getWidth() + 100, gp.getHeight() + 100))){
+        if(!this.getRect().intersects(new Rectangle(-50,-50, gp.size.width + 100, gp.size.height + 100))){
             this.spawn();
             return;
         }

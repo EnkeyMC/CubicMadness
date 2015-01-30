@@ -37,8 +37,8 @@ public class Player extends GameObject{
         super(gp,gs);
         color = new Color(179,61,67);
         size = 24;
-        x = gp.getWidth() / 2 - size / 2;
-        y = gp.getHeight() / 2 - size / 2;
+        x = gp.size.width / 2 - size / 2;
+        y = gp.size.height / 2 - size / 2;
         DEFAULT_SPEED = 8f;
         this.speed = DEFAULT_SPEED;
     }
@@ -68,16 +68,16 @@ public class Player extends GameObject{
             x = 0;
             velX = 0;
         }
-        if(this.x > gp.getWidth() - this.size){
-            x = gp.getWidth() - this.size;
+        if(this.x > gp.size.width - this.size){
+            x = gp.size.width - this.size;
             velX = 0;
         }
         if(this.y < 0) {
             y = 0;
             velY = 0;
         }
-        if(this.y > gp.getHeight() - this.size) {
-            y = gp.getHeight() - this.size;
+        if(this.y > gp.size.height - this.size) {
+            y = gp.size.height - this.size;
             velY = 0;
         }
         

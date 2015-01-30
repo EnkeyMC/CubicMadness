@@ -112,7 +112,7 @@ public class MenuLabel extends MenuElement {
     }
     
     public void alignCenter(){
-        this.x = gp.getWidth() / 2 - this.getWidth() / 2;
+        this.x = gp.size.width / 2 - this.getWidth() / 2;
     }
 
 }

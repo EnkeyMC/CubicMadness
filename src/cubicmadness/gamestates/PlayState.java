@@ -91,11 +91,11 @@ public class PlayState extends GameState {
                 Random r = new Random();
                 int n = r.nextInt(100);
                 if(n < 40){
-                    objects.powerups.add(new BoxLife(gp, this,r.nextInt(90) + 90, r.nextInt(gp.getWidth() - 200) + 100, r.nextInt(gp.getHeight() - 200) + 100));
+                    objects.powerups.add(new BoxLife(gp, this,r.nextInt(90) + 90, r.nextInt(gp.size.width - 200) + 100, r.nextInt(gp.size.height - 200) + 100));
                 }else if(n < 80){
-                    objects.powerups.add(new BoxPulse(gp, this,r.nextInt(90) + 90, r.nextInt(gp.getWidth() - 200) + 100, r.nextInt(gp.getHeight() - 200) + 100));
+                    objects.powerups.add(new BoxPulse(gp, this,r.nextInt(90) + 90, r.nextInt(gp.size.width - 200) + 100, r.nextInt(gp.size.height - 200) + 100));
                 }else{
-                    objects.powerups.add(new BoxShield(gp, this,r.nextInt(90) + 90, r.nextInt(gp.getWidth() - 200) + 100, r.nextInt(gp.getHeight() - 200) + 100));
+                    objects.powerups.add(new BoxShield(gp, this,r.nextInt(90) + 90, r.nextInt(gp.size.width - 200) + 100, r.nextInt(gp.size.height - 200) + 100));
                 }
                 this.nextSpawn = r.nextInt(3) + 2;
             }

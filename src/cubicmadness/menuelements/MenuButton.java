@@ -102,13 +102,13 @@ public class MenuButton extends MenuElement{
     public void align(byte align){
         switch(align){
             case ALIGN_CENTER:
-                setX((gp.getWidth() / 2f) - (type.width / 2f));
+                setX((gp.size.width / 2f) - (type.width / 2f));
                 break;
             case ALIGN_RIGHT:
-                setX(gp.getWidth() * 0.8f - type.width);
+                setX(gp.size.width * 0.8f - type.width);
                 break;
             case ALIGN_LEFT:
-                setX(gp.getWidth() * 0.2f);
+                setX(gp.size.width * 0.2f);
                 break;
             default:
                 System.out.println("Unknown button align!");

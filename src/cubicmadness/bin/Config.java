@@ -14,7 +14,7 @@ import java.awt.event.KeyEvent;
 public class Config {
     
     // VERSION
-    public static final String VERSION = "0.7.1";
+    public static final String VERSION = "0.7.2";
     
     // GRAPHICS OPTIONS
     public static boolean antialiasing = true;

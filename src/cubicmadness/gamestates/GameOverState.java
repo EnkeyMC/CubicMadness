@@ -40,11 +40,11 @@ public class GameOverState extends GameState{
 
     @Override
     public void tick() {        
-        if(!(MouseInput.mouseXY.x == MouseInput.mousePrevXY.x && MouseInput.mouseXY.y == MouseInput.mousePrevXY.y)){            
-            MouseInput.mousePrevXY = MouseInput.mouseXY;
+        if(!(MouseInput.mouseXYtransform.x == MouseInput.mousePrevXY.x && MouseInput.mouseXYtransform.y == MouseInput.mousePrevXY.y)){            
+            MouseInput.mousePrevXY = MouseInput.mouseXYtransform;
             
             for(MenuElement e : objects.buttons){
-                if(e.isInBounds(MouseInput.mouseXY.x, MouseInput.mouseXY.y)){
+                if(e.isInBounds(MouseInput.mouseXYtransform.x, MouseInput.mouseXYtransform.y)){
                     this.unfocusAllElements();
                     e.setFocused(true);
                 }
@@ -104,7 +104,7 @@ public class GameOverState extends GameState{
         if(MouseInput.LMB){
             MouseInput.LMB = false;
             for(MenuElement e : objects.buttons){
-                if(e.isInBounds(MouseInput.mouseXY.x, MouseInput.mouseXY.y)){
+                if(e.isInBounds(MouseInput.mouseXYtransform.x, MouseInput.mouseXYtransform.y)){
                     e.actionPerformed();
                     return;
                 }
@@ -142,7 +142,7 @@ public class GameOverState extends GameState{
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, this.alpha));
             
             g.setColor(new Color(1,1,1, 0.7f));
-            g.fillRect(0, 0, gp.getWidth(), gp.getHeight());
+            g.fillRect(0, 0, gp.size.width, gp.size.height);
             
             for(PowerUp p : objects.powerups){
                 p.draw(g, interpolation);
@@ -199,8 +199,8 @@ public class GameOverState extends GameState{
             Logger.getLogger(MainMenuState.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        objects.elements.add(new MenuLabel(gp, this, gp.getWidth() / 2, 100, "Game Over!", MenuLabel.TYPE_H1, MenuLabel.ALIGN_CENTER));
-        score = new MenuLabel(gp, this, gp.getWidth() / 2, 150, "Score: " + 0, MenuLabel.TYPE_H2, MenuLabel.ALIGN_CENTER);
+        objects.elements.add(new MenuLabel(gp, this, gp.size.width / 2, 100, "Game Over!", MenuLabel.TYPE_H1, MenuLabel.ALIGN_CENTER));
+        score = new MenuLabel(gp, this, gp.size.width / 2, 150, "Score: " + 0, MenuLabel.TYPE_H2, MenuLabel.ALIGN_CENTER);
 
     }
     

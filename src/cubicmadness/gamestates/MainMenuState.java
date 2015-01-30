@@ -32,11 +32,11 @@ public class MainMenuState extends GameState {
 
     @Override
     public void tick() {
-        if(!(MouseInput.mouseXY.x == MouseInput.mousePrevXY.x && MouseInput.mouseXY.y == MouseInput.mousePrevXY.y)){
-            MouseInput.mousePrevXY = MouseInput.mouseXY;
+        if(!(MouseInput.mouseXYtransform.x == MouseInput.mousePrevXY.x && MouseInput.mouseXYtransform.y == MouseInput.mousePrevXY.y)){
+            MouseInput.mousePrevXY = MouseInput.mouseXYtransform;
             
             for(MenuElement e : objects.buttons){
-                if(e.isInBounds(MouseInput.mouseXY.x, MouseInput.mouseXY.y)){
+                if(e.isInBounds(MouseInput.mouseXYtransform.x, MouseInput.mouseXYtransform.y)){
                     this.unfocusAllElements();
                     e.setFocused(true);
                 }
@@ -66,7 +66,7 @@ public class MainMenuState extends GameState {
         
         g.drawImage(gp.bgr.getImage(), 0, 0, gp);
         g.setColor(new Color(1,1,1,0.85f));
-        g.fillRect(0, 0, gp.getWidth(), gp.getHeight());
+        g.fillRect(0, 0, gp.size.width, gp.size.height);
         
         for(MenuElement e : objects.elements){
             e.draw(g, interpolation);
@@ -109,9 +109,9 @@ public class MainMenuState extends GameState {
             Logger.getLogger(MainMenuState.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        objects.elements.add(new MenuLabel(gp, this, gp.getWidth() / 2, 100, "Cubic Madness", MenuLabel.TYPE_H1, MenuLabel.ALIGN_CENTER));
-        objects.elements.add(new MenuLabel(gp, this, 20, gp.getHeight() - 20, "Made by Martin Omacht", 12, 0));
-        objects.elements.add(new MenuLabel(gp, this, gp.getWidth() - 20, gp.getHeight() - 20, "Version: " + Config.VERSION, 12, MenuLabel.ALIGN_RIGHT));
+        objects.elements.add(new MenuLabel(gp, this, gp.size.width / 2, 100, "Cubic Madness", MenuLabel.TYPE_H1, MenuLabel.ALIGN_CENTER));
+        objects.elements.add(new MenuLabel(gp, this, 20, gp.size.height - 20, "Made by Martin Omacht", 12, 0));
+        objects.elements.add(new MenuLabel(gp, this, gp.size.width - 20, gp.size.height - 20, "Version: " + Config.VERSION, 12, MenuLabel.ALIGN_RIGHT));
     }
     
     public void buttonPlayAction(){
