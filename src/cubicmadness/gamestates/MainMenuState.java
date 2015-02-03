@@ -92,18 +92,28 @@ public class MainMenuState extends GameState {
         try {
             e = new MenuButton(gp, this, MenuButton.BIG, "Play", this.getClass().getDeclaredMethod("buttonPlayAction"));
             e.align(MenuButton.ALIGN_CENTER);
-            e.setY(200);
+            e.setY(160);
             e.setFocused(true);
             objects.buttons.add(e);
             
             e = new MenuButton(gp, this, MenuButton.BIG, "Options", this.getClass().getDeclaredMethod("buttonOptionsAction"));
             e.align(MenuButton.ALIGN_CENTER);
+            e.setY(230);
+            objects.buttons.add(e);
+            
+            e = new MenuButton(gp, this, MenuButton.BIG, "High Score", this.getClass().getDeclaredMethod("buttonHighScoreAction"));
+            e.align(MenuButton.ALIGN_CENTER);
             e.setY(300);
+            objects.buttons.add(e);
+            
+            e = new MenuButton(gp, this, MenuButton.BIG, "Help", this.getClass().getDeclaredMethod("buttonHelpAction"));
+            e.align(MenuButton.ALIGN_CENTER);
+            e.setY(370);
             objects.buttons.add(e);
             
             e = new MenuButton(gp, this, MenuButton.BIG, "Exit", this.getClass().getDeclaredMethod("buttonExitAction"));
             e.align(MenuButton.ALIGN_CENTER);
-            e.setY(400);
+            e.setY(440);
             objects.buttons.add(e);
         } catch (NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(MainMenuState.class.getName()).log(Level.SEVERE, null, ex);
@@ -124,6 +134,14 @@ public class MainMenuState extends GameState {
     
     public void buttonOptionsAction(){
         gp.gsm.transition(this, gp.gsm.OPTIONSMENU_STATE, TransitionState.BLACKFADE);
+    }
+    
+    public void buttonHighScoreAction(){
+        
+    }
+    
+    public void buttonHelpAction(){
+        gp.gsm.transition(this, gp.gsm.HELP_STATE, TransitionState.BLACKFADE);
     }
 
     @Override

@@ -34,12 +34,4 @@ public abstract class PowerUp extends GameObject{
             list.add(this);
         }
     }
-    
-    protected Color interpolatedColor(double interpolation){
-        int r,g,b;
-        r = (int)Math.round(c1.getRed() * interpolation + c2.getRed() * (1 - interpolation));
-        g = (int)Math.round(c1.getGreen() * interpolation + c2.getGreen() * (1 - interpolation));
-        b = (int)Math.round(c1.getBlue() * interpolation + c2.getBlue() * (1 - interpolation));
-        return new Color(r,g,b);
-    }
 }

@@ -27,14 +27,16 @@ public class MenuButton extends MenuElement{
     
     public static final byte ALIGN_CENTER = 0;
     public static final byte ALIGN_RIGHT = 1;
-    private static final byte ALIGN_LEFT = 2;
+    public static final byte ALIGN_LEFT = 2;
     
-    public static final Dimension BIG = new Dimension(300,80);
+    public static final Dimension BIG = new Dimension(300,60);
     public static final Dimension MEDIUM = new Dimension(150,40);
+    public static final Dimension SQUARE = new Dimension(60,60);
     
     private final Dimension type;
     private String text;
     private Method action;
+    private boolean enabled;
     
     private int animProgress = 0;
     private final int animTime = 10;
@@ -44,6 +46,15 @@ public class MenuButton extends MenuElement{
         this.type = type;
         this.text = text;
         this.action = m;
+        this.enabled = true;
+    }
+    
+    public MenuButton(GamePanel panel, GameState gs, Dimension type, String text, Method m, float x, float y){
+        super(panel, gs, x,y);
+        this.type = type;
+        this.text = text;
+        this.action = m;
+        this.enabled = true;
     }
     
     @Override
@@ -60,7 +71,7 @@ public class MenuButton extends MenuElement{
 
     @Override
     public void draw(Graphics2D g, double interpolation) {
-        g.setColor(new Color(200,200,200,50));
+        g.setColor(Utils.interpolatedColor(Utils.smootherstep(this.animProgress / (float)this.animTime), new Color(150,150,150,50), new Color(200,200,200,50)));
         g.fillRect((int)this.x, (int)this.y, type.width, type.height);
         g.setColor(new Color(130,130,130));
         g.setStroke(new BasicStroke(2f));
@@ -148,5 +159,19 @@ public class MenuButton extends MenuElement{
      */
     public void setText(String text) {
         this.text = text;
+    }
+
+    /**
+     * @return the enabled
+     */
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    /**
+     * @param enabled the enabled to set
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

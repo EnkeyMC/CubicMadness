@@ -118,6 +118,7 @@ public class OptionsMenuState extends GameState{
     }
     
     public void buttonControlsAction(){
+        gp.gsm.transition(this, gp.gsm.CONTROLSMENU_STATE, TransitionState.BLACKFADE);
     }
     
     public void buttonGraphicsAction(){

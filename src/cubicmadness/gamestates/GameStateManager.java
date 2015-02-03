@@ -22,6 +22,8 @@ public class GameStateManager {
     public final GameState GAMEOVER_STATE;
     public final GameState OPTIONSMENU_STATE;
     public final GameState GRAPHICSOPTIONS_STATE;
+    public final GameState CONTROLSMENU_STATE;
+    public final GameState HELP_STATE;
     
     
     private final GamePanel gp;
@@ -32,6 +34,8 @@ public class GameStateManager {
         this.GAMEOVER_STATE = new GameOverState(gp);
         this.OPTIONSMENU_STATE = new OptionsMenuState(gp);
         this.GRAPHICSOPTIONS_STATE = new GraphicsOptionsState(gp);
+        this.CONTROLSMENU_STATE = new ControlsState(gp);
+        this.HELP_STATE = new HelpState(gp);
         
         this.pushState(this.MAINMENU_STATE);
         this.gp = gp;

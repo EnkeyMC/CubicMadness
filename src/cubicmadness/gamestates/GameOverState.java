@@ -187,13 +187,13 @@ public class GameOverState extends GameState{
         try {
             e = new MenuButton(gp, this, MenuButton.BIG, "Restart", this.getClass().getDeclaredMethod("buttonRestartAction"));
             e.align(MenuButton.ALIGN_CENTER);
-            e.setY(200);
+            e.setY(250);
             e.setFocused(true);
             objects.buttons.add(e);
             
             e = new MenuButton(gp, this, MenuButton.BIG, "Main menu", this.getClass().getDeclaredMethod("buttonMainMenuAction"));
             e.align(MenuButton.ALIGN_CENTER);
-            e.setY(300);
+            e.setY(320);
             objects.buttons.add(e);
         } catch (NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(MainMenuState.class.getName()).log(Level.SEVERE, null, ex);

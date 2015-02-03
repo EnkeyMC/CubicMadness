@@ -24,6 +24,8 @@ import cubicmadness.powerup.BoxPulse;
 import cubicmadness.powerup.BoxShield;
 import cubicmadness.powerup.Effect;
 import cubicmadness.powerup.PowerUp;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -139,7 +141,8 @@ public class PlayState extends GameState {
     }
     
     private void gameHUD(Graphics2D g){
-        g.setColor(objects.player.getColor());
+        g.setColor(Color.black);
+        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
         g.drawString("Score: " + score, 10, 20);
         if(debugMode){
             this.debugHUD(g);

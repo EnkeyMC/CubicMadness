@@ -25,6 +25,7 @@ public class MenuLabel extends MenuElement {
     // Types
     public static final int TYPE_H1 = 60;
     public static final int TYPE_H2 = 45;
+    public static final int TYPE_H3 = 25;
     public static final int TYPE_LABEL = 15;
 
     private String text;
@@ -35,6 +36,24 @@ public class MenuLabel extends MenuElement {
         this.text = text;
         this.font = new Font(Font.SANS_SERIF, Font.PLAIN, type);
         this.y = parent.y - 15;
+        
+        switch (align) {
+            case ALIGN_RIGHT:
+                this.x = parent.getX() + parent.getWidth() /2 - gp.getGraphics().getFontMetrics(font).stringWidth(text);
+                break;
+            case ALIGN_CENTER:
+                this.x = parent.getX() + parent.getWidth() /2 - gp.getGraphics().getFontMetrics(font).stringWidth(text) / 2f;
+                break;
+            default:
+                this.x = parent.x;
+        }
+    }
+    
+    public MenuLabel(GamePanel gp, GameState gs, MenuElement parent, int distance, String text, int type, int align) {
+        super(gp, gs, 0, 0);
+        this.text = text;
+        this.font = new Font(Font.SANS_SERIF, Font.PLAIN, type);
+        this.y = parent.y - distance;
         
         switch (align) {
             case ALIGN_RIGHT:

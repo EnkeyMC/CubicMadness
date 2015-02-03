@@ -1,6 +1,7 @@
 package cubicmadness.powerup;
 
 import cubicmadness.bin.GamePanel;
+import cubicmadness.bin.Utils;
 import cubicmadness.gamestates.GameState;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -32,8 +33,15 @@ public class BoxLife extends PowerUp {
     }
     
     @Override
+    public void tick(){
+        animProgress += animSpeed;
+        if(animProgress > 180)
+            animProgress -= 180;
+    }
+    
+    @Override
     public void draw(Graphics2D g, double interpolation){
-        g.setColor(this.interpolatedColor(Math.sin(Math.toRadians(this.animProgress))));
+        g.setColor(Utils.interpolatedColor(Math.sin(Math.toRadians(this.animProgress)), c1, c2));
         g.fill(this.getRect(interpolation)); 
         
         float s = this.size / 4f;
