@@ -59,13 +59,13 @@ public class GamePanel extends Canvas implements Runnable{
     // GAME LOOP
 
     private static final int UPDATES_PER_SECOND = 30;
-    private static final double UPDATE_INTERVAL = 1000 / UPDATES_PER_SECOND * 1000000;
+    private static final double UPDATE_INTERVAL = 1_000 / UPDATES_PER_SECOND * 1_000_000;
     private static final int MAX_FRAMESKIP = 5;
     
     private long nextUpdate = System.nanoTime();
     public int frames = 0;
     public int FPS = 0;
-    
+
     @Override
     public void run() {
         long timer = System.currentTimeMillis();

@@ -15,8 +15,6 @@ import java.util.List;
  */
 public class TransitionState extends GameState{
     
-    // TODO: přidat možnost vypnutí
-    
     // Types
     public static final byte BLACKFADE = 0;
     

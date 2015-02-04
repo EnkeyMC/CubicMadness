@@ -24,6 +24,7 @@ import cubicmadness.powerup.BoxPulse;
 import cubicmadness.powerup.BoxShield;
 import cubicmadness.powerup.Effect;
 import cubicmadness.powerup.PowerUp;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -38,6 +39,9 @@ import java.util.Random;
  * @author Martin
  */
 public class PlayState extends GameState {
+    
+    private final int TOP_PANEL = 50;
+    
     private int score = 0;
     private int coins = 0;
     private boolean debugMode = false;
@@ -141,9 +145,14 @@ public class PlayState extends GameState {
     }
     
     private void gameHUD(Graphics2D g){
-        g.setColor(Color.black);
-        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
-        g.drawString("Score: " + score, 10, 20);
+        g.setColor(new Color(200,200,200,150));
+        g.fillRect(0, 0, gp.size.width, this.TOP_PANEL);
+        g.setColor(new Color(130,130,130));
+        g.setStroke(new BasicStroke(2));
+        g.drawLine(0, this.TOP_PANEL, gp.size.width, this.TOP_PANEL);
+        g.setColor(new Color(50,50,50));
+        g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 24));
+        g.drawString("Score: " + score, gp.size.width / 2 - g.getFontMetrics().stringWidth("Score: " + score) / 2, 35);
         if(debugMode){
             this.debugHUD(g);
         }

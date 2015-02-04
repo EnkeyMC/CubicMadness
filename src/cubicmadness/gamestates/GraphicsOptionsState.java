@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  *
  * @author Martin
  */
-public class GraphicsOptionsState extends GameState{
+public class GraphicsOptionsState extends GameState {
     
     private MenuButton transition;
     private MenuButton antialiasing;
@@ -60,7 +60,7 @@ public class GraphicsOptionsState extends GameState{
         
         this.menuInteraction();
     }
-
+    
     @Override
     public void draw(Graphics2D g, double interpolation) {
         g.drawImage(gp.bgr.getImage(), 0, 0, gp);
