@@ -5,6 +5,7 @@ import cubicmadness.bin.Config;
 import cubicmadness.bin.GameObject;
 import cubicmadness.bin.GamePanel;
 import cubicmadness.gamestates.GameState;
+import cubicmadness.gamestates.PlayState;
 import cubicmadness.input.KeyInput;
 import cubicmadness.particle.ParticleTrail;
 import cubicmadness.powerup.Effect;
@@ -114,6 +115,7 @@ public class Player extends GameObject{
             if(gs.getObjects().pulse == null && this.hasEffect(Effect.PULSE)){
                 gs.getObjects().pulse = new Pulse(gp, gs, this.getCenter().x,this.getCenter().y);
                 this.effects.remove(this.getFirstEffect(Effect.PULSE));
+                ((PlayState)gs).getHistory().pulseFired(gs.getObjects().pulse);
             }
         }
     }

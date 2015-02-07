@@ -5,6 +5,7 @@
  */
 package cubicmadness.gamestates;
 
+import cubicmadness.bin.GameHistory;
 import cubicmadness.bin.GamePanel;
 import cubicmadness.bin.ObjectHandler;
 import cubicmadness.coin.Coin;
@@ -40,12 +41,16 @@ import java.util.Random;
  */
 public class PlayState extends GameState {
     
-    private final int TOP_PANEL = 50;
+    private final int TOP_PANEL_HEIGHT = 50;
+    private final int TOP_PANEL_WIDTH = 170;
     
     private int score = 0;
     private int coins = 0;
     private boolean debugMode = false;
     private int nextSpawn = 0;
+    private long ticks;
+    
+    private GameHistory history;
 
     public PlayState(GamePanel gp) {
         super(gp);
@@ -107,6 +112,7 @@ public class PlayState extends GameState {
                 this.nextSpawn = r.nextInt(3) + 2;
             }
         }
+        this.ticks++;
     }
 
     @Override
@@ -146,20 +152,21 @@ public class PlayState extends GameState {
     
     private void gameHUD(Graphics2D g){
         g.setColor(new Color(200,200,200,150));
-        g.fillRect(0, 0, gp.size.width, this.TOP_PANEL);
+        g.fillRect(0, 0, this.TOP_PANEL_WIDTH, this.TOP_PANEL_HEIGHT);
         g.setColor(new Color(130,130,130));
         g.setStroke(new BasicStroke(2));
-        g.drawLine(0, this.TOP_PANEL, gp.size.width, this.TOP_PANEL);
+        g.drawLine(0, this.TOP_PANEL_HEIGHT, this.TOP_PANEL_WIDTH, this.TOP_PANEL_HEIGHT);
+        g.drawLine(this.TOP_PANEL_WIDTH, 0, this.TOP_PANEL_WIDTH, this.TOP_PANEL_HEIGHT);
         g.setColor(new Color(50,50,50));
         g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 24));
-        g.drawString("Score: " + score, gp.size.width / 2 - g.getFontMetrics().stringWidth("Score: " + score) / 2, 35);
+        g.drawString("Score: " + score, 10, 33);
         if(debugMode){
             this.debugHUD(g);
         }
     }
     
     private void debugHUD(Graphics g){
-        g.drawString("FPS: " + gp.FPS, 10, 50);
+        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
         g.drawString("Player:", 10, 70);
         g.drawString("X: " + objects.player.getX(), 20, 90);
         g.drawString("Y: " + objects.player.getY(), 20, 110);
@@ -171,6 +178,7 @@ public class PlayState extends GameState {
         for(Particle p : objects.particles) particles += p.particleAmount();
         g.drawString("Particles: " + particles, 10, 200);
         g.drawString("PowerUps: " + objects.powerups.size(), 10, 220);
+        g.drawString("FPS: " + gp.FPS, 10, 250);
     }
     
     private void gameCollisions(){
@@ -190,6 +198,7 @@ public class PlayState extends GameState {
             }
             
             if(objects.pulse != null && objects.pulse.getCollisionBox().intersects(e.getCollisionBox())){
+                history.enemyDestroyed(e);
                 enemiesToRemove.add(e);
                 this.objects.particles.add(new ParticleCircular(gp, this,10, e.getColor(), e.getCenter(), 4, 6, e, 1, e.getSize() / 2, 10, 0.1f));
                 this.objects.particles.add(new ParticleCircular(gp, this,8, e.getColor(), e.getCenter(), 6, 10, e, 1, e.getSize() / 3, 6, 0.1f));
@@ -204,6 +213,7 @@ public class PlayState extends GameState {
             score += this.objects.coin.getPoints();
             coins++;
             this.nextSpawn--;
+            history.coinCollected(this.objects.coin);
             
             this.objects.particles.add(new ParticleCircular(gp, this,10, this.objects.coin.getColor(), this.objects.coin.getCenter(), 4, 6, this.objects.coin, 1, this.objects.coin.getSize() / 2, 10, 0.1f));
             this.objects.particles.add(new ParticleCircular(gp, this,8, this.objects.coin.getColor(), this.objects.coin.getCenter(), 6, 10, this.objects.coin, 1, this.objects.coin.getSize() / 3, 6, 0.1f));
@@ -229,6 +239,7 @@ public class PlayState extends GameState {
         for(PowerUp p : objects.powerups){
             if(objects.player.getCollisionBox().intersects(p.getCollisionBox())){
                 if(objects.player.applyEffect(p.getEffect())){
+                    history.powerUpCollected(p);
                     toRemove.add(p);
                     this.objects.particles.add(new ParticleZooming(gp, this,8, p.getColor(), p.getCenter(), p.getX(), p.getY(), p.getSize(), 3));
                 }
@@ -248,6 +259,7 @@ public class PlayState extends GameState {
     @Override
     public void init() {
         this.objects = new ObjectHandler();
+        this.history = new GameHistory(gp, this);
         objects.player = new Player(gp, this);
         for(int i = 0; i < 2; i++)
             this.objects.enemies.add(new EnemyBasic(gp, this));
@@ -256,6 +268,7 @@ public class PlayState extends GameState {
         
         coins = 0;
         score = 0;
+        ticks = 0;
     }
 
     @Override
@@ -265,5 +278,19 @@ public class PlayState extends GameState {
     
     public int getScore(){
         return score;
+    }
+
+    /**
+     * @return the ticks
+     */
+    public long getTicks() {
+        return ticks;
+    }
+
+    /**
+     * @return the history
+     */
+    public GameHistory getHistory() {
+        return history;
     }
 }

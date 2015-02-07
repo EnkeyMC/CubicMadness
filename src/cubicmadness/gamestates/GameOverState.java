@@ -201,6 +201,8 @@ public class GameOverState extends GameState{
         
         objects.elements.add(new MenuLabel(gp, this, gp.size.width / 2, 100, "Game Over!", MenuLabel.TYPE_H1, MenuLabel.ALIGN_CENTER));
         score = new MenuLabel(gp, this, gp.size.width / 2, 150, "Score: " + 0, MenuLabel.TYPE_H2, MenuLabel.ALIGN_CENTER);
+        
+        System.out.println(((PlayState)gp.gsm.PLAY_STATE).getHistory().toJSONString());
 
     }
     
