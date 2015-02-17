@@ -29,4 +29,8 @@ public class Config {
     public static int LEFT = KeyEvent.VK_A;
     public static int RIGHT = KeyEvent.VK_D;
     public static int ATTACK = KeyEvent.VK_SPACE;
+    
+    // OTHER
+    public static final int MAX_NICK_LEN = 20;
+    public static final int MIN_NICK_LEN = 4;
 }

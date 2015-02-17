@@ -2,6 +2,7 @@ package cubicmadness.gamestates;
 
 import cubicmadness.bin.Config;
 import cubicmadness.bin.GamePanel;
+import cubicmadness.bin.HttpRequester;
 import cubicmadness.bin.ObjectHandler;
 import cubicmadness.bin.Utils;
 import cubicmadness.enemy.EnemyBasic;
@@ -21,6 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -29,6 +33,7 @@ import java.util.logging.Logger;
 public class GameOverState extends GameState{
     
     private ObjectHandler gameObjects;
+    private PlayState ps;
     private int delay;
     private float alpha;
     
@@ -157,7 +162,7 @@ public class GameOverState extends GameState{
                 e.draw(g, 0);
             }
             
-            int s = ((PlayState)gp.gsm.PLAY_STATE).getScore();          
+            int s = ps.getScore();          
             this.score.setText("Score: " + s);
             this.score.alignCenter();
             this.score.draw(g, interpolation);
@@ -191,9 +196,14 @@ public class GameOverState extends GameState{
             e.setFocused(true);
             objects.buttons.add(e);
             
-            e = new MenuButton(gp, this, MenuButton.BIG, "Main menu", this.getClass().getDeclaredMethod("buttonMainMenuAction"));
+            e = new MenuButton(gp, this, MenuButton.BIG, "Submit score", this.getClass().getDeclaredMethod("buttonSubmitScoreAction"));
             e.align(MenuButton.ALIGN_CENTER);
             e.setY(320);
+            objects.buttons.add(e);
+            
+            e = new MenuButton(gp, this, MenuButton.BIG, "Main menu", this.getClass().getDeclaredMethod("buttonMainMenuAction"));
+            e.align(MenuButton.ALIGN_CENTER);
+            e.setY(390);
             objects.buttons.add(e);
         } catch (NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(MainMenuState.class.getName()).log(Level.SEVERE, null, ex);
@@ -202,8 +212,7 @@ public class GameOverState extends GameState{
         objects.elements.add(new MenuLabel(gp, this, gp.size.width / 2, 100, "Game Over!", MenuLabel.TYPE_H1, MenuLabel.ALIGN_CENTER));
         score = new MenuLabel(gp, this, gp.size.width / 2, 150, "Score: " + 0, MenuLabel.TYPE_H2, MenuLabel.ALIGN_CENTER);
         
-        System.out.println(((PlayState)gp.gsm.PLAY_STATE).getHistory().toJSONString());
-
+        ps = (PlayState)gp.gsm.PLAY_STATE;
     }
     
     public void buttonRestartAction(){
@@ -212,5 +221,35 @@ public class GameOverState extends GameState{
     
     public void buttonMainMenuAction(){
         gp.gsm.transition(this, gp.gsm.MAINMENU_STATE, TransitionState.BLACKFADE);
+    }
+    
+    public void buttonSubmitScoreAction(){
+        boolean valid;
+        String nick;
+        
+        do{
+            valid = true;
+            nick = JOptionPane.showInputDialog(gp, "Enter nickname:", "Submit score", JOptionPane.PLAIN_MESSAGE);
+            
+            if(nick == null)
+                return;
+            
+            Pattern p = Pattern.compile("^([1-zA-Z0-1@.\\s]{1,255})$");
+            Matcher m = p.matcher(nick);
+            
+            if(nick.length() > Config.MAX_NICK_LEN){
+                valid = false;
+                JOptionPane.showMessageDialog(gp, "Too long nickname! (max " + Config.MAX_NICK_LEN + ")", "Error", JOptionPane.ERROR_MESSAGE);
+            }else if(nick.length() < Config.MIN_NICK_LEN){
+                valid = false;
+                JOptionPane.showMessageDialog(gp, "Too short nickname! (min " + Config.MIN_NICK_LEN + ")", "Error", JOptionPane.ERROR_MESSAGE);
+            }else if(!m.matches()){
+                valid = false;
+                JOptionPane.showMessageDialog(gp, "Do not use special chracters!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            
+        }while(!valid);
+        
+        System.out.println(HttpRequester.submitScore(nick, ps.getScore(), ps.getHistory()));
     }
 }
