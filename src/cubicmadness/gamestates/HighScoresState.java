@@ -5,14 +5,14 @@
  */
 package cubicmadness.gamestates;
 
-import cubicmadness.bin.Config;
 import cubicmadness.bin.GamePanel;
-import cubicmadness.bin.HttpRequester;
 import cubicmadness.bin.ObjectHandler;
 import cubicmadness.input.MouseInput;
 import cubicmadness.menuelements.MenuButton;
 import cubicmadness.menuelements.MenuElement;
 import cubicmadness.menuelements.MenuLabel;
+import cubicmadness.menuelements.MenuTable;
+import cubicmadness.menuelements.MenuTableRow;
 import cubicmadness.particle.Particle;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -25,9 +25,11 @@ import java.util.logging.Logger;
  *
  * @author Martin
  */
-public class MainMenuState extends GameState {
+public class HighScoresState extends GameState{
+    
+    private final int TABLEWIDTH = 300, TABLEHEIGHT = 350;
 
-    public MainMenuState(GamePanel gp) {
+    public HighScoresState(GamePanel gp) {
         super(gp);
     }
 
@@ -68,13 +70,17 @@ public class MainMenuState extends GameState {
         g.drawImage(gp.bgr.getImage(), 0, 0, gp);
         g.setColor(new Color(1,1,1,0.85f));
         g.fillRect(0, 0, gp.size.width, gp.size.height);
-        
-        for(MenuElement e : objects.elements){
+        /*
+        g.setColor(new Color(200,200,200,50));
+        g.fillRect((gp.size.width / 2) - this.TABLEWIDTH /2, 120, this.TABLEWIDTH, this.TABLEHEIGHT);
+        */
+        for(MenuElement e : objects.elements){   
             e.draw(g, interpolation);
         }
         
-        for(MenuButton b : objects.buttons)
-            b.draw(g, interpolation);
+        for(MenuElement e : objects.buttons){
+            e.draw(g, interpolation);
+        }
         
         for(Particle p : objects.particles){
             p.draw(g, interpolation);
@@ -89,64 +95,42 @@ public class MainMenuState extends GameState {
     @Override
     public void init() {
         this.objects = new ObjectHandler();
+        
         MenuButton e;
         try {
-            e = new MenuButton(gp, this, MenuButton.BIG, "Play", this.getClass().getDeclaredMethod("buttonPlayAction"));
+            e = new MenuButton(gp, this, MenuButton.MEDIUM, "Back", this.getClass().getDeclaredMethod("buttonBackAction"));
             e.align(MenuButton.ALIGN_CENTER);
-            e.setY(160);
-            e.setFocused(true);
-            objects.buttons.add(e);
-            
-            e = new MenuButton(gp, this, MenuButton.BIG, "Options", this.getClass().getDeclaredMethod("buttonOptionsAction"));
-            e.align(MenuButton.ALIGN_CENTER);
-            e.setY(230);
-            objects.buttons.add(e);
-            
-            e = new MenuButton(gp, this, MenuButton.BIG, "High Score", this.getClass().getDeclaredMethod("buttonHighScoreAction"));
-            e.align(MenuButton.ALIGN_CENTER);
-            e.setY(300);
-            objects.buttons.add(e);
-            
-            e = new MenuButton(gp, this, MenuButton.BIG, "Help", this.getClass().getDeclaredMethod("buttonHelpAction"));
-            e.align(MenuButton.ALIGN_CENTER);
-            e.setY(370);
-            objects.buttons.add(e);
-            
-            e = new MenuButton(gp, this, MenuButton.BIG, "Exit", this.getClass().getDeclaredMethod("buttonExitAction"));
-            e.align(MenuButton.ALIGN_CENTER);
-            e.setY(440);
+            e.setY(480);
             objects.buttons.add(e);
         } catch (NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(MainMenuState.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        objects.elements.add(new MenuLabel(gp, this, gp.size.width / 2, 100, "Cubic Madness", MenuLabel.TYPE_H1, MenuLabel.ALIGN_CENTER));
-        objects.elements.add(new MenuLabel(gp, this, 20, gp.size.height - 20, "Made by Martin Omacht", 12, 0));
-        objects.elements.add(new MenuLabel(gp, this, gp.size.width - 20, gp.size.height - 20, "Version: " + Config.VERSION, 12, MenuLabel.ALIGN_RIGHT));
-    }
-    
-    public void buttonPlayAction(){
-        gp.gsm.transition(this, gp.gsm.PLAY_STATE, TransitionState.BLACKFADE);
-    }
-    
-    public void buttonExitAction(){
-        System.exit(0);
-    }
-    
-    public void buttonOptionsAction(){
-        gp.gsm.transition(this, gp.gsm.OPTIONSMENU_STATE, TransitionState.BLACKFADE);
-    }
-    
-    public void buttonHighScoreAction(){
-        gp.gsm.transition(this, gp.gsm.HIGHSCORES_STATE, TransitionState.BLACKFADE);
-    }
-    
-    public void buttonHelpAction(){
-        gp.gsm.transition(this, gp.gsm.HELP_STATE, TransitionState.BLACKFADE);
+        objects.elements.add(new MenuLabel(gp, this, gp.size.width / 2, 100, "High Scores", MenuLabel.TYPE_H2, MenuLabel.ALIGN_CENTER));      
+        
+        objects.elements.add((new MenuTable(gp, this, (gp.size.width / 2) - this.TABLEWIDTH /2, 120, this.TABLEWIDTH, this.TABLEHEIGHT))
+                .setHeader(new MenuTableRow(new String[]{"Rank", "Nickname", "Score"}))
+                .appendRow(new MenuTableRow(new String[]{"1", "Meeeeee", "1684"}))
+                .appendRow(new MenuTableRow(new String[]{"2", "Meeeeee", "1684"}))
+                .appendRow(new MenuTableRow(new String[]{"3", "Meeeeee", "1684"}))
+                .appendRow(new MenuTableRow(new String[]{"4", "Meeeeee", "1684"}))
+                .appendRow(new MenuTableRow(new String[]{"5", "Meeeeee", "1684"}))
+                .appendRow(new MenuTableRow(new String[]{"5", "Meeeeee", "1684"}))
+                .appendRow(new MenuTableRow(new String[]{"5", "Meeeeee", "1684"}))
+                .appendRow(new MenuTableRow(new String[]{"5", "Meeeeee", "1684"}))
+                .setCellMargine(2)
+                .setPadding(5)
+                .setColumnWidth(new Float[]{0.2f, 0.5f, 0.3f})
+        );
     }
 
     @Override
     public void init(Object o) {
         init();
     }
+    
+    public void buttonBackAction(){
+        gp.gsm.popTransition(TransitionState.BLACKFADE);
+    }
+    
 }

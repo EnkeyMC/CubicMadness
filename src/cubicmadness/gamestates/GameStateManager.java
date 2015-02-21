@@ -24,6 +24,7 @@ public class GameStateManager {
     public final GameState GRAPHICSOPTIONS_STATE;
     public final GameState CONTROLSMENU_STATE;
     public final GameState HELP_STATE;
+    public final GameState HIGHSCORES_STATE;
     
     
     private final GamePanel gp;
@@ -36,6 +37,7 @@ public class GameStateManager {
         this.GRAPHICSOPTIONS_STATE = new GraphicsOptionsState(gp);
         this.CONTROLSMENU_STATE = new ControlsState(gp);
         this.HELP_STATE = new HelpState(gp);
+        this.HIGHSCORES_STATE = new HighScoresState(gp);
         
         this.pushState(this.MAINMENU_STATE);
         this.gp = gp;
@@ -99,5 +101,12 @@ public class GameStateManager {
     public void resume(GameState s){
         states.push(s);
         resume();
+    }
+    
+    public void popTransition(byte type){
+        GameState prev = states.peek();
+        states.pop();
+        GameState next = states.peek();
+        states.push(new TransitionState(gp, prev, next, type));
     }
 }
