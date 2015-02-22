@@ -40,15 +40,10 @@ public class HttpRequester {
         URL url;
         HttpURLConnection connection = null;
         try {
-            //Proxy
-            Proxy proxy = null;
-            if(JOptionPane.showConfirmDialog(null, "Jsi ve škole?", "Proxy", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
-                proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("192.168.1.1", 800));
-            
             //Create connection
             url = new URL(targetUrl);
-            if(proxy != null)
-                connection = (HttpURLConnection) url.openConnection(proxy);
+            if(Config.proxy != null)
+                connection = (HttpURLConnection) url.openConnection(Config.proxy);
             else
                 connection = (HttpURLConnection) url.openConnection();
             connection.setConnectTimeout(1000);
@@ -115,15 +110,10 @@ public class HttpRequester {
         URL url;
         HttpURLConnection connection = null;
         try {
-            //Proxy
-            Proxy proxy = null;
-            if(JOptionPane.showConfirmDialog(null, "Jsi ve škole?", "Proxy", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
-                proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("192.168.1.1", 800));
-            
             //Create connection
             url = new URL(targetUrl);
-            if(proxy != null)
-                connection = (HttpURLConnection) url.openConnection(proxy);
+            if(Config.proxy != null)
+                connection = (HttpURLConnection) url.openConnection(Config.proxy);
             else
                 connection = (HttpURLConnection) url.openConnection();
             

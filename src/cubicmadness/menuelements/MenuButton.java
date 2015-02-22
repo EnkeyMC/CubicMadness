@@ -71,7 +71,10 @@ public class MenuButton extends MenuElement{
 
     @Override
     public void draw(Graphics2D g, double interpolation) {
-        g.setColor(Utils.interpolatedColor(Utils.smootherstep(this.animProgress / (float)this.animTime), new Color(150,150,150,50), new Color(200,200,200,50)));
+        if(this.isEnabled())
+            g.setColor(Utils.interpolatedColor(Utils.smootherstep(this.animProgress / (float)this.animTime), new Color(150,150,150,50), new Color(200,200,200,50)));
+        else
+            g.setColor(new Color(150,150,150,50));
         g.fillRect((int)this.x, (int)this.y, type.width, type.height);
         g.setColor(new Color(130,130,130));
         g.setStroke(new BasicStroke(2f));
@@ -98,14 +101,18 @@ public class MenuButton extends MenuElement{
         
         FontMetrics fm = g.getFontMetrics();
         if(this.type.width * 0.8 < fm.stringWidth(getText())){
-            for(float i = 40; i > 12; i--){
+            for(float i = 40; i > 10; i--){
                 g.setFont(g.getFont().deriveFont(i));
                 if(this.type.width * 0.8 >= g.getFontMetrics().stringWidth(getText()))
                     break;
             }
             fm = g.getFontMetrics();
         }
-        g.setColor(new Color(100,100,100));
+        
+        if(this.isEnabled())
+            g.setColor(new Color(100,100,100));
+        else
+            g.setColor(new Color(200,200,200));
         float paddingX = (type.width - fm.stringWidth(getText())) / 2f;
         float paddingY = (float)(type.height - fm.getStringBounds(getText(), g).getHeight()) / 2f;
         g.drawString(getText(), x + paddingX, y + paddingY + fm.getAscent());
@@ -130,10 +137,12 @@ public class MenuButton extends MenuElement{
     
     @Override
     public void actionPerformed(){
-        try {
-            action.invoke(this.gs);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(MenuButton.class.getName()).log(Level.SEVERE, null, ex);
+        if(this.isEnabled()){
+            try {
+                action.invoke(this.gs);
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                Logger.getLogger(MenuButton.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

@@ -5,6 +5,7 @@
  */
 package cubicmadness.gamestates;
 
+import cubicmadness.bin.Config;
 import cubicmadness.bin.GamePanel;
 import cubicmadness.bin.ObjectHandler;
 import cubicmadness.input.MouseInput;
@@ -14,16 +15,25 @@ import cubicmadness.menuelements.MenuLabel;
 import cubicmadness.particle.Particle;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Martin
  */
 public class OptionsMenuState extends GameState{
+    
+    private static final String ipRegex = "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\:\\d{1,5}$";
+    
+    private MenuButton setProxy;
 
     public OptionsMenuState(GamePanel gp) {
         super(gp);
@@ -95,13 +105,20 @@ public class OptionsMenuState extends GameState{
             
             e = new MenuButton(gp, this, MenuButton.MEDIUM, "Controls", this.getClass().getDeclaredMethod("buttonControlsAction"));
             e.align(MenuButton.ALIGN_CENTER);
-            e.setY(200);
+            e.setY(170);
             e.setFocused(true);
             objects.buttons.add(e);
             
             e = new MenuButton(gp, this, MenuButton.MEDIUM, "Graphics", this.getClass().getDeclaredMethod("buttonGraphicsAction"));
             e.align(MenuButton.ALIGN_CENTER);
-            e.setY(250);
+            e.setY(220);
+            objects.buttons.add(e);
+            
+            e = new MenuButton(gp, this, MenuButton.MEDIUM, Config.proxy == null ? "None" : Config.proxy.address().toString().replace("/", ""), this.getClass().getDeclaredMethod("buttonProxyAction"));
+            e.align(MenuButton.ALIGN_CENTER);
+            e.setY(320);
+            this.setProxy = e;
+            objects.elements.add(new MenuLabel(gp, this, e, "Set proxy", MenuLabel.TYPE_LABEL, MenuLabel.ALIGN_CENTER));
             objects.buttons.add(e);
             
             e = new MenuButton(gp, this, MenuButton.MEDIUM, "Back", this.getClass().getDeclaredMethod("buttonBackAction"));
@@ -123,6 +140,42 @@ public class OptionsMenuState extends GameState{
     
     public void buttonGraphicsAction(){
         gp.gsm.transition(this, gp.gsm.GRAPHICSOPTIONS_STATE, TransitionState.BLACKFADE);
+    }
+    
+    public void buttonProxyAction(){
+        String in = JOptionPane.showInputDialog(gp, "Set proxy (leave blank for no proxy)", "192.168.1.1:800");
+        if(in == null)
+            return;
+        
+        if(in.isEmpty()){
+            Config.proxy = null;
+            setProxy.setText("None");
+        }
+        
+        Pattern p = Pattern.compile(ipRegex);
+        Matcher m = p.matcher(in);
+        if(m.matches()){
+            String[] parts = in.split(":|\\.");
+            
+            for (int i = 0; i < parts.length; i++) {
+                if(i == parts.length - 1){
+                    if(Integer.parseInt(parts[i]) < 1 || Integer.parseInt(parts[i]) > 65535){
+                        JOptionPane.showMessageDialog(gp, "Wrong port!", "ERROR", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }else{
+                    if(Integer.parseInt(parts[i]) < 0 || Integer.parseInt(parts[i]) > 255){
+                        JOptionPane.showMessageDialog(gp, "IP out of range!", "ERROR", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+            }
+            
+            Config.proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(String.format("%s.%s.%s.%s", parts[0], parts[1], parts[2], parts[3]), Integer.parseInt(parts[4])));
+            setProxy.setText(Config.proxy.address().toString().replace("/", ""));
+        }else{
+            JOptionPane.showMessageDialog(gp, "Wrong IP entered!", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     @Override

@@ -6,6 +6,7 @@
 package cubicmadness.bin;
 
 import java.awt.event.KeyEvent;
+import java.net.Proxy;
 
 /**
  *
@@ -33,4 +34,6 @@ public class Config {
     // OTHER
     public static final int MAX_NICK_LEN = 20;
     public static final int MIN_NICK_LEN = 4;
+    
+    public static Proxy proxy = null;
 }

@@ -7,7 +7,6 @@ package cubicmadness.gamestates;
 
 import cubicmadness.bin.Config;
 import cubicmadness.bin.GamePanel;
-import cubicmadness.bin.HttpRequester;
 import cubicmadness.bin.ObjectHandler;
 import cubicmadness.input.MouseInput;
 import cubicmadness.menuelements.MenuButton;

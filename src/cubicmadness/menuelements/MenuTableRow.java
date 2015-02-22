@@ -68,4 +68,16 @@ public class MenuTableRow {
     public String get(int i){
         return data.get(i);
     }
+    
+    public List<Byte> getAlign(){
+        return align;
+    }
+    
+    public byte getAlign(int i){
+        return align.get(i);
+    }
+    
+    public boolean hasAlign(){
+        return !align.isEmpty();
+    }
 }

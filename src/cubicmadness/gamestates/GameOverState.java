@@ -38,6 +38,7 @@ public class GameOverState extends GameState{
     private float alpha;
     
     private MenuLabel score;
+    private MenuButton submit;
 
     public GameOverState(GamePanel gp) {
         super(gp);
@@ -199,6 +200,7 @@ public class GameOverState extends GameState{
             e = new MenuButton(gp, this, MenuButton.BIG, "Submit score", this.getClass().getDeclaredMethod("buttonSubmitScoreAction"));
             e.align(MenuButton.ALIGN_CENTER);
             e.setY(320);
+            this.submit = e;
             objects.buttons.add(e);
             
             e = new MenuButton(gp, this, MenuButton.BIG, "Main menu", this.getClass().getDeclaredMethod("buttonMainMenuAction"));
@@ -251,5 +253,6 @@ public class GameOverState extends GameState{
         }while(!valid);
         
         System.out.println(HttpRequester.submitScore(nick, ps.getScore(), ps.getHistory()));
+        submit.setEnabled(false);
     }
 }

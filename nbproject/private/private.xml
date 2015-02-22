@@ -5,9 +5,11 @@
         <group>
             <file>file:/D:/Data/OneDrive/codes/Java/CubicMadness/src/cubicmadness/gamestates/HelpState.java</file>
             <file>file:/D:/Data/OneDrive/codes/Java/CubicMadness/src/cubicmadness/menuelements/MenuLabel.java</file>
+            <file>file:/D:/Data/OneDrive/codes/Java/CubicMadness/src/cubicmadness/menuelements/MenuTableRow.java</file>
             <file>file:/D:/Data/OneDrive/codes/Java/CubicMadness/src/cubicmadness/gamestates/HighScoresState.java</file>
             <file>file:/D:/Data/OneDrive/codes/Java/CubicMadness/src/cubicmadness/bin/HttpRequester.java</file>
-            <file>file:/D:/Data/OneDrive/codes/Java/CubicMadness/src/cubicmadness/menuelements/MenuBgrLabel.java</file>
+            <file>file:/D:/Data/OneDrive/codes/Java/CubicMadness/src/cubicmadness/menuelements/MenuButton.java</file>
+            <file>file:/D:/Data/OneDrive/codes/Java/CubicMadness/src/cubicmadness/menuelements/MenuTable.java</file>
             <file>file:/D:/Data/OneDrive/codes/Java/CubicMadness/src/cubicmadness/gamestates/MainMenuState.java</file>
         </group>
     </open-files>

@@ -20,10 +20,10 @@ import java.util.List;
  * @author Martin
  */
 public class MenuTable extends MenuElement{
-    // TODO text align
     private int width, height;
     private float padding = 0, cellMargine = 0, cellPadding = 10;
     private Color header = new Color(150,150,150,50), data = new Color(200,200,200,50), headerText = new Color(100,100,100), dataText = new Color(100,100,100);
+    private Color bgrColor;
     private List<MenuTableRow> rows;
     private MenuTableRow heading = null;
     private List<Integer> columnWidth = null;
@@ -36,12 +36,18 @@ public class MenuTable extends MenuElement{
         this.width = width;
         this.height = height;
         this.rows = new ArrayList();
+        this.bgrColor = null;
     }
 
     @Override
     public void draw(Graphics2D g, double interpolation) {
         if(rows.isEmpty() && heading == null)
             return;
+        
+        if(bgrColor != null){
+            g.setColor(bgrColor);
+            g.fillRect((int)this.getX(), (int)this.getY(), width, height);
+        }
         
         int cellHeight, cellWidth, textOffset, startY;
         
@@ -66,7 +72,7 @@ public class MenuTable extends MenuElement{
                 g.fillRect((int) (padding + currX + i*cellMargine), (int) (this.getY() + padding), cellWidth, cellHeight);
                 
                 g.setColor(headerText);
-                g.drawString(heading.get(i), padding + currX + cellPadding, this.getY() + padding + (cellHeight - fmh.getHeight()) / 2f + fmh.getAscent());
+                g.drawString(heading.get(i), alignText(heading.hasAlign() ? heading.getAlign(i) : 0, (int) (currX + i*cellMargine), cellWidth, heading.get(i), g), this.getY() + padding + (cellHeight - fmh.getHeight()) / 2f + fmh.getAscent());
                 currX += cellWidth;
             }
             
@@ -93,7 +99,7 @@ public class MenuTable extends MenuElement{
                 g.fillRect((int)(currX + padding + d*cellMargine), startY + r*cellHeight + r*(int)cellMargine, cellWidth, cellHeight);
                 
                 g.setColor(dataText);
-                g.drawString(text, currX + padding + cellPadding + d*cellMargine, startY + r*cellHeight + r*cellMargine + textOffset);
+                g.drawString(text, alignText(row.hasAlign() ? row.getAlign(d) : (rows.get(0).hasAlign() ? rows.get(0).getAlign(d) : (heading == null ? 0 : heading.getAlign(d))), (int) (currX + d*cellMargine), cellWidth, text, g), startY + r*cellHeight + r*cellMargine + textOffset);
                 currX += cellWidth;
             }
         }
@@ -107,6 +113,16 @@ public class MenuTable extends MenuElement{
     @Override
     public int getWidth() {
         return this.width;
+    }
+    
+    private int alignText(byte align, int cellX, int cellWidth, String text, Graphics2D g){
+        if(align == MenuTableRow.ALIGN_CENTER){
+            return (int) (((cellWidth - g.getFontMetrics().stringWidth(text)) / 2) + cellX + padding);
+        }else if(align == MenuTableRow.ALIGN_RIGHT){
+            return (int) (cellX + cellWidth - padding - g.getFontMetrics().stringWidth(text));
+        }else{
+            return (int) (cellX + cellPadding);
+        }
     }
 
     /**
@@ -319,5 +335,19 @@ public class MenuTable extends MenuElement{
         }
         
         return this;
+    }
+    
+    /**
+     *
+     * @param bgr - color of the background (null = without background)
+     * @return this
+     */
+    public MenuTable setBgrColor(Color bgr){
+        this.bgrColor = bgr;
+        return this;
+    }
+    
+    public Color getBgrColor(){
+        return this.bgrColor;
     }
 }
