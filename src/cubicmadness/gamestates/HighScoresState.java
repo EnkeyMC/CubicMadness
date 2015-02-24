@@ -121,7 +121,7 @@ public class HighScoresState extends GameState{
                 if(i >= records.length){
                     data = new String[]{"", ""};
                 }else{
-                    data = records[i].split(" ");
+                    data = records[i].split(";");
                 }
                 
                 table[i][0] = String.valueOf(i + 1);
