@@ -97,16 +97,6 @@ public class GameOverState extends GameState{
             this.menuInteraction();
         }
         
-        if(KeyInput.pressed.contains(KeyEvent.VK_ENTER) || KeyInput.pressed.contains(Config.ATTACK)){
-            KeyInput.pressed.remove(KeyEvent.VK_ENTER);
-            for(MenuElement e : objects.buttons){
-                if(e.isFocused()){
-                    e.actionPerformed();
-                    return;
-                }
-            }
-        }
-        
         if(MouseInput.LMB){
             MouseInput.LMB = false;
             for(MenuElement e : objects.buttons){
