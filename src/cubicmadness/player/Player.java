@@ -133,6 +133,11 @@ public class Player extends GameObject{
         }else{
             super.draw(g, interpolation);
         }
+        
+        if(this.hasEffect(Effect.SLOWNESS)){
+            g.setColor(new Color(0,0,0, 0.3f));
+            g.fill(this.getRect(interpolation));
+        }
                 
         
         Set<Integer> key = KeyInput.pressed;
