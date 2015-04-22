@@ -5,7 +5,17 @@
  */
 package cubicmadness.bin;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import cubicmadness.jsonhandlers.ConfigDeserializer;
+import cubicmadness.jsonhandlers.ConfigSerializer;
+
 import java.awt.event.KeyEvent;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.lang.reflect.Modifier;
 import java.net.Proxy;
 
 /**
@@ -36,4 +46,40 @@ public class Config {
     public static final int MIN_NICK_LEN = 4;
     
     public static Proxy proxy = null;
+
+    public static boolean loadConfig(){
+        try {
+            // read the json file
+            FileReader reader = new FileReader("config.json");
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Config.class, new ConfigDeserializer())
+                    .create();
+            gson.fromJson(reader, Config.class);
+            System.out.println("file loaded");
+            return true;
+        } catch (FileNotFoundException ex) {
+            System.out.println("error loading");
+            return false;
+        }
+    }
+
+    public static boolean saveConfig(){
+        try {
+            FileWriter writer;
+            writer = new FileWriter("config.json");
+
+            GsonBuilder gson = new GsonBuilder();
+            gson.registerTypeAdapter(Config.class, new ConfigSerializer()).setPrettyPrinting();
+            gson.create().toJson(new Config(), new TypeToken<Config>() {
+            }.getType(), writer);
+            writer.close();
+            System.out.println("file saved");
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+            System.out.println("error saving");
+            return false;
+        }
+    }
 }

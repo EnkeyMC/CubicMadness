@@ -37,6 +37,7 @@ public class GamePanel extends Canvas implements Runnable{
     }
     
     private void init(){
+        Config.loadConfig();
         f = new Frame(size.width, size.height, "Cubic Madness", this);
         this.setBackground(Color.white);
         this.setForeground(Color.black);
