@@ -23,7 +23,7 @@ public class ConfigSerializer implements JsonSerializer<Config> {
         json.addProperty("UP", Config.UP);
         json.addProperty("DOWN", Config.DOWN);
         json.addProperty("LEFT", Config.LEFT);
-        json.addProperty("ATTAC", Config.ATTACK);
+        json.addProperty("ATTACK", Config.ATTACK);
         json.addProperty("proxy", Config.proxy == null ? "null" : Config.proxy.address() + "");
 
         return json;

@@ -23,7 +23,7 @@ public class ConfigDeserializer implements JsonDeserializer<Config> {
         Config.UP = json.get("UP").getAsInt();
         Config.DOWN = json.get("DOWN").getAsInt();
         Config.LEFT = json.get("LEFT").getAsInt();
-        Config.ATTACK = json.get("ATTAC").getAsInt();
+        Config.ATTACK = json.get("ATTACK").getAsInt();
 
         String proxy = json.get("proxy").getAsString();
         if(proxy.equals("null"))

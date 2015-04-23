@@ -15,7 +15,6 @@ import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.lang.reflect.Modifier;
 import java.net.Proxy;
 
 /**

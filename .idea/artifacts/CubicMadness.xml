@@ -5,8 +5,10 @@
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
       </element>
-      <element id="library" level="project" name="gson-2.3.1" />
       <element id="module-output" name="CubicMadness" />
+      <element id="directory" name="lib">
+        <element id="library" level="project" name="gson-2.3.1" />
+      </element>
     </root>
   </artifact>
 </component>

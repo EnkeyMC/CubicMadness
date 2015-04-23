@@ -7,6 +7,6 @@
   "UP": 87,
   "DOWN": 83,
   "LEFT": 65,
-  "ATTAC": 32,
+  "ATTACK": 32,
   "proxy": "null"
 }
