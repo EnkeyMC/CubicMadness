@@ -3,7 +3,7 @@
   "antialiasingText": true,
   "transitions": true,
   "rendering": true,
-  "fullscreen": false,
+  "fullscreen": true,
   "UP": 87,
   "DOWN": 83,
   "LEFT": 65,
