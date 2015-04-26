@@ -153,6 +153,7 @@ public class GraphicsOptionsState extends GameState {
     }
     
     public void buttonBackAction(){
+        Config.saveConfig();
         gp.gsm.transition(this, gp.gsm.OPTIONSMENU_STATE, TransitionState.BLACKFADE);
     }
 
