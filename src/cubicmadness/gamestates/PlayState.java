@@ -31,6 +31,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -99,6 +100,11 @@ public class PlayState extends GameState {
                 KeyInput.pressed.remove(KeyEvent.VK_SEMICOLON);
             }
 
+            if(KeyInput.pressed.contains(KeyEvent.VK_ESCAPE)){
+                gp.gsm.pushState(gp.gsm.PAUSEMENU_STATE, this.objects);
+                KeyInput.pressed.remove(KeyEvent.VK_ESCAPE);
+            }
+
             if(this.nextSpawn <= 0){
                 Random r = new Random();
                 int n = r.nextInt(100);
@@ -117,6 +123,9 @@ public class PlayState extends GameState {
 
     @Override
     public void draw(Graphics2D g, double interpolation) {
+        if(paused)
+            interpolation = 0;
+
         try{
             for(PowerUp p : objects.powerups){
                 p.draw((Graphics2D)g, interpolation);

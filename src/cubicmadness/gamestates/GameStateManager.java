@@ -25,7 +25,8 @@ public class GameStateManager {
     public final GameState CONTROLSMENU_STATE;
     public final GameState HELP_STATE;
     public final GameState HIGHSCORES_STATE;
-    
+    public final GameState PAUSEMENU_STATE;
+
     
     private final GamePanel gp;
     
@@ -38,6 +39,7 @@ public class GameStateManager {
         this.CONTROLSMENU_STATE = new ControlsState(gp);
         this.HELP_STATE = new HelpState(gp);
         this.HIGHSCORES_STATE = new HighScoresState(gp);
+        this.PAUSEMENU_STATE = new PauseMenuState(gp);
         
         this.pushState(this.MAINMENU_STATE);
         this.gp = gp;
@@ -83,6 +85,7 @@ public class GameStateManager {
     
     public void popCurrentState(){
         states.pop();
+        states.peek().resume();
     }
     
     public GameState getCurrentState(){
