@@ -131,7 +131,7 @@ public class OptionsMenuState extends GameState{
     }
     
     public void buttonBackAction(){
-        gp.gsm.transition(this, gp.gsm.MAINMENU_STATE, TransitionState.BLACKFADE);
+        gp.gsm.popTransition(TransitionState.BLACKFADE);
     }
     
     public void buttonControlsAction(){
