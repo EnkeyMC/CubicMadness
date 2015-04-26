@@ -173,6 +173,7 @@ public class OptionsMenuState extends GameState{
             
             Config.proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(String.format("%s.%s.%s.%s", parts[0], parts[1], parts[2], parts[3]), Integer.parseInt(parts[4])));
             setProxy.setText(Config.proxy.address().toString().replace("/", ""));
+            Config.saveConfig();
         }else{
             JOptionPane.showMessageDialog(gp, "Wrong IP entered!", "ERROR", JOptionPane.ERROR_MESSAGE);
         }

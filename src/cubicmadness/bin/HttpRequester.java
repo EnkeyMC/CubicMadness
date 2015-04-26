@@ -46,7 +46,7 @@ public class HttpRequester {
                 connection = (HttpURLConnection) url.openConnection(Config.proxy);
             else
                 connection = (HttpURLConnection) url.openConnection();
-            connection.setConnectTimeout(1000);
+            connection.setConnectTimeout(5000);
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type",
                     "application/x-www-form-urlencoded");
@@ -79,6 +79,7 @@ public class HttpRequester {
             return response.toString();
 
         } catch (HeadlessException | IOException e) {
+            e.printStackTrace();
             return "ERROR";
 
         } finally {
@@ -117,7 +118,7 @@ public class HttpRequester {
             else
                 connection = (HttpURLConnection) url.openConnection();
             
-            connection.setConnectTimeout(1000);
+            connection.setConnectTimeout(3000);
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Content-Type",
                     "application/x-www-form-urlencoded");
