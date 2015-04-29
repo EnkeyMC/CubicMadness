@@ -150,6 +150,7 @@ public class OptionsMenuState extends GameState{
         if(in.isEmpty()){
             Config.proxy = null;
             setProxy.setText("None");
+            return;
         }
         
         Pattern p = Pattern.compile(ipRegex);
