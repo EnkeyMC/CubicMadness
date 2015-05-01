@@ -84,10 +84,9 @@ public class GameStateManager {
     }
     
     public void popCurrentState(){
-        if(!states.empty()){
-            states.pop();
+        states.pop();
+        if(!states.empty())
             states.peek().resume();
-        }
     }
     
     public GameState getCurrentState(){
