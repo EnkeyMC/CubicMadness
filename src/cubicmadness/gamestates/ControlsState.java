@@ -171,7 +171,7 @@ public class ControlsState extends GameState{
     
     public void buttonBackAction(){
         Config.saveConfig();
-        gp.gsm.transition(this, gp.gsm.OPTIONSMENU_STATE, TransitionState.BLACKFADE);
+        gp.gsm.popTransition(TransitionState.BLACKFADE);
     }
     
     public void buttonUPAction(){

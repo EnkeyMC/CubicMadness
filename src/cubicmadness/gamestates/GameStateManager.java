@@ -84,8 +84,10 @@ public class GameStateManager {
     }
     
     public void popCurrentState(){
-        states.pop();
-        states.peek().resume();
+        if(!states.empty()){
+            states.pop();
+            states.peek().resume();
+        }
     }
     
     public GameState getCurrentState(){
@@ -110,6 +112,7 @@ public class GameStateManager {
         GameState prev = states.peek();
         states.pop();
         GameState next = states.peek();
+        states.pop();
         states.push(new TransitionState(gp, prev, next, type));
     }
 }

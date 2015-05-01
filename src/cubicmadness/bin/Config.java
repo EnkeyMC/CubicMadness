@@ -24,7 +24,7 @@ import java.net.Proxy;
 public class Config {
     
     // VERSION
-    public static final String VERSION = "0.9.0";
+    public static final String VERSION = "0.9.1";
     
     // GRAPHICS OPTIONS
     public static boolean antialiasing = true;

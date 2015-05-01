@@ -3,10 +3,10 @@
   "antialiasingText": true,
   "transitions": true,
   "rendering": true,
-  "fullscreen": true,
+  "fullscreen": false,
   "UP": 87,
   "DOWN": 83,
   "LEFT": 65,
   "ATTACK": 32,
-  "proxy": "/192.168.1.1:800"
+  "proxy": "null"
 }
