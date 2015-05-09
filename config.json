@@ -1,7 +1,7 @@
 {
   "antialiasing": true,
   "antialiasingText": true,
-  "transitions": true,
+  "transitions": false,
   "rendering": true,
   "fullscreen": false,
   "UP": 87,

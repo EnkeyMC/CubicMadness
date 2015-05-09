@@ -53,6 +53,7 @@ public class TransitionState extends GameState{
         }
         
         if(!Config.transitions){
+            gp.gsm.popCurrentState();
             gp.gsm.pushState(next);
         }  
         
