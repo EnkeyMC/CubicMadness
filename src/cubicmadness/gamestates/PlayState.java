@@ -278,6 +278,7 @@ public class PlayState extends GameState {
         coins = 0;
         score = 0;
         ticks = 0;
+        this.resume();
     }
 
     @Override

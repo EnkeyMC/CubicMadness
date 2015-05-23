@@ -6,5 +6,8 @@ package cubicmadness.bin;
 public interface IAnimatable {
 
     // NYI
+    public void translate (float x, float y);
+    public void reset ();
+    public void scale (float x, float y);
 
 }

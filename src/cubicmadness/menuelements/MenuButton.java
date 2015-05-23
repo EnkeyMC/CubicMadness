@@ -6,6 +6,7 @@
 package cubicmadness.menuelements;
 
 import cubicmadness.bin.GamePanel;
+import cubicmadness.bin.IAnimatable;
 import cubicmadness.bin.Utils;
 import cubicmadness.gamestates.GameState;
 import java.awt.BasicStroke;
@@ -23,7 +24,7 @@ import java.util.logging.Logger;
  *
  * @author Martin
  */
-public class MenuButton extends MenuElement{
+public class MenuButton extends MenuElement implements IAnimatable{
     
     public static final byte ALIGN_CENTER = 0;
     public static final byte ALIGN_RIGHT = 1;
@@ -40,6 +41,9 @@ public class MenuButton extends MenuElement{
     
     private int animProgress = 0;
     private final int animTime = 10;
+
+    private float tmpX, tmpY;
+    private float tmpSX, tmpSY;
 
     public MenuButton(GamePanel panel, GameState gs, Dimension type, String text, Method m) {
         super(panel, gs, 0, 0);
@@ -182,5 +186,20 @@ public class MenuButton extends MenuElement{
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @Override
+    public void translate(float x, float y) {
+
+    }
+
+    @Override
+    public void reset() {
+
+    }
+
+    @Override
+    public void scale(float x, float y) {
+
     }
 }
