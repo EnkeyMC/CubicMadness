@@ -109,44 +109,53 @@ public class HighScoresState extends GameState{
         String scores = HttpRequester.getTopTen();
         
         if(scores.equals("ERROR")){
-            objects.elements.add(new MenuLabel(gp, this, gp.size.width / 2, 400, "ERROR", MenuLabel.TYPE_H2, MenuLabel.ALIGN_CENTER));   
+            errorLoading();
         }else{
-        
-            String[][] table = new String[10][3];
-            
-            String[] records = scores.split("\n");
-            
-            for (int i = 0; i < table.length; i++) {
-                String[] data;
-                if(i >= records.length){
-                    data = new String[]{"", ""};
-                }else{
-                    data = records[i].split(";");
+            try {
+                String[][] table = new String[10][3];
+
+                String[] records = scores.split("\n");
+
+                for (int i = 0; i < table.length; i++) {
+                    String[] data;
+                    if (i >= records.length) {
+                        data = new String[]{"", ""};
+                    } else {
+                        data = records[i].split(";");
+                    }
+
+                    table[i][0] = String.valueOf(i + 1);
+                    table[i][1] = data[0];
+                    table[i][2] = data[1];
                 }
-                
-                table[i][0] = String.valueOf(i + 1);
-                table[i][1] = data[0];
-                table[i][2] = data[1];
+
+                objects.elements.add((new MenuTable(gp, this, (gp.size.width / 2) - this.TABLEWIDTH / 2, 120, this.TABLEWIDTH, this.TABLEHEIGHT))
+                                .setHeader(new MenuTableRow(new String[]{"Rank", "Nickname", "Score"}).setAligns(new Byte[]{MenuTableRow.ALIGN_CENTER, MenuTableRow.ALIGN_CENTER, MenuTableRow.ALIGN_CENTER}))
+                                .appendRow(new MenuTableRow(table[0]).setAligns(new Byte[]{MenuTableRow.ALIGN_RIGHT, MenuTableRow.ALIGN_LEFT, MenuTableRow.ALIGN_RIGHT}))
+                                .appendRow(new MenuTableRow(table[1]))
+                                .appendRow(new MenuTableRow(table[2]))
+                                .appendRow(new MenuTableRow(table[3]))
+                                .appendRow(new MenuTableRow(table[4]))
+                                .appendRow(new MenuTableRow(table[5]))
+                                .appendRow(new MenuTableRow(table[6]))
+                                .appendRow(new MenuTableRow(table[7]))
+                                .appendRow(new MenuTableRow(table[8]))
+                                .appendRow(new MenuTableRow(table[9]))
+                                .setCellMargine(2)
+                                .setPadding(5)
+                                .setColumnWidth(new Float[]{0.2f, 0.5f, 0.3f})
+                                .setBgrColor(new Color(200, 200, 200, 50))
+                );
+            } catch (Exception ex){
+                System.out.println(scores);
+                ex.printStackTrace();
+                this.errorLoading();
             }
-            
-            objects.elements.add((new MenuTable(gp, this, (gp.size.width / 2) - this.TABLEWIDTH /2, 120, this.TABLEWIDTH, this.TABLEHEIGHT))
-                    .setHeader(new MenuTableRow(new String[]{"Rank", "Nickname", "Score"}).setAligns(new Byte[]{MenuTableRow.ALIGN_CENTER, MenuTableRow.ALIGN_CENTER, MenuTableRow.ALIGN_CENTER}))
-                    .appendRow(new MenuTableRow(table[0]).setAligns(new Byte[]{MenuTableRow.ALIGN_RIGHT, MenuTableRow.ALIGN_LEFT, MenuTableRow.ALIGN_RIGHT}))
-                    .appendRow(new MenuTableRow(table[1]))
-                    .appendRow(new MenuTableRow(table[2]))
-                    .appendRow(new MenuTableRow(table[3]))
-                    .appendRow(new MenuTableRow(table[4]))
-                    .appendRow(new MenuTableRow(table[5]))
-                    .appendRow(new MenuTableRow(table[6]))
-                    .appendRow(new MenuTableRow(table[7]))
-                    .appendRow(new MenuTableRow(table[8]))
-                    .appendRow(new MenuTableRow(table[9]))
-                    .setCellMargine(2)
-                    .setPadding(5)
-                    .setColumnWidth(new Float[]{0.2f, 0.5f, 0.3f})
-                    .setBgrColor(new Color(200,200,200,50))
-            );
         }
+    }
+
+    private void errorLoading(){
+        objects.elements.add(new MenuLabel(gp, this, gp.size.width / 2, 400, "ERROR", MenuLabel.TYPE_H2, MenuLabel.ALIGN_CENTER));
     }
 
     @Override

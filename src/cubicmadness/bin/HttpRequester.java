@@ -30,7 +30,7 @@ public class HttpRequester {
                     + "&score=" + URLEncoder.encode(Integer.toString(score), "UTF-8")
                     + "&history=" + URLEncoder.encode(history.toJSONString(), "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(HttpRequester.class.getName()).log(Level.SEVERE, null, ex);
+            return "ERROR";
         }
         
         return requestPost(url, params);
@@ -101,7 +101,7 @@ public class HttpRequester {
             params = "from=" + URLEncoder.encode(Integer.toString(from), "UTF-8")
                     + "&n=" + URLEncoder.encode(Integer.toString(n), "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(HttpRequester.class.getName()).log(Level.SEVERE, null, ex);
+            return "ERROR";
         }
         url += params;
         return requestGet(url);
